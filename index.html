@@ -154,6 +154,152 @@
             border-radius: 12px;
             border: 2px solid rgb(46, 213, 115);
         }
+
+        /* STYLES CỦA STORE WIDGET AUTH POPUP */
+        .sw-dropdown-wrapper { position: relative; }
+        .sw-btn-account {
+            background: #ffffff;
+            border: 2px solid #000000;
+            color: #000000;
+            font-weight: bold;
+            padding: 8px 16px;
+            border-radius: 10px;
+            box-shadow: 3px 3px 0px #000000;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            transition: all 0.1s ease;
+        }
+        .sw-btn-account:hover {
+            background: #fffa65;
+            transform: translate(-1px, -1px);
+            box-shadow: 4px 4px 0px #000000;
+        }
+        .sw-auth-options {
+            display: none;
+            position: absolute;
+            top: 115%;
+            right: 0;
+            background: #ffffff;
+            border: 2px solid #000000;
+            border-radius: 10px;
+            padding: 8px;
+            box-shadow: 4px 4px 0px #000000;
+            flex-direction: column;
+            gap: 6px;
+            min-width: 140px;
+            z-index: 50;
+        }
+        .sw-auth-options.active { display: flex; }
+        .sw-option-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: #f9f9f9;
+            border: 2px solid #000000;
+            border-radius: 6px;
+            color: #000000;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: bold;
+            box-shadow: 2px 2px 0px #000000;
+            cursor: pointer;
+            transition: all 0.1s;
+        }
+        .sw-option-box:hover {
+            background: #fffa65;
+            transform: translate(-1px, -1px);
+        }
+        .sw-logged-group { display: flex; gap: 8px; }
+        .sw-box {
+            background: #ffffff;
+            border: 2px solid #000000;
+            color: #000000;
+            padding: 6px 14px;
+            border-radius: 10px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            box-shadow: 3px 3px 0px #000000;
+            transition: all 0.1s ease;
+        }
+        .sw-box:hover {
+            background: #fffa65;
+            transform: translate(-1px, -1px);
+            box-shadow: 4px 4px 0px #000000;
+        }
+        .sw-box-balance { color: #27ae60; font-weight: bold; }
+        .sw-box-user { color: #d63031; font-weight: bold; }
+
+        .sw-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(3px);
+            z-index: 1000000;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+        }
+        .sw-modal-card {
+            background: #ffffff;
+            border: 3px solid #000000;
+            border-radius: 16px;
+            width: 340px;
+            max-width: 90%;
+            padding: 24px;
+            color: #000000;
+            box-shadow: 6px 6px 0px #000000;
+            position: relative;
+            text-align: center;
+        }
+        .sw-close-btn {
+            position: absolute;
+            top: 12px; right: 15px;
+            background: #ff4757; border: 2px solid #000;
+            color: #fff; font-size: 14px; font-weight: bold;
+            border-radius: 6px; width: 26px; height: 26px;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            box-shadow: 2px 2px 0px #000;
+        }
+        .sw-close-btn:hover { background: #ff6b81; }
+        .sw-form-group { margin-bottom: 14px; text-align: left; }
+        .sw-label { display: block; font-size: 13px; font-weight: bold; color: #000000; margin-bottom: 6px; }
+        .sw-input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 2px solid #000000;
+            border-radius: 8px;
+            font-size: 13px;
+            background: #f9f9f9;
+            box-shadow: 3px 3px 0px #000000;
+            outline: none;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        .sw-submit-btn {
+            width: 100%; padding: 12px;
+            background: #00b894;
+            border: 2px solid #000000; border-radius: 8px;
+            color: #fff; font-weight: bold; font-size: 14px;
+            cursor: pointer; margin-top: 10px;
+            box-shadow: 3px 3px 0px #000000;
+            transition: all 0.1s;
+        }
+        .sw-submit-btn:hover {
+            background: #55efc4;
+            color: #000;
+            transform: translate(-1px, -1px);
+            box-shadow: 4px 4px 0px #000000;
+        }
+        .sw-switch-text { margin-top: 14px; font-size: 13px; color: #555; }
+        .sw-switch-text a { color: #0984e3; font-weight: bold; cursor: pointer; text-decoration: underline; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col antialiased selection:bg-indigo-500 selection:text-white">
@@ -179,19 +325,33 @@
                     <i id="themeIcon" class="fa-solid fa-moon text-base"></i>
                 </button>
 
-                <div class="hidden sm:flex items-center gap-2 bg-slate-900/80 border border-emerald-500/30 rounded-full px-4 py-2 shadow-inner backdrop-blur-md">
-                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                    <span class="text-xs text-slate-400 font-semibold">Ví:</span>
-                    <span class="text-sm font-extrabold text-emerald-400 tracking-wide" id="globalUserBalance">0đ</span>
-                </div>
-
-                <button onclick="openUserModal()" class="liquid-btn liquid-btn-secondary flex items-center gap-2.5 rounded-full px-4 py-2 transition group">
-                    <div class="w-7 h-7 rounded-full bg-indigo-600/30 border border-indigo-400/40 flex items-center justify-center text-indigo-300 text-xs font-bold">
-                        <i class="fa-solid fa-user"></i>
+                <!-- STORE WIDGET SYSTEM -->
+                <div id='swMainContainer'>
+                    <!-- Trạng thái chưa đăng nhập -->
+                    <div class='sw-dropdown-wrapper' id='swLoggedOutWrapper'>
+                        <button class='sw-btn-account' onclick='swToggleAuthMenu()'>
+                            <span>👤</span> <span>Tài Khoản</span> <span>&#9662;</span>
+                        </button>
+                        <div class='sw-auth-options' id='swAuthMenu'>
+                            <div class='sw-option-box' onclick='swOpenLoginModal()'>
+                                🔑 <span>Đăng Nhập</span>
+                            </div>
+                            <div class='sw-option-box' onclick='swOpenRegisterModal()' style='color:#079992;'>
+                                📝 <span>Đăng Ký</span>
+                            </div>
+                        </div>
                     </div>
-                    <span class="text-sm font-bold text-slate-200 group-hover:text-white transition" id="globalUserName">Khách</span>
-                    <i class="fa-solid fa-chevron-down text-[10px] text-slate-400"></i>
-                </button>
+
+                    <!-- Trạng thái đã đăng nhập -->
+                    <div class='sw-logged-group' id='swGroupLoggedIn' style='display: none;'>
+                        <div class='sw-box' onclick='swOpenUserModal()' title='Số dư ví'>
+                            <span style='color: #27ae60; font-weight: bold;'>Ví:</span> <span class='sw-box-balance' id='swTextBalance'>0đ</span>
+                        </div>
+                        <div class='sw-box' onclick='swOpenUserModal()' title='Tài khoản của bạn'>
+                            <span>👤</span> <span class='sw-box-user' id='swTextUsername'>...</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </header>
@@ -250,9 +410,60 @@
         </div>
     </div>
 
-    <!-- JAVASCRIPT LOGIC TRANG CHỦ -->
+    <!-- MODAL POPUP ĐĂNG NHẬP -->
+    <div class='sw-modal-overlay' id='swLoginModal'>
+        <div class='sw-modal-card'>
+            <button class='sw-close-btn' onclick='swCloseAllModals()'>&#10005;</button>
+            <h3 style='margin-top:0; color:#000000; font-size: 18px; margin-bottom: 15px;'>ĐĂNG NHẬP HỆ THỐNG</h3>
+            <div class='sw-form-group'>
+                <label class='sw-label'>👤 Tên đăng nhập:</label>
+                <input class='sw-input' id='swLoginUser' placeholder='Nhập tên tài khoản...' type='text'/>
+            </div>
+            <div class='sw-form-group'>
+                <label class='sw-label'>🔒 Mật khẩu:</label>
+                <input class='sw-input' id='swLoginPass' placeholder='Nhập mật khẩu...' type='password'/>
+            </div>
+            <button class='sw-submit-btn' id='swLoginBtn' onclick='swProcessLogin()'>🚀 ĐĂNG NHẬP NGAY</button>
+            <div class='sw-switch-text'>
+                Chưa có tài khoản? <a onclick='swSwitchToRegister()'>Đăng ký ngay</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL POPUP ĐĂNG KÝ -->
+    <div class='sw-modal-overlay' id='swRegisterModal'>
+        <div class='sw-modal-card'>
+            <button class='sw-close-btn' onclick='swCloseAllModals()'>&#10005;</button>
+            <h3 style='margin-top:0; color:#000000; font-size: 18px; margin-bottom: 15px;'>ĐĂNG KÝ TÀI KHOẢN</h3>
+            <div class='sw-form-group'>
+                <label class='sw-label'>👤 Tên đăng nhập:</label>
+                <input class='sw-input' id='swRegUser' placeholder='Chọn tên tài khoản...' type='text'/>
+            </div>
+            <div class='sw-form-group'>
+                <label class='sw-label'>🔒 Mật khẩu:</label>
+                <input class='sw-input' id='swRegPass' placeholder='Tạo mật khẩu...' type='password'/>
+            </div>
+            <button class='sw-submit-btn' id='swRegBtn' onclick='swProcessRegister()' style='background:#0984e3;'>📝 TẠO TÀI KHOẢN</button>
+            <div class='sw-switch-text'>
+                Đã có tài khoản? <a onclick='swSwitchToLogin()'>Đăng nhập ngay</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL POPUP QUẢN LÝ TÀI KHOẢN -->
+    <div class='sw-modal-overlay' id='swUserMenuModal'>
+        <div class='sw-modal-card'>
+            <button class='sw-close-btn' onclick='swCloseAllModals()'>&#10005;</button>
+            <h3 style='margin-top:0; color:#000000; font-size: 18px;'>QUẢN LÝ TÀI KHOẢN</h3>
+            <p style='color:#555555; font-size:13px; margin-bottom: 20px;'>Xin chào, <b id='swMenuUser' style='color:#d63031;'>...</b></p>
+            <button class='sw-submit-btn' onclick='swHandleLogout()' style='background:#ff4757;'>Đăng Xuất</button>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC TRANG CHỦ & WIDGET AUTH -->
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz_YC2ALIH4fux4jTPOiZFRcf-c2oP6cCNNtazPlEdiNPE-P0cMQ7t8LJevKEHVTnB6/exec";
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz5MYk4UcJnlQ5JUaXUFAuz9Be5Ddj9WTgPMfKpOg346dFcS2Kbwt_1kFNfzNbkYDEm/exec";
         let CURRENT_ACTIVE_POST_ID = "";
 
         // 🌗 XỬ LÝ GIAO DIỆN SÁNG / TỐI
@@ -282,6 +493,160 @@
             }
         }
         initTheme();
+
+        // 🟢 STORE WIDGET POPUP AUTH SYSTEM LOGIC
+        window.addEventListener("DOMContentLoaded", function() {
+            var user = localStorage.getItem("logged_user");
+            if (user && user !== "null" && user !== "") {
+                document.getElementById("swLoggedOutWrapper").style.display = "none";
+                document.getElementById("swGroupLoggedIn").style.display = "flex";
+                
+                var cachedBalance = localStorage.getItem("logged_balance") || 0;
+                document.getElementById("swTextBalance").innerText = parseInt(cachedBalance).toLocaleString("vi-VN") + "đ";
+                document.getElementById("swTextUsername").innerText = user;
+                document.getElementById("swMenuUser").innerText = user;
+
+                swUpdateBalance(user);
+            }
+        });
+
+        function swUpdateBalance(username) {
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: "POST",
+                headers: { "Content-Type": "text/plain;charset=utf-8" },
+                body: JSON.stringify({ action: "get_balance", username: username })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === "success" && data.balance !== undefined) {
+                    localStorage.setItem("logged_balance", data.balance);
+                    document.getElementById("swTextBalance").innerText = parseInt(data.balance).toLocaleString("vi-VN") + "đ";
+                    const modalBal = document.getElementById("userBalanceText");
+                    if (modalBal) modalBal.innerText = parseInt(data.balance).toLocaleString("vi-VN") + "đ";
+                }
+            })
+            .catch(err => console.log("Lỗi đồng bộ số dư:", err));
+        }
+
+        function swToggleAuthMenu() {
+            var menu = document.getElementById("swAuthMenu");
+            menu.classList.toggle("active");
+        }
+
+        document.addEventListener("click", function(event) {
+            var wrapper = document.getElementById("swLoggedOutWrapper");
+            if (wrapper && !wrapper.contains(event.target)) {
+                document.getElementById("swAuthMenu").classList.remove("active");
+            }
+        });
+
+        function swOpenLoginModal() {
+            document.getElementById("swAuthMenu").classList.remove("active");
+            document.getElementById("swLoginModal").style.display = "flex";
+        }
+        function swOpenRegisterModal() {
+            document.getElementById("swAuthMenu").classList.remove("active");
+            document.getElementById("swRegisterModal").style.display = "flex";
+        }
+        function swOpenUserModal() {
+            document.getElementById("swUserMenuModal").style.display = "flex";
+        }
+        function swCloseAllModals() {
+            document.getElementById("swLoginModal").style.display = "none";
+            document.getElementById("swRegisterModal").style.display = "none";
+            document.getElementById("swUserMenuModal").style.display = "none";
+        }
+        function swSwitchToRegister() {
+            document.getElementById("swLoginModal").style.display = "none";
+            document.getElementById("swRegisterModal").style.display = "flex";
+        }
+        function swSwitchToLogin() {
+            document.getElementById("swRegisterModal").style.display = "none";
+            document.getElementById("swLoginModal").style.display = "flex";
+        }
+
+        function swProcessLogin() {
+            let user = document.getElementById("swLoginUser").value.trim();
+            let pass = document.getElementById("swLoginPass").value.trim();
+
+            if (!user || !pass) {
+                alert("⚠️ Vui lòng nhập đầy đủ tên tài khoản và mật khẩu!");
+                return;
+            }
+
+            let btn = document.getElementById("swLoginBtn");
+            let oldText = btn.innerText;
+            btn.innerText = "⏳ Đang kiểm tra...";
+            btn.disabled = true;
+
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: "POST",
+                headers: { "Content-Type": "text/plain;charset=utf-8" },
+                body: JSON.stringify({ action: "login", username: user, password: pass })
+            })
+            .then(res => res.json())
+            .then(data => {
+                btn.disabled = false;
+                btn.innerText = oldText;
+                if (data.status === "success") {
+                    localStorage.setItem("logged_user", data.username);
+                    localStorage.setItem("logged_balance", data.balance);
+                    alert("✅ Đăng nhập thành công!");
+                    location.reload();
+                } else {
+                    alert("❌ " + data.message);
+                }
+            })
+            .catch(err => {
+                btn.disabled = false;
+                btn.innerText = oldText;
+                alert("❌ Lỗi kết nối đến Google Sheets!");
+            });
+        }
+
+        function swProcessRegister() {
+            let user = document.getElementById("swRegUser").value.trim();
+            let pass = document.getElementById("swRegPass").value.trim();
+
+            if (!user || !pass) {
+                alert("⚠️ Vui lòng nhập đầy đủ tên tài khoản và mật khẩu!");
+                return;
+            }
+
+            let btn = document.getElementById("swRegBtn");
+            let oldText = btn.innerText;
+            btn.innerText = "⏳ Đang tạo...";
+            btn.disabled = true;
+
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: "POST",
+                headers: { "Content-Type": "text/plain;charset=utf-8" },
+                body: JSON.stringify({ action: "register", username: user, password: pass })
+            })
+            .then(res => res.json())
+            .then(data => {
+                btn.disabled = false;
+                btn.innerText = oldText;
+                if (data.status === "success") {
+                    alert("✅ Đăng ký thành công! Hãy đăng nhập ngay.");
+                    swSwitchToLogin();
+                } else {
+                    alert("❌ " + data.message);
+                }
+            })
+            .catch(err => {
+                btn.disabled = false;
+                btn.innerText = oldText;
+                alert("❌ Lỗi kết nối đến Google Sheets!");
+            });
+        }
+
+        function swHandleLogout() {
+            localStorage.removeItem("logged_user");
+            localStorage.removeItem("logged_balance");
+            alert("👋 Đã đăng xuất!");
+            location.reload();
+        }
 
         // 🟢 HÀM BẤM ẨN/HIỆN FORM BÁO LỖI
         function toggleBaoLoi() {
@@ -417,6 +782,12 @@
                                 if (modalBody) {
                                     const idSpan = modalBody.querySelector('#displayPostId');
                                     if (idSpan) idSpan.innerText = uniquePostId;
+
+                                    const userBalText = modalBody.querySelector('#userBalanceText');
+                                    if (userBalText) {
+                                        const cb = localStorage.getItem("logged_balance") || 0;
+                                        userBalText.innerText = parseInt(cb).toLocaleString("vi-VN") + "đ";
+                                    }
 
                                     const scripts = modalBody.querySelectorAll('script');
                                     scripts.forEach(oldScript => {
