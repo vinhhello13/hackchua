@@ -17,4 +17,4 @@ collections:
     fields:
       - {label: "Tiêu đề Script", name: "title", widget: "string"}
       - {label: "Mô tả ngắn", name: "description", widget: "text"}
-      - {label: "Mã Script / HTML Code", name: "body", widget: "code", default_language: "html"}
+      - {label: "Nội dung / HTML Code", name: "body", widget: "markdown"}
