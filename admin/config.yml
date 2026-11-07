@@ -16,6 +16,4 @@ collections:
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     fields:
       - {label: "Tiêu đề Script", name: "title", widget: "string"}
-      - {label: "Link Ảnh Thumbnail", name: "image", widget: "string"}
-      - {label: "Link Rút Gọn Miễn Phí (Cuty.io)", name: "cuty_link", widget: "string", default: "https://cuty.io/hUDtD"}
-      - {label: "Mã Lua Script (Loadstring khi mua VIP)", name: "lua_script", widget: "text"}
+      - {label: "Nội dung bài viết (Dán code vào đây, dùng <!--more--> để ngăn cách)", name: "body", widget: "markdown"}
