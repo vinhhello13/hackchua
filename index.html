@@ -149,12 +149,6 @@
             box-shadow: 0 8px 25px -5px rgba(99, 102, 241, 0.45), inset 0 1px 1px 0 rgba(255, 255, 255, 0.4);
         }
 
-        .liquid-btn-primary:hover {
-            background: linear-gradient(135deg, rgba(99, 102, 241, 1), rgba(67, 56, 202, 0.95));
-            box-shadow: 0 12px 30px -5px rgba(99, 102, 241, 0.65), inset 0 1px 2px 0 rgba(255, 255, 255, 0.6);
-            transform: translateY(-2px);
-        }
-
         .liquid-btn-cyan {
             background: linear-gradient(135deg, rgba(6, 182, 212, 0.85), rgba(14, 116, 144, 0.75));
             border: 1px solid rgba(255, 255, 255, 0.3);
@@ -207,6 +201,14 @@
 
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* Căn giữa ảnh tuyệt đối */
+        .post-preview-box img {
+            margin: 0 auto !important;
+            display: block !important;
+            max-width: 100% !important;
+            height: auto !important;
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col antialiased selection:bg-indigo-500 selection:text-white">
@@ -351,7 +353,7 @@
         }
         initTheme();
 
-        // TỰ ĐỘNG TẢI BÀI VIẾT TỪ REPO GITHUB (AN TOÀN EVENT & SCRIPT EXECUTION)
+        // TỰ ĐỘNG TẢI BÀI VIẾT TỪ REPO GITHUB
         async function loadPosts() {
             try {
                 const res = await fetch('https://api.github.com/repos/vinhhello13/hackchua/contents/_posts');
@@ -409,25 +411,23 @@
                                 </div>
                             </div>
                             
-                            <div class="space-y-3 mb-6 text-center">
+                            <!-- BÊN NGOÀI TRANG CHỦ: CĂN GIỮA ẢNH 100% VÀ MÔ TẢ GỌN GÀNG -->
+                            <div class="post-preview-box flex flex-col items-center justify-center space-y-3 mb-6 text-center w-full">
                                 ${externalHTML}
                             </div>
 
-                            <div class="grid grid-cols-2 gap-3 pt-2">
-                                <button class="btn-xem liquid-btn liquid-btn-cyan w-full font-extrabold py-3 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-1.5">
-                                    <i class="fa-solid fa-eye text-cyan-200"></i> XEM SCRIPT
-                                </button>
-                                <button class="btn-mua liquid-btn liquid-btn-primary w-full font-extrabold py-3 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-1.5">
-                                    <i class="fa-solid fa-bolt text-yellow-300"></i> KÍCH HOẠT
+                            <!-- CHỈ GIỮ LẠI NÚT XEM SCRIPT (RỘNG FULL 100%) -->
+                            <div class="pt-2">
+                                <button class="btn-xem liquid-btn liquid-btn-cyan w-full font-extrabold py-3.5 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2">
+                                    <i class="fa-solid fa-eye text-cyan-200"></i> XEM SCRIPT CHI TIẾT
                                 </button>
                             </div>
                         `;
 
-                        // Gắn sự kiện qua addEventListener để tránh vỡ chuỗi JS khi Modal mở
+                        // Click XEM SCRIPT
                         postCard.querySelector('.btn-xem').addEventListener('click', () => {
                             openModal(title, `<div class="w-full text-slate-200 overflow-x-auto">${internalHTML}</div>`);
                             
-                            // Re-eval scripts để kích hoạt lại checkStatus(), muaBangSoDu(), guiBaoLoi()
                             setTimeout(() => {
                                 const modalBody = document.getElementById('modalBody');
                                 if (modalBody) {
@@ -440,10 +440,6 @@
                                     });
                                 }
                             }, 150);
-                        });
-
-                        postCard.querySelector('.btn-mua').addEventListener('click', () => {
-                            buyProduct(title);
                         });
 
                         container.appendChild(postCard);
@@ -459,17 +455,6 @@
         }
 
         loadPosts();
-
-        function buyProduct(name) {
-            openModal("KÍCH HOẠT DỊCH VỤ", `
-                <div class="space-y-3">
-                    <p>Xác nhận kích hoạt gói: <span class="text-indigo-400 font-bold">${name}</span></p>
-                    <div class="bg-emerald-500/10 border border-emerald-500/20 p-3 rounded-xl text-emerald-400 font-semibold text-xs flex items-center gap-2 backdrop-blur-md">
-                        <i class="fa-solid fa-circle-check"></i> Trạng thái: Hoạt động bình thường.
-                    </div>
-                </div>
-            `);
-        }
 
         function openGiftcodeModal() {
             openModal("NHẬP GIFTCODE KHUYẾN MÃI", `
