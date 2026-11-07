@@ -1171,5 +1171,184 @@
 
         function closeModal() { document.getElementById('generalModal').classList.add('hidden'); }
     </script>
+    <!-- Khu vực chứa thông báo Real-time siêu nhỏ gọn, tối đa 3 thông báo, ghim góc dưới bên trái -->
+<div id='toastContainer' style='position: fixed !important; bottom: 16px !important; left: 16px !important; right: auto !important; top: auto !important; width: 220px !important; z-index: 99999; display: flex; flex-direction: column-reverse; gap: 8px; pointer-events: none;'/>
+
+<script>
+//<![CDATA[
+(function() {
+  const SCRIPT_URL_HISTORY = "https://script.google.com/macros/s/AKfycbziBZNAxN4UMo81tVHE05qEoDNu1VqIplZp8L9jJPFSwu6SWxmTRNHpVQlLern5--wl/exec";
+
+  // Kho 2000 tên thực tế
+  const fakeUsersPool = [];
+  const ho = ["nguyen", "tran", "le", "pham", "hoang", "huynh", "phan", "vu", "vo", "dang", "bui", "do", "ho", "ngo", "duong"];
+  const dem = ["van", "thi", "huu", "gia", "minh", "duc", "thanh", "quoc", "nhat", "hoang", "tuan", "my", "kim", "xuan"];
+  const ten = ["an", "anh", "bao", "binh", "cuong", "dung", "dat", "dong", "ha", "hai", "hieu", "hoa", "huy", "khang", "khoa", "kien", "long", "nam", "nghia", "phong", "phuc", "quan", "son", "tai", "tam", "thang", "thien", "thuan", "tin", "toan", "trang", "trung", "tu", "tung", "uyen", "vinh", "vu", "yen", "tungbeo", "hieupc", "datdz", "huyhoa"];
+  const nicknames = ["pro", "gaming", "dz", "kun", "vip", "vlogs", "troll", "lord", "master", "cute", "nghien", "caythue", "tety", "ak47", "sieu", "sao"];
+
+  for (let i = 0; i < 2000; i++) {
+    let randomHo = ho[Math.floor(Math.random() * ho.length)];
+    let randomDem = dem[Math.floor(Math.random() * dem.length)];
+    let randomTen = ten[Math.floor(Math.random() * ten.length)];
+    let randomNick = nicknames[Math.floor(Math.random() * nicknames.length)];
+    let num = Math.floor(Math.random() * 9000) + 100;
+    
+    let generatedName = "";
+    let styleChoice = Math.floor(Math.random() * 4);
+
+    if (styleChoice === 0) {
+      generatedName = randomHo + randomDem + randomTen + (Math.random() < 0.5 ? num : "");
+    } else if (styleChoice === 1) {
+      generatedName = randomHo + "_" + randomTen + (Math.random() < 0.5 ? "_" + randomNick : "");
+    } else if (styleChoice === 2) {
+      generatedName = randomTen + "_" + randomNick + (Math.random() < 0.5 ? num : "");
+    } else {
+      generatedName = randomTen + randomNick + num;
+    }
+    fakeUsersPool.push(generatedName);
+  }
+
+  const fakeAmounts = [2000, 5000, 5000, 10000, 10000, 20000];
+  const fakeTimePool = ["Vừa xong", "1 phút trước", "2 phút trước", "5 phút trước", "10 phút trước", "30 phút trước", "1 giờ trước", "Hôm qua"];
+
+  let lastKnownTotal = 0;
+  let isFirstCheck = true;
+
+  function showToast(content) {
+    let container = document.getElementById("toastContainer");
+    if (!container) return;
+
+    while (container.children.length >= 3) {
+      container.lastChild.remove();
+    }
+
+    let toast = document.createElement("div");
+    // Style iOS Liquid Glass Dark Mode
+    toast.style.cssText = "background: rgba(15, 23, 42, 0.88); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 16px; padding: 10px 24px 10px 12px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6), 0 0 15px rgba(99, 102, 241, 0.15); font-family: -apple-system, 'Plus Jakarta Sans', sans-serif; font-size: 11px; color: #f3f4f6; z-index: 99999; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); opacity: 0; transform: translateY(12px) scale(0.95); pointer-events: auto; width: 100%; box-sizing: border-box; position: relative;";
+    
+    let closeBtn = document.createElement("span");
+    closeBtn.innerHTML = "&times;";
+    closeBtn.style.cssText = "position: absolute; top: 4px; right: 8px; font-size: 13px; cursor: pointer; color: #94a3b8; width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: rgba(255,255,255,0.05); transition: all 0.2s;";
+    closeBtn.onmouseover = function() { closeBtn.style.color = "#ffffff"; closeBtn.style.background = "rgba(255,255,255,0.2)"; };
+    closeBtn.onmouseout = function() { closeBtn.style.color = "#94a3b8"; closeBtn.style.background = "rgba(255,255,255,0.05)"; };
+    closeBtn.onclick = function() {
+      toast.style.opacity = "0";
+      toast.style.transform = "translateY(-8px) scale(0.95)";
+      setTimeout(() => toast.remove(), 300);
+    };
+    toast.appendChild(closeBtn);
+
+    let contentDiv = document.createElement("div");
+    contentDiv.style.cssText = "line-height: 1.4;";
+    contentDiv.innerHTML = content;
+    toast.appendChild(contentDiv);
+
+    container.insertBefore(toast, container.firstChild);
+
+    setTimeout(function() {
+      toast.style.opacity = "1";
+      toast.style.transform = "translateY(0) scale(1)";
+    }, 50);
+
+    setTimeout(function() {
+      if (toast.parentElement) {
+        toast.style.opacity = "0";
+        toast.style.transform = "translateY(-8px) scale(0.95)";
+        setTimeout(function() {
+          toast.remove();
+        }, 300);
+      }
+    }, 4000);
+  }
+
+  // 🔄 Chuỗi nhai lại giao dịch thật giãn cách tịnh tiến thực tế
+  function triggerRepeatSequence(username, mainText) {
+    const timeSequence = ["Vừa xong", "1 phút trước", "5 phút trước", "10 phút trước", "30 phút trước", "1 giờ trước"];
+    const delaySequence = [0, 60000, 180000, 420000, 900000, 1800000];
+
+    for (let i = 0; i < timeSequence.length; i++) {
+      setTimeout(function() {
+        let timeText = timeSequence[i];
+        showToast("<span style='color: #818cf8; font-weight: 800;'>⚡ " + username + "</span> " + mainText + "<br><span style='font-size: 9px; color: #94a3b8; font-weight: 500; display: block; margin-top: 2px;'>⏱️ " + timeText + "</span>");
+      }, delaySequence[i]);
+    }
+  }
+
+  // Quét Google Sheets liên tục mỗi 6 giây để đồng bộ real-time
+  async function pollRealTransactions() {
+    try {
+      let res = await fetch(SCRIPT_URL_HISTORY);
+      let json = await res.json();
+      if (json && json.status === "success" && json.data) {
+        let realTransactions = json.data;
+        
+        if (isFirstCheck) {
+          lastKnownTotal = realTransactions.length;
+          isFirstCheck = false;
+        } else if (realTransactions.length > lastKnownTotal) {
+          let latestTx = realTransactions[realTransactions.length - 1];
+          let username = latestTx.username || "Khách";
+          let note = latestTx.note || "";
+          let amount = Number(latestTx.amount) || 0;
+          let mainText = "";
+
+          if (note.indexOf("Giftcode") !== -1) {
+            mainText = "vừa đổi mã nhận <b style='color:#f43f5e;'>" + amount.toLocaleString("vi-VN") + "đ</b>! 🔥";
+          } else if (amount > 0) {
+            mainText = "vừa nạp <b style='color:#34d399;'>" + amount.toLocaleString("vi-VN") + "đ</b>! 💰";
+          } else {
+            mainText = "vừa giao dịch thành công! 🚀";
+          }
+
+          triggerRepeatSequence(username, mainText);
+          lastKnownTotal = realTransactions.length;
+        }
+      }
+    } catch (e) {}
+
+    setTimeout(pollRealTransactions, 6000);
+  }
+
+  // 🚀 Vòng lặp thông báo ảo: Ban ngày (6h - 22h) nhảy từ 1s-25s, Ban đêm (22h - 6h) nhảy từ 3p-10p
+  function scheduleNextFake() {
+    let currentHour = new Date().getHours();
+    let delay;
+
+    if (currentHour >= 6 && currentHour < 22) {
+      delay = Math.floor(Math.random() * (25000 - 1000 + 1)) + 1000;
+    } else {
+      delay = Math.floor(Math.random() * (600000 - 180000 + 1)) + 180000;
+    }
+
+    setTimeout(function() {
+      let chosenUser = fakeUsersPool[Math.floor(Math.random() * fakeUsersPool.length)];
+      let randomType = Math.random();
+      let randomMoney = fakeAmounts[Math.floor(Math.random() * fakeAmounts.length)];
+      let timeText = fakeTimePool[Math.floor(Math.random() * fakeTimePool.length)];
+      
+      let fakeMainText = "";
+      
+      // 🎛️ Tỷ lệ: 10% nạp tiền, 40% nhập giftcode, 50% mua script VIP
+      if (randomType < 0.10) {
+        fakeMainText = "vừa nạp <b style='color:#34d399;'>" + randomMoney.toLocaleString("vi-VN") + "đ</b>! 💰";
+      } else if (randomType < 0.50) {
+        fakeMainText = "vừa nhập Giftcode nhận <b style='color:#f43f5e;'>" + randomMoney.toLocaleString("vi-VN") + "đ</b>! 🔥";
+      } else {
+        fakeMainText = "vừa mở khóa <b style='color:#38bdf8;'>Script VIP</b>! 🔓";
+      }
+
+      showToast("<span style='color: #818cf8; font-weight: 800;'>⚡ " + chosenUser + "</span> " + fakeMainText + "<br><span style='font-size: 9px; color: #94a3b8; font-weight: 500; display: block; margin-top: 2px;'>⏱️ " + timeText + "</span>");
+      
+      scheduleNextFake();
+    }, delay);
+  }
+
+  setTimeout(function() {
+    pollRealTransactions();
+    scheduleNextFake();
+  }, 2000);
+})();
+//]]>
+</script>
 </body>
 </html>
