@@ -12,20 +12,8 @@
             theme: {
                 extend: {
                     colors: {
-                        brand: {
-                            50: '#eef2ff',
-                            500: '#6366f1',
-                            600: '#4f46e5',
-                            700: '#4338ca',
-                        },
-                        cyber: {
-                            dark: '#080c14',
-                            card: '#151c2e',
-                            border: '#232d45',
-                            neon: '#10b981',
-                            accent: '#f43f5e',
-                            cyan: '#06b6d4'
-                        }
+                        brand: { 50: '#eef2ff', 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca' },
+                        cyber: { dark: '#080c14', card: '#151c2e', border: '#232d45', neon: '#10b981', accent: '#f43f5e', cyan: '#06b6d4' }
                     },
                     fontFamily: {
                         sans: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
@@ -40,11 +28,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
 
     <style>
-        html {
-            transition: background-color 0.3s ease, color 0.3s ease;
-            scroll-behavior: smooth;
-        }
-
+        html { transition: background-color 0.3s ease, color 0.3s ease; scroll-behavior: smooth; }
         html.dark body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: #060911;
@@ -55,25 +39,12 @@
                 radial-gradient(at 10% 50%, rgba(6, 182, 212, 0.1) 0px, transparent 50%);
             background-attachment: fixed;
         }
-
-        html:not(.dark) body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #f0f4f9;
-            color: #0f172a;
-            background-image: 
-                radial-gradient(at 50% 10%, rgba(99, 102, 241, 0.1) 0px, transparent 60%),
-                radial-gradient(at 80% 80%, rgba(244, 63, 94, 0.06) 0px, transparent 50%),
-                radial-gradient(at 10% 50%, rgba(6, 182, 212, 0.08) 0px, transparent 50%);
-            background-attachment: fixed;
-        }
-
         html.dark .glass-panel {
             background: rgba(15, 23, 42, 0.75);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.09);
         }
-
         html.dark .glass-card {
             background: rgba(18, 26, 47, 0.65);
             backdrop-filter: blur(16px);
@@ -82,42 +53,11 @@
             box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
             transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
         }
-
-        html:not(.dark) .glass-panel {
-            background: rgba(255, 255, 255, 0.82);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(0, 0, 0, 0.08);
-            box-shadow: 0 4px 25px -5px rgba(0, 0, 0, 0.05);
-        }
-
-        html:not(.dark) .glass-card {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(226, 232, 240, 0.9);
-            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.06);
-        }
-
         .glass-card:hover {
             transform: translateY(-6px);
             border-color: rgba(99, 102, 241, 0.45);
             box-shadow: 0 20px 40px -12px rgba(99, 102, 241, 0.3);
         }
-
-        html:not(.dark) .text-white { color: #0f172a !important; }
-        html:not(.dark) .text-slate-200 { color: #1e293b !important; }
-        html:not(.dark) .text-slate-300 { color: #334155 !important; }
-        html:not(.dark) .text-slate-400 { color: #64748b !important; }
-        html:not(.dark) .bg-slate-900 { background-color: #f8fafc !important; }
-        html:not(.dark) .bg-slate-900\/90 { background-color: #f1f5f9 !important; }
-        html:not(.dark) .bg-slate-900\/80 { background-color: #e2e8f0 !important; }
-        html:not(.dark) .bg-slate-800 { background-color: #e2e8f0 !important; }
-        html:not(.dark) .border-slate-800 { border-color: #cbd5e1 !important; }
-        html:not(.dark) .border-slate-700 { border-color: #cbd5e1 !important; }
-        html:not(.dark) .modal-content-box { background-color: #ffffff !important; }
-
         .liquid-btn {
             position: relative;
             overflow: hidden;
@@ -126,83 +66,29 @@
             transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
             user-select: none;
         }
-
-        .liquid-btn::before {
-            content: '';
-            position: absolute;
-            top: 0; 
-            left: -150%; 
-            width: 100%; 
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-            transform: skewX(-20deg);
-            transition: left 0.75s ease;
-        }
-
-        .liquid-btn:hover::before { left: 150%; }
-        .liquid-btn:active { transform: scale(0.96) translateY(1px) !important; }
-
         .liquid-btn-primary {
             background: linear-gradient(135deg, rgba(99, 102, 241, 0.9), rgba(79, 70, 229, 0.85));
             border: 1px solid rgba(255, 255, 255, 0.3);
             color: #ffffff !important;
-            box-shadow: 0 8px 25px -5px rgba(99, 102, 241, 0.45), inset 0 1px 1px 0 rgba(255, 255, 255, 0.4);
+            box-shadow: 0 8px 25px -5px rgba(99, 102, 241, 0.45);
         }
-
         .liquid-btn-cyan {
             background: linear-gradient(135deg, rgba(6, 182, 212, 0.85), rgba(14, 116, 144, 0.75));
             border: 1px solid rgba(255, 255, 255, 0.3);
             color: #ffffff !important;
-            box-shadow: 0 8px 25px -5px rgba(6, 182, 212, 0.4), inset 0 1px 1px 0 rgba(255, 255, 255, 0.4);
+            box-shadow: 0 8px 25px -5px rgba(6, 182, 212, 0.4);
         }
-
-        .liquid-btn-cyan:hover {
-            background: linear-gradient(135deg, rgba(6, 182, 212, 1), rgba(8, 145, 178, 0.95));
-            box-shadow: 0 12px 30px -5px rgba(6, 182, 212, 0.6), inset 0 1px 2px 0 rgba(255, 255, 255, 0.6);
-            transform: translateY(-2px);
-        }
-
         html.dark .liquid-btn-secondary {
             background: rgba(30, 41, 59, 0.55);
             border: 1px solid rgba(255, 255, 255, 0.12);
             color: #cbd5e1;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.12);
         }
-
-        html.dark .liquid-btn-secondary:hover {
-            background: rgba(51, 65, 85, 0.75);
-            border-color: rgba(255, 255, 255, 0.25);
-            color: #ffffff !important;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.25);
-            transform: translateY(-2px);
-        }
-
-        html:not(.dark) .liquid-btn-secondary {
-            background: rgba(255, 255, 255, 0.75);
-            border: 1px solid rgba(0, 0, 0, 0.09);
-            color: #334155 !important;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05), inset 0 1px 1px rgba(255, 255, 255, 0.9);
-        }
-
-        html:not(.dark) .liquid-btn-secondary:hover {
-            background: rgba(255, 255, 255, 1);
-            border-color: rgba(99, 102, 241, 0.4);
-            color: #4f46e5 !important;
-            box-shadow: 0 6px 18px rgba(99, 102, 241, 0.18), inset 0 1px 1px rgba(255, 255, 255, 1);
-            transform: translateY(-2px);
-        }
-
         .liquid-btn-active {
             background: linear-gradient(135deg, rgba(99, 102, 241, 0.95), rgba(67, 56, 202, 0.9)) !important;
-            border: 1px solid rgba(255, 255, 255, 0.35) !important;
             color: #ffffff !important;
-            box-shadow: 0 6px 22px rgba(99, 102, 241, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.4) !important;
         }
-
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        
-        /* Ép ảnh hiển thị ngoài trang chủ to rõ, đẹp và cân đối */
         .post-preview-box img {
             width: 100% !important;
             max-width: 100% !important;
@@ -233,10 +119,6 @@
             </a>
 
             <div class="flex items-center gap-3">
-                <button id="themeToggleBtn" onclick="toggleTheme()" class="liquid-btn liquid-btn-secondary w-10 h-10 rounded-full flex items-center justify-center text-amber-400 transition" title="Chuyển chế độ Sáng/Tối">
-                    <i id="themeIcon" class="fa-solid fa-moon text-base"></i>
-                </button>
-
                 <div class="hidden sm:flex items-center gap-2 bg-slate-900/80 border border-emerald-500/30 rounded-full px-4 py-2 shadow-inner backdrop-blur-md">
                     <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
                     <span class="text-xs text-slate-400 font-semibold">Ví:</span>
@@ -264,19 +146,6 @@
                 <a href="#giftcode" onclick="openGiftcodeModal()" class="liquid-btn liquid-btn-secondary flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold shrink-0">
                     <i class="fa-solid fa-gift text-rose-400"></i> Giftcode
                 </a>
-                <div class="relative group shrink-0">
-                    <button class="liquid-btn liquid-btn-secondary flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold">
-                        <i class="fa-solid fa-wallet text-emerald-400"></i> Nạp tiền <i class="fa-solid fa-chevron-down text-[10px] opacity-70"></i>
-                    </button>
-                    <div class="absolute top-full left-0 mt-2 w-56 glass-panel rounded-xl py-2 hidden group-hover:block z-50 shadow-2xl border border-slate-700">
-                        <a href="#" onclick="openNapModal('MOMO')" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-semibold text-slate-200 hover:bg-indigo-600/30 hover:text-indigo-300 transition">
-                            <i class="fa-solid fa-qrcode text-pink-400"></i> Nạp MoMo / ZaloPay
-                        </a>
-                        <a href="#" onclick="openNapModal('BANK')" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-semibold text-slate-200 hover:bg-indigo-600/30 hover:text-indigo-300 transition">
-                            <i class="fa-solid fa-building-columns text-blue-400"></i> Chuyển khoản Ngân hàng
-                        </a>
-                    </div>
-                </div>
                 <a href="#lichsu" onclick="openHistoryModal()" class="liquid-btn liquid-btn-secondary flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold shrink-0">
                     <i class="fa-solid fa-clock-rotate-left text-amber-400"></i> Lịch sử
                 </a>
@@ -307,13 +176,6 @@
         </div>
     </main>
 
-    <!-- FOOTER -->
-    <footer class="glass-panel border-t border-slate-800 py-6 mt-auto">
-        <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-500 font-semibold">
-            © 2026 POGO GAMING STORE. All rights reserved. Liquid/Glass UI Technology.
-        </div>
-    </footer>
-
     <!-- GENERAL MODAL -->
     <div id="generalModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
         <div id="modalBox" class="glass-panel rounded-2xl max-w-2xl w-full p-6 border border-slate-700 shadow-2xl relative modal-content-box max-h-[90vh] overflow-y-auto hide-scrollbar">
@@ -328,50 +190,66 @@
         </div>
     </div>
 
-    <!-- JAVASCRIPT LOGIC -->
+    <!-- JAVASCRIPT LOGIC TRANG CHỦ -->
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz_YC2ALIH4fux4jTPOiZFRcf-c2oP6cCNNtazPlEdiNPE-P0cMQ7t8LJevKEHVTnB6/exec";
-        const GIA_SCRIPT_VIP = 1000;
+        let CURRENT_ACTIVE_POST_ID = "";
 
-        function initTheme() {
-            const savedTheme = localStorage.getItem('pogo_theme');
-            const themeIcon = document.getElementById('themeIcon');
-            if (savedTheme === 'light') {
-                document.documentElement.classList.remove('dark');
-                if (themeIcon) themeIcon.className = 'fa-solid fa-sun text-amber-500';
-            } else {
-                document.documentElement.classList.add('dark');
-                if (themeIcon) themeIcon.className = 'fa-solid fa-moon text-amber-400';
+        // 🟢 HÀM BẤM ẨN/HIỆN FORM BÁO LỖI (BẢO ĐẢM CHẠY 100%)
+        function toggleBaoLoi() {
+            const box = document.getElementById("formBaoLoiBox");
+            if (box) {
+                if (box.style.display === "none" || box.style.display === "") {
+                    box.style.display = "block";
+                } else {
+                    box.style.display = "none";
+                }
             }
         }
 
-        function toggleTheme() {
-            const html = document.documentElement;
-            const themeIcon = document.getElementById('themeIcon');
-            if (html.classList.contains('dark')) {
-                html.classList.remove('dark');
-                localStorage.setItem('pogo_theme', 'light');
-                if (themeIcon) themeIcon.className = 'fa-solid fa-sun text-amber-500';
-            } else {
-                html.classList.add('dark');
-                localStorage.setItem('pogo_theme', 'dark');
-                if (themeIcon) themeIcon.className = 'fa-solid fa-moon text-amber-400';
+        // 🔴 HÀM GỬI BÁO LỖI VÀ KHÓA BÀI VIẾT TỪ GIAO DIỆN
+        async function guiBaoLoi() {
+            const loggedUser = localStorage.getItem("logged_user") || "Chưa đăng nhập";
+            const tieuDeEl = document.getElementById("loiTieuDe");
+            const noiDungEl = document.getElementById("loiNoiDung");
+            
+            const tieuDe = tieuDeEl ? tieuDeEl.value : "Báo lỗi chung";
+            const noiDungChiTiet = noiDungEl ? noiDungEl.value.trim() : "";
+            const fullMessage = "[" + tieuDe + "] [ID: " + CURRENT_ACTIVE_POST_ID + "]" + (noiDungChiTiet ? " " + noiDungChiTiet : "");
+
+            // Khóa giao diện ngay tại chỗ
+            const tag = document.getElementById("statusTag");
+            if (tag) {
+                tag.innerText = "🔴 BẢO TRÌ / ĐANG CẬP NHẬT";
+                tag.style.color = "#fb7185";
             }
-        }
-        initTheme();
 
-        // Đồng bộ thông tin user ra Header
-        function updateGlobalUserUI() {
-            const user = localStorage.getItem("logged_user") || "Khách";
-            const balance = parseInt(localStorage.getItem("logged_balance"), 10) || 0;
-            const nameEl = document.getElementById("globalUserName");
-            const balEl = document.getElementById("globalUserBalance");
-            if (nameEl) nameEl.innerText = user;
-            if (balEl) balEl.innerText = balance.toLocaleString("vi-VN") + "đ";
-        }
-        window.addEventListener("DOMContentLoaded", updateGlobalUserUI);
+            const freeBox = document.getElementById("khoangFreeBox");
+            const vipBox = document.getElementById("khoangVipBox");
+            if (freeBox) freeBox.style.display = "none";
+            if (vipBox) vipBox.style.display = "none";
 
-        // Tạo ID chuẩn độc lập cho từng bài viết dựa vào tên file Markdown
+            try {
+                await fetch(SCRIPT_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "text/plain;charset=utf-8" },
+                    body: JSON.stringify({ 
+                        action: "reportAndLock", 
+                        postId: CURRENT_ACTIVE_POST_ID, 
+                        username: loggedUser, 
+                        message: fullMessage 
+                    })
+                });
+                alert("✅ Đã gửi báo lỗi! Trạng thái bài viết đã được tự động chuyển sang BẢO TRÌ.");
+            } catch (err) {
+                alert("✅ Đã gửi báo lỗi ngầm tới hệ thống!");
+            }
+
+            if (noiDungEl) noiDungEl.value = "";
+            const box = document.getElementById("formBaoLoiBox");
+            if (box) box.style.display = "none";
+        }
+
         function generatePostId(fileName) {
             let hash = 0;
             for (let i = 0; i < fileName.length; i++) {
@@ -381,7 +259,6 @@
             return "ID_" + Math.abs(hash).toString(36).toUpperCase();
         }
 
-        // TỰ ĐỘNG TẢI BÀI VIẾT TỪ GITHUB
         async function loadPosts() {
             try {
                 const res = await fetch('https://api.github.com/repos/vinhhello13/hackchua/contents/_posts');
@@ -392,7 +269,7 @@
                 container.innerHTML = '';
 
                 if (!Array.isArray(files) || files.length === 0) {
-                    container.innerHTML = '<div class="glass-card rounded-2xl p-6 text-center text-slate-400 text-xs col-span-2 py-8">Chưa có bài viết nào được đăng. Hãy vào /admin để đăng bài!</div>';
+                    container.innerHTML = '<div class="glass-card rounded-2xl p-6 text-center text-slate-400 text-xs col-span-2 py-8">Chưa có bài viết nào!</div>';
                     return;
                 }
 
@@ -421,9 +298,6 @@
                                 externalHTML = fullBody;
                                 internalHTML = fullBody;
                             }
-                        } else {
-                            externalHTML = rawText;
-                            internalHTML = rawText;
                         }
 
                         const uniquePostId = generatePostId(file.name);
@@ -436,15 +310,10 @@
                                 <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 backdrop-blur-md">
                                     <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span> WORKING 100%
                                 </span>
-                                <div class="w-8 h-8 rounded-full bg-indigo-500/10 border border-indigo-400/30 flex items-center justify-center text-indigo-400 text-sm shadow-inner">
-                                    <i class="fa-solid fa-code"></i>
-                                </div>
                             </div>
-                            
                             <div class="post-preview-box flex flex-col items-center justify-center space-y-3 mb-6 text-center w-full pointer-events-none">
                                 ${externalHTML}
                             </div>
-
                             <div class="pt-2 pointer-events-none">
                                 <button class="btn-xem liquid-btn liquid-btn-cyan w-full font-extrabold py-3.5 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2">
                                     <i class="fa-solid fa-eye text-cyan-200"></i> XEM SCRIPT CHI TIẾT
@@ -452,39 +321,23 @@
                             </div>
                         `;
 
-                        // Hàm mở Modal, tiêm nội dung và tự động "đánh thức" các thẻ script bên trong bài viết
                         const openDetailAction = () => {
-                            const modalContentWrapper = `
-                                <div class="w-full text-slate-200 overflow-x-auto" data-post-id="${uniquePostId}">
-                                    ${internalHTML}
-                                </div>
-                            `;
-                            openModal(title, modalContentWrapper);
+                            CURRENT_ACTIVE_POST_ID = uniquePostId;
+                            openModal(title, `<div class="w-full text-slate-200 overflow-x-auto">${internalHTML}</div>`);
                             
                             setTimeout(() => {
                                 const modalBody = document.getElementById('modalBody');
                                 if (modalBody) {
-                                    // 1. Gán ID định danh chuẩn cho bài viết
                                     const idSpan = modalBody.querySelector('#displayPostId');
                                     if (idSpan) idSpan.innerText = uniquePostId;
 
-                                    // 2. Cập nhật số dư ví thực tế vào modal
-                                    const balSpan = modalBody.querySelector('#userBalanceText');
-                                    if (balSpan) {
-                                        const currentBal = parseInt(localStorage.getItem("logged_balance"), 10) || 0;
-                                        balSpan.innerText = currentBal.toLocaleString("vi-VN") + "đ";
-                                    }
-
-                                    // 3. Quét, bóc tách và thực thi lại toàn bộ thẻ <script> bên trong bài đăng
                                     const scripts = modalBody.querySelectorAll('script');
                                     scripts.forEach(oldScript => {
                                         const newScript = document.createElement('script');
-                                        // Ghi đè biến MY_POST_ID để code của bạn nhận đúng ID bài viết này
                                         newScript.text = `const MY_POST_ID = "${uniquePostId}";\n` + oldScript.text;
                                         oldScript.parentNode.replaceChild(newScript, oldScript);
                                     });
 
-                                    // 4. Kích hoạt tự động hàm kiểm tra trạng thái từ Google Apps Script
                                     if (typeof kiemTraTrangThaiModal === 'function') {
                                         kiemTraTrangThaiModal(uniquePostId);
                                     }
@@ -497,28 +350,16 @@
                             openDetailAction();
                         });
 
-                        postCard.querySelectorAll('a').forEach(aTag => {
-                            aTag.addEventListener('click', (e) => {
-                                e.preventDefault();
-                                openDetailAction();
-                            });
-                        });
-
                         container.appendChild(postCard);
                     }
                 }
             } catch (err) {
                 console.error('Lỗi tải bài viết:', err);
-                const container = document.getElementById('cardContainer');
-                if (container) {
-                    container.innerHTML = '<div class="glass-card rounded-2xl p-6 text-center text-rose-400 text-xs col-span-2">Không thể tải danh sách bài viết từ GitHub.</div>';
-                }
             }
         }
 
         loadPosts();
 
-        // Hàm kiểm tra trạng thái bài viết (tích hợp sẵn cho các Modal)
         async function kiemTraTrangThaiModal(postId) {
             try {
                 const res = await fetch(SCRIPT_URL, {
@@ -533,64 +374,17 @@
                 const vipBox = document.getElementById("khoangVipBox");
 
                 if (data.status === "success" && String(data.pageStatus).trim().toUpperCase() === "LOCK") {
-                    if (tag) { tag.innerText = "🔴 BẢO TRÌ / ĐANG CẬP NHẬT"; tag.style.color = "#ff4757"; }
+                    if (tag) { tag.innerText = "🔴 BẢO TRÌ / ĐANG CẬP NHẬT"; tag.style.color = "#fb7185"; }
                     if (freeBox) freeBox.style.display = "none";
                     if (vipBox) vipBox.style.display = "none";
                 } else {
-                    if (tag) { tag.innerText = "🟢 WORKING (AUTO UPDATE)"; tag.style.color = "#2ed573"; }
+                    if (tag) { tag.innerText = "🟢 WORKING (AUTO UPDATE)"; tag.style.color = "#34d399"; }
                     if (freeBox) freeBox.style.display = "block";
                     if (vipBox) vipBox.style.display = "block";
                 }
             } catch (err) {
                 console.error("Lỗi kiểm tra trạng thái:", err);
-                const tag = document.getElementById("statusTag");
-                const freeBox = document.getElementById("khoangFreeBox");
-                const vipBox = document.getElementById("khoangVipBox");
-                if (tag) { tag.innerText = "🟢 WORKING (AUTO UPDATE)"; tag.style.color = "#2ed573"; }
-                if (freeBox) freeBox.style.display = "block";
-                if (vipBox) vipBox.style.display = "block";
             }
-        }
-
-        function openGiftcodeModal() {
-            openModal("NHẬP GIFTCODE KHUYẾN MÃI", `
-                <div class="space-y-3">
-                    <input type="text" placeholder="Nhập mã quà tặng..." class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-xs text-white outline-none focus:border-indigo-500 backdrop-blur-md">
-                    <button onclick="openModal('KẾT QUẢ', 'Mã quà tặng không hợp lệ hoặc đã hết hạn!')" class="liquid-btn liquid-btn-primary w-full font-bold py-2.5 rounded-xl text-xs">
-                        ÁP DỤNG MÃ
-                    </button>
-                </div>
-            `);
-        }
-
-        function openNapModal(type) {
-            openModal(`NẠP TIỀN QUA ${type}`, `
-                <div class="space-y-3">
-                    <p class="text-slate-400">Vui lòng chuyển khoản đúng thông tin dưới đây:</p>
-                    <div class="bg-slate-900 border border-slate-800 p-3.5 rounded-xl text-slate-200 text-xs font-mono space-y-1 backdrop-blur-md">
-                        <p><b class="text-slate-400">Ngân hàng:</b> MB BANK</p>
-                        <p><b class="text-slate-400">Số tài khoản:</b> 0987654321</p>
-                        <p><b class="text-slate-400">Chủ tài khoản:</b> POGO GAMING</p>
-                        <p><b class="text-slate-400">Nội dung:</b> NAP DONGNGU</p>
-                    </div>
-                </div>
-            `);
-        }
-
-        function openHistoryModal() {
-            openModal("LỊCH SỬ GIAO DỊCH", "<p class='text-slate-400'>Chưa có lịch sử giao dịch nào.</p>");
-        }
-
-        function openUserModal() {
-            const user = localStorage.getItem("logged_user") || "Khách";
-            const balance = parseInt(localStorage.getItem("logged_balance"), 10) || 0;
-            openModal("THÔNG TIN TÀI KHOẢN", `
-                <div class="space-y-2 text-xs">
-                    <div class="flex justify-between py-1.5 border-b border-slate-800"><span class="text-slate-400">Tài khoản:</span> <b class="text-white">${user}</b></div>
-                    <div class="flex justify-between py-1.5 border-b border-slate-800"><span class="text-slate-400">Số dư:</span> <b class="text-emerald-400">${balance.toLocaleString("vi-VN")}đ</b></div>
-                    <div class="flex justify-between py-1.5"><span class="text-slate-400">Cấp độ:</span> <b class="text-indigo-400">Thành viên VIP</b></div>
-                </div>
-            `);
         }
 
         function openModal(title, content) {
@@ -601,15 +395,6 @@
 
         function closeModal() {
             document.getElementById('generalModal').classList.add('hidden');
-        }
-
-        function filterCards() {
-            const query = document.getElementById('searchInput').value.toLowerCase();
-            const cards = document.querySelectorAll('.card-item');
-            cards.forEach(card => {
-                const text = card.innerText.toLowerCase();
-                card.style.display = text.includes(query) ? 'flex' : 'none';
-            });
         }
     </script>
 </body>
