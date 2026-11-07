@@ -769,5 +769,42 @@
             });
         }
     </script>
+    <script>
+  async function loadPosts() {
+    try {
+      // 1. Lấy danh sách các bài viết trong thư mục _posts
+      const res = await fetch('https://api.github.com/repos/vinhhello13/hackchua/contents/_posts');
+      const files = await res.json();
+      
+      const container = document.getElementById('posts-container'); // ID của khung chứa bài viết trên trang chủ
+      if (!container) return;
+      container.innerHTML = '';
+
+      // 2. Lặp qua từng file bài viết và hiển thị
+      for (const file of files) {
+        if (file.name.endsWith('.md')) {
+          const contentRes = await fetch(file.download_url);
+          const rawText = await contentRes.text();
+          
+          // Tách phần metadata (YAML) và phần nội dung
+          const parts = rawText.split('---');
+          if (parts.length >= 3) {
+            const body = parts.slice(2).join('---');
+            
+            // Tạo phần tử hiển thị bài viết
+            const postCard = document.createElement('div');
+            postCard.className = 'post-card'; // Đổi class này theo css giao diện của bạn
+            postCard.innerHTML = body;
+            container.appendChild(postCard);
+          }
+        }
+      }
+    } catch (err) {
+      console.error('Lỗi tải bài viết:', err);
+    }
+  }
+
+  loadPosts();
+</script>
 </body>
 </html>
