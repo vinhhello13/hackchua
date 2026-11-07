@@ -202,12 +202,16 @@
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
-        /* Căn giữa ảnh tuyệt đối */
+        /* Ép ảnh hiển thị ngoài trang chủ to rõ, đẹp và cân đối */
         .post-preview-box img {
+            width: 100% !important;
+            max-width: 100% !important;
+            height: 190px !important;
+            object-fit: cover !important;
             margin: 0 auto !important;
             display: block !important;
-            max-width: 100% !important;
-            height: auto !important;
+            border-radius: 12px;
+            border: 2px solid rgb(46, 213, 115);
         }
     </style>
 </head>
@@ -353,7 +357,7 @@
         }
         initTheme();
 
-        // TỰ ĐỘNG TẢI BÀI VIẾT TỪ REPO GITHUB
+        // TỰ ĐỘNG TẢI BÀI VIẾT TỪ GITHUB REPO
         async function loadPosts() {
             try {
                 const res = await fetch('https://api.github.com/repos/vinhhello13/hackchua/contents/_posts');
@@ -399,10 +403,11 @@
                         }
 
                         const postCard = document.createElement('div');
-                        postCard.className = 'glass-card rounded-2xl p-6 flex flex-col justify-between relative overflow-hidden group card-item border border-slate-800';
+                        // Biến cả khung thành thẻ bấm được (cursor-pointer)
+                        postCard.className = 'glass-card rounded-2xl p-6 flex flex-col justify-between relative overflow-hidden group card-item border border-slate-800 cursor-pointer';
                         
                         postCard.innerHTML = `
-                            <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center justify-between mb-4 pointer-events-none">
                                 <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 backdrop-blur-md">
                                     <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span> WORKING 100%
                                 </span>
@@ -411,21 +416,20 @@
                                 </div>
                             </div>
                             
-                            <!-- BÊN NGOÀI TRANG CHỦ: CĂN GIỮA ẢNH 100% VÀ MÔ TẢ GỌN GÀNG -->
-                            <div class="post-preview-box flex flex-col items-center justify-center space-y-3 mb-6 text-center w-full">
+                            <!-- BÊN NGOÀI TRANG CHỦ: ẢNH TO RÕ, ĐẸP VÀ KHÔNG BỊ LỆCH -->
+                            <div class="post-preview-box flex flex-col items-center justify-center space-y-3 mb-6 text-center w-full pointer-events-none">
                                 ${externalHTML}
                             </div>
 
-                            <!-- CHỈ GIỮ LẠI NÚT XEM SCRIPT (RỘNG FULL 100%) -->
-                            <div class="pt-2">
+                            <div class="pt-2 pointer-events-none">
                                 <button class="btn-xem liquid-btn liquid-btn-cyan w-full font-extrabold py-3.5 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2">
                                     <i class="fa-solid fa-eye text-cyan-200"></i> XEM SCRIPT CHI TIẾT
                                 </button>
                             </div>
                         `;
 
-                        // Click XEM SCRIPT
-                        postCard.querySelector('.btn-xem').addEventListener('click', () => {
+                        // Hàm mở Modal chi tiết nội dung script bên trong
+                        const openDetailAction = () => {
                             openModal(title, `<div class="w-full text-slate-200 overflow-x-auto">${internalHTML}</div>`);
                             
                             setTimeout(() => {
@@ -440,6 +444,20 @@
                                     });
                                 }
                             }, 150);
+                        };
+
+                        // Bấm vào bất kỳ đâu trên khung card hoặc bấm vào ảnh đều mở Modal
+                        postCard.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            openDetailAction();
+                        });
+
+                        // Vô hiệu hóa hành vi chuyển hướng của mọi thẻ a bên trong card preview
+                        postCard.querySelectorAll('a').forEach(aTag => {
+                            aTag.addEventListener('click', (e) => {
+                                e.preventDefault();
+                                openDetailAction();
+                            });
                         });
 
                         container.appendChild(postCard);
