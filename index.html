@@ -1,4 +1,34 @@
-async function loadPosts() {
+<!-- JAVASCRIPT LOGIC -->
+    <script>
+        function initTheme() {
+            const savedTheme = localStorage.getItem('pogo_theme');
+            const themeIcon = document.getElementById('themeIcon');
+            if (savedTheme === 'light') {
+                document.documentElement.classList.remove('dark');
+                if (themeIcon) themeIcon.className = 'fa-solid fa-sun text-amber-500';
+            } else {
+                document.documentElement.classList.add('dark');
+                if (themeIcon) themeIcon.className = 'fa-solid fa-moon text-amber-400';
+            }
+        }
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            const themeIcon = document.getElementById('themeIcon');
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                localStorage.setItem('pogo_theme', 'light');
+                if (themeIcon) themeIcon.className = 'fa-solid fa-sun text-amber-500';
+            } else {
+                html.classList.add('dark');
+                localStorage.setItem('pogo_theme', 'dark');
+                if (themeIcon) themeIcon.className = 'fa-solid fa-moon text-amber-400';
+            }
+        }
+        initTheme();
+
+        // --- TỰ ĐỘNG TẢI BÀI VIẾT (ĐỒNG BỘ ẢNH VÀ NỘI DUNG) ---
+        async function loadPosts() {
             try {
                 const res = await fetch('https://api.github.com/repos/vinhhello13/hackchua/contents/_posts');
                 const files = await res.json();
@@ -8,7 +38,7 @@ async function loadPosts() {
                 container.innerHTML = '';
 
                 if (!Array.isArray(files) || files.length === 0) {
-                    container.innerHTML = '<div class="glass-card rounded-2xl p-6 text-center text-slate-400 text-xs col-span-2 py-8">Chưa có bài viết nào được đăng. Hãy vào /admin để đăng bài!</div>';
+                    container.innerHTML = '<div class="glass-card rounded-2xl p-6 text-center text-slate-400 text-xs col-span-2 py-8">Chưa có bài viết hoặc script nào được đăng. Hãy vào /admin để đăng bài đầu tiên!</div>';
                     return;
                 }
 
@@ -18,34 +48,34 @@ async function loadPosts() {
                         const rawText = await contentRes.text();
                         
                         const parts = rawText.split('---');
-                        let title = "Script VIP";
-                        let externalHTML = ""; // Phần hiện ngoài trang chủ
-                        let internalHTML = ""; // Phần hiện trong popup chi tiết
+                        let title = file.name.replace('.md', '');
+                        let imageUrl = 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjdefQupbTOHJzkaQF0Ex3AS88eiO1z5ddMXjo0IuOnnGs62GT8GCfwCYfR_0V5U0Ad0JNZG13042KBhFJNnLSf8vlicjTN2zb0ujeUjLrzpX4hpffIVnuichz6Dfyug7rQlNV-DljSYNxR9kxBJS9RraG345pKzD-hFJyNiqT31A86G_vqGWHmh6p2ewI/s1600/image.png';
+                        let internalHTML = '';
 
                         if (parts.length >= 3) {
                             const yamlHeader = parts[1];
-                            const fullMarkdown = parts.slice(2).join('---').trim();
+                            const fullBody = parts.slice(2).join('---').trim();
 
-                            const tMatch = yamlHeader.match(/title:\s*"?(.*?)"?$/m);
-                            if (tMatch) title = tMatch[1];
+                            const titleMatch = yamlHeader.match(/title:\s*"?(.*?)"?$/m);
+                            if (titleMatch && titleMatch[1]) title = titleMatch[1];
 
-                            // Tách bằng <!--more--> chuẩn phong cách Blogger
-                            if (fullMarkdown.includes('<!--more-->')) {
-                                const splitParts = fullMarkdown.split('<!--more-->');
-                                externalHTML = splitParts[0].trim();
+                            const imgMatch = yamlHeader.match(/image:\s*"?(.*?)"?$/m);
+                            if (imgMatch && imgMatch[1]) imageUrl = imgMatch[1];
+
+                            // Tách nội dung sau thẻ <!--more--> cho phần chi tiết bên trong modal
+                            if (fullBody.includes('<!--more-->')) {
+                                const splitParts = fullBody.split('<!--more-->');
                                 internalHTML = splitParts[1].trim();
                             } else {
-                                externalHTML = fullMarkdown;
-                                internalHTML = fullMarkdown;
+                                internalHTML = fullBody;
                             }
                         } else {
-                            externalHTML = rawText;
                             internalHTML = rawText;
                         }
 
-                        // Tạo thẻ Card ngoài trang chủ (Chỉ hiện phần trên <!--more-->)
+                        // Khung hiển thị Card bài viết ngoài Trang chủ
                         const postCard = document.createElement('div');
-                        postCard.className = 'glass-card rounded-2xl p-6 flex flex-col justify-between relative overflow-hidden group card-item border border-slate-800 col-span-1 md:col-span-2';
+                        postCard.className = 'glass-card rounded-2xl p-6 flex flex-col justify-between relative overflow-hidden group card-item border border-slate-800';
                         
                         postCard.innerHTML = `
                             <div class="flex items-center justify-between mb-4">
@@ -56,13 +86,16 @@ async function loadPosts() {
                                     <i class="fa-solid fa-code"></i>
                                 </div>
                             </div>
-
-                            <!-- PHẦN HIỂN THỊ NGOÀI TRANG CHỦ (ẢNH + MÔ TẢ GỌN GÀNG) -->
-                            <div class="mb-6 text-center">
-                                ${externalHTML}
+                            
+                            <!-- BÊN NGOÀI TRANG CHỦ: HIỆN ẢNH TỪ Ô NHẬP LINK VÀ TIÊU ĐỀ -->
+                            <div class="space-y-3 mb-6 text-center">
+                                <div style="clear: both; margin-bottom: 10px; text-align: center;">
+                                    <img alt="${title}" src="${imageUrl}" style="border-radius: 10px; border: 2px solid rgb(46, 213, 115); max-width: 320px; width: 100%; height: auto; display: inline-block;" />
+                                </div>
+                                <p class="text-xs text-slate-300 font-bold">🔥 ${title} - Bấm XEM SCRIPT để lấy link!</p>
                             </div>
 
-                            <!-- NÚT BẤM -->
+                            <!-- DẢI NÚT THAO TÁC -->
                             <div class="grid grid-cols-2 gap-3 pt-2">
                                 <button class="btn-xem liquid-btn liquid-btn-cyan w-full font-extrabold py-3 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-1.5">
                                     <i class="fa-solid fa-eye text-cyan-200"></i> XEM SCRIPT
@@ -73,19 +106,23 @@ async function loadPosts() {
                             </div>
                         `;
 
-                        // KHI BẤM "XEM SCRIPT", BUNG TOÀN BỘ KHÔNG GIAN CHỨC NĂNG BÊN DƯỚI VÀO POPUP
+                        // KHI BẤM "XEM SCRIPT", MỞ MODAL CHỨA TOÀN BỘ KHUNG CHỨC NĂNG BÊN DƯỚI <!--more-->
                         postCard.querySelector('.btn-xem').addEventListener('click', () => {
-                            openModal(title, `<div class="max-h-[75vh] overflow-y-auto pr-1 hide-scrollbar">${internalHTML}</div>`);
+                            openModal(title, `<div class="w-full text-slate-200 overflow-x-auto">${internalHTML}</div>`);
                             
-                            // Kích hoạt lại các đoạn mã script chức năng (check trạng thái, số dư) bên trong popup
+                            // Kích hoạt lại các đoạn thẻ <script> bên trong modal để chạy logic checkStatus, mua hàng, báo lỗi
                             setTimeout(() => {
-                                const scripts = document.getElementById('generalModal').querySelectorAll('script');
-                                scripts.forEach(oldScript => {
-                                    const newScript = document.createElement('script');
-                                    newScript.text = oldScript.text;
-                                    oldScript.parentNode.replaceChild(newScript, oldScript);
-                                });
-                            }, 200);
+                                const modalBody = document.getElementById('modalBody');
+                                if (modalBody) {
+                                    const scripts = modalBody.querySelectorAll('script');
+                                    scripts.forEach(oldScript => {
+                                        const newScript = document.createElement('script');
+                                        Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
+                                        newScript.appendChild(document.createTextNode(oldScript.innerHTML));
+                                        oldScript.parentNode.replaceChild(newScript, oldScript);
+                                    });
+                                }
+                            }, 150);
                         });
 
                         postCard.querySelector('.btn-mua').addEventListener('click', () => {
@@ -105,3 +142,74 @@ async function loadPosts() {
         }
 
         loadPosts();
+
+        // --- CÁC HÀM XỬ LÝ NẠP TIỀN / MUA HÀNG KHÁC ---
+        function buyProduct(name) {
+            openModal("KÍCH HOẠT DỊCH VỤ", `
+                <div class="space-y-3">
+                    <p>Xác nhận kích hoạt gói: <span class="text-indigo-400 font-bold">${name}</span></p>
+                    <div class="bg-emerald-500/10 border border-emerald-500/20 p-3 rounded-xl text-emerald-400 font-semibold text-xs flex items-center gap-2 backdrop-blur-md">
+                        <i class="fa-solid fa-circle-check"></i> Trạng thái: Hoạt động bình thường.
+                    </div>
+                </div>
+            `);
+        }
+
+        function openGiftcodeModal() {
+            openModal("NHẬP GIFTCODE KHUYẾN MÃI", `
+                <div class="space-y-3">
+                    <input type="text" placeholder="Nhập mã quà tặng..." class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-xs text-white outline-none focus:border-indigo-500 backdrop-blur-md">
+                    <button onclick="openModal('KẾT QUẢ', 'Mã quà tặng không hợp lệ hoặc đã hết hạn!')" class="liquid-btn liquid-btn-primary w-full font-bold py-2.5 rounded-xl text-xs">
+                        ÁP DỤNG MÃ
+                    </button>
+                </div>
+            `);
+        }
+
+        function openNapModal(type) {
+            openModal(`NẠP TIỀN QUA ${type}`, `
+                <div class="space-y-3">
+                    <p class="text-slate-400">Vui lòng chuyển khoản đúng thông tin dưới đây:</p>
+                    <div class="bg-slate-900 border border-slate-800 p-3.5 rounded-xl text-slate-200 text-xs font-mono space-y-1 backdrop-blur-md">
+                        <p><b class="text-slate-400">Ngân hàng:</b> MB BANK</p>
+                        <p><b class="text-slate-400">Số tài khoản:</b> 0987654321</p>
+                        <p><b class="text-slate-400">Chủ tài khoản:</b> POGO GAMING</p>
+                        <p><b class="text-slate-400">Nội dung:</b> NAP DONGNGU</p>
+                    </div>
+                </div>
+            `);
+        }
+
+        function openHistoryModal() {
+            openModal("LỊCH SỬ GIAO DỊCH", "<p class='text-slate-400'>Chưa có lịch sử giao dịch nào.</p>");
+        }
+
+        function openUserModal() {
+            openModal("THÔNG TIN TÀI KHOẢN", `
+                <div class="space-y-2 text-xs">
+                    <div class="flex justify-between py-1.5 border-b border-slate-800"><span class="text-slate-400">Tài khoản:</span> <b class="text-white">đông ngu</b></div>
+                    <div class="flex justify-between py-1.5 border-b border-slate-800"><span class="text-slate-400">Số dư:</span> <b class="text-emerald-400">1.999.985.000đ</b></div>
+                    <div class="flex justify-between py-1.5"><span class="text-slate-400">Cấp độ:</span> <b class="text-indigo-400">Thành viên VIP</b></div>
+                </div>
+            `);
+        }
+
+        function openModal(title, content) {
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalBody').innerHTML = content;
+            document.getElementById('generalModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('generalModal').classList.add('hidden');
+        }
+
+        function filterCards() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const cards = document.querySelectorAll('.card-item');
+            cards.forEach(card => {
+                const text = card.innerText.toLowerCase();
+                card.style.display = text.includes(query) ? 'flex' : 'none';
+            });
+        }
+    </script>
