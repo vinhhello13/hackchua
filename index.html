@@ -130,11 +130,11 @@
             box-shadow: 0 8px 25px -5px rgba(6, 182, 212, 0.4);
         }
 
-        .liquid-btn-emerald {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.9), rgba(5, 150, 105, 0.85));
+        .liquid-btn-rose {
+            background: linear-gradient(135deg, rgba(244, 63, 94, 0.9), rgba(225, 29, 72, 0.85));
             border: 1px solid rgba(255, 255, 255, 0.3);
             color: #ffffff !important;
-            box-shadow: 0 8px 25px -5px rgba(16, 185, 129, 0.4);
+            box-shadow: 0 8px 25px -5px rgba(244, 63, 94, 0.45);
         }
 
         html.dark .liquid-btn-secondary {
@@ -162,7 +162,7 @@
             border: 2px solid rgb(46, 213, 115);
         }
 
-        /* 📱 STYLES POPUP WIDGET AUTH THEO PHONG CÁCH iOS LIQUID GLASS */
+        /* 📱 STYLES POPUP WIDGET AUTH & MODAL THEO PHONG CÁCH iOS LIQUID GLASS */
         .ios-dropdown-menu {
             display: none;
             position: absolute;
@@ -201,13 +201,18 @@
             -webkit-backdrop-filter: blur(30px);
             border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: 28px;
-            width: 380px;
+            width: 440px;
             max-width: 100%;
             padding: 28px;
             color: #ffffff;
             box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.8), 0 0 30px rgba(99, 102, 241, 0.2);
             position: relative;
             text-align: center;
+        }
+
+        .ios-modal-large {
+            width: 820px;
+            max-width: 100%;
         }
     </style>
 </head>
@@ -277,12 +282,12 @@
                 <a href="#" class="liquid-btn liquid-btn-active flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold shrink-0">
                     <i class="fa-solid fa-house text-indigo-200"></i> Trang chủ
                 </a>
-                <a href="#giftcode" onclick="openGiftcodeModal()" class="liquid-btn liquid-btn-secondary flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold shrink-0">
+                <button onclick="openGiftcodeModal()" class="liquid-btn liquid-btn-secondary flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold shrink-0">
                     <i class="fa-solid fa-gift text-rose-400"></i> Giftcode
-                </a>
-                <a href="#lichsu" onclick="openHistoryModal()" class="liquid-btn liquid-btn-secondary flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold shrink-0">
+                </button>
+                <button onclick="openHistoryModal()" class="liquid-btn liquid-btn-secondary flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold shrink-0">
                     <i class="fa-solid fa-clock-rotate-left text-amber-400"></i> Lịch sử
-                </a>
+                </button>
             </nav>
 
             <div class="relative w-40 sm:w-60">
@@ -324,7 +329,146 @@
         </div>
     </div>
 
-    <!-- 📱 MODAL POPUP ĐĂNG NHẬP (CHUẨN GIAO DIỆN iOS LIQUID GLASS) -->
+    <!-- 🎁 MODAL GIFTCODE (ĐÃ NÂNG CẤP iOS LIQUID GLASS) -->
+    <div class="ios-modal-overlay" id="giftcodeModal">
+        <div class="ios-modal-card">
+            <button onclick="closeGiftcodeModal()" class="liquid-btn liquid-btn-secondary absolute top-4 right-4 text-slate-400 hover:text-white w-8 h-8 rounded-full flex items-center justify-center">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            
+            <div class="w-16 h-16 mx-auto mb-3 rounded-2xl bg-gradient-to-tr from-rose-500 via-orange-500 to-amber-500 flex items-center justify-center text-white text-3xl shadow-lg shadow-rose-500/30">
+                <i class="fa-solid fa-gift"></i>
+            </div>
+            
+            <h3 class="text-lg font-extrabold text-white mb-1 uppercase tracking-wide">NHẬP GIFTCODE NHẬN QUÀ</h3>
+            <p class="text-xs text-slate-400 mb-6">Nhập mã quà tặng do Admin phát hành để nhận ngay tiền vào ví!</p>
+            
+            <div class="space-y-4 text-left">
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1.5">🎁 MÃ GIFTCODE:</label>
+                    <input type="text" id="pageGiftcodeInput" placeholder="Nhập mã quà tặng của bạn vào đây..." class="w-full bg-slate-900/90 border border-slate-700/80 focus:border-rose-500 rounded-xl px-4 py-3 text-xs font-bold text-slate-200 uppercase outline-none transition tracking-wider">
+                </div>
+                
+                <button id="pageGiftcodeBtn" onclick="submitPageGiftcode()" class="liquid-btn liquid-btn-rose w-full py-3.5 rounded-xl text-xs font-extrabold uppercase tracking-wider mt-2">
+                    🚀 XÁC NHẬN ĐỔI QUÀ
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 📜 MODAL LỊCH SỬ GIAO DỊCH (ĐÃ NÂNG CẤP iOS LIQUID GLASS) -->
+    <div class="ios-modal-overlay" id="historyModal">
+        <div class="ios-modal-card ios-modal-large text-left">
+            <button onclick="closeHistoryModal()" class="liquid-btn liquid-btn-secondary absolute top-4 right-4 text-slate-400 hover:text-white w-8 h-8 rounded-full flex items-center justify-center">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <!-- KHUNG HIỆN KHI CHƯA ĐĂNG NHẬP -->
+            <div id="auth-required-section" class="text-center py-8" style="display: none;">
+                <div class="w-16 h-16 mx-auto mb-3 rounded-full bg-rose-500/20 border border-rose-500/30 flex items-center justify-center text-rose-400 text-2xl">
+                    <i class="fa-solid fa-lock"></i>
+                </div>
+                <h3 class="text-lg font-extrabold text-white mb-2">LỊCH SỬ GIAO DỊCH KHÓA</h3>
+                <p class="text-xs text-slate-400 mb-6">⚠️ Bạn cần đăng nhập tài khoản trên web để xem lịch sử giao dịch!</p>
+                <button onclick="closeHistoryModal(); swOpenLoginModal();" class="liquid-btn liquid-btn-primary px-6 py-3 rounded-xl text-xs font-bold uppercase tracking-wider">
+                    👉 ĐĂNG NHẬP NGAY
+                </button>
+            </div>
+
+            <!-- KHUNG HIỆN KHI ĐÃ ĐĂNG NHẬP -->
+            <div id="ls-main-section" style="display: none;">
+                <div class="flex items-center justify-between mb-4 border-b border-slate-800 pb-3">
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-clock-rotate-left text-amber-400 text-lg"></i>
+                        <h3 class="text-lg font-extrabold text-white uppercase tracking-wide">LỊCH SỬ GIAO DỊCH</h3>
+                    </div>
+                    <div class="text-xs text-slate-400 flex items-center gap-2">
+                        <span>Tài khoản:</span>
+                        <span id="display-user-tag" class="px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-bold">...</span>
+                    </div>
+                </div>
+
+                <!-- BỘ LỌC THÔNG MINH -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-slate-900/90 border border-slate-800 p-3 rounded-2xl mb-4">
+                    <div>
+                        <label class="block text-[10px] font-extrabold text-slate-400 mb-1 uppercase">Loại giao dịch</label>
+                        <select id="filter-type" onchange="filterData()" class="w-full bg-slate-950 border border-slate-700/80 rounded-xl px-3 py-2 text-xs font-semibold text-slate-200 outline-none">
+                            <option value="all">Tất cả</option>
+                            <option value="nap">Nạp tiền (+)</option>
+                            <option value="tru">Trừ tiền / Mua hàng (-)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-extrabold text-slate-400 mb-1 uppercase">Hình thức</label>
+                        <select id="filter-method" onchange="filterData()" class="w-full bg-slate-950 border border-slate-700/80 rounded-xl px-3 py-2 text-xs font-semibold text-slate-200 outline-none">
+                            <option value="all">Tất cả hình thức</option>
+                            <option value="chuyenkhoan">Chuyển khoản / SePay</option>
+                            <option value="napthe">Nạp thẻ cào</option>
+                            <option value="muahang">Mua Script / Trừ tiền</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-extrabold text-slate-400 mb-1 uppercase">Khoảng thời gian</label>
+                        <select id="filter-time" onchange="filterData()" class="w-full bg-slate-950 border border-slate-700/80 rounded-xl px-3 py-2 text-xs font-semibold text-slate-200 outline-none">
+                            <option value="all">Tất cả (Toàn bộ)</option>
+                            <option value="today">Hôm nay</option>
+                            <option value="yesterday">Hôm qua</option>
+                            <option value="week">1 tuần trước</option>
+                            <option value="month">1 tháng trước</option>
+                            <option value="year">1 năm trước</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- BẢNG CUỘN NGANG AN TOÀN -->
+                <div class="overflow-x-auto rounded-2xl border border-slate-800 bg-slate-950/60 max-h-72 overflow-y-auto hide-scrollbar">
+                    <table class="w-full text-left border-collapse text-xs">
+                        <thead class="bg-slate-900 sticky top-0 border-b border-slate-800 text-slate-400 font-bold uppercase text-[10px]">
+                            <tr>
+                                <th class="p-3">Mã GD</th>
+                                <th class="p-3">Nội dung / Hình thức</th>
+                                <th class="p-3">Số tiền</th>
+                                <th class="p-3">Thời gian</th>
+                                <th class="p-3">Trạng thái / Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ls-sheet-list" class="divide-y divide-slate-800/60 text-slate-300">
+                            <tr><td colspan="5" class="text-center p-6 text-slate-500 font-semibold">Đang tải dữ liệu...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="flex items-center justify-between mt-4">
+                    <button onclick="fetchHistoryFromSheet()" class="liquid-btn liquid-btn-cyan px-4 py-2.5 rounded-xl text-xs font-bold flex items-center gap-2">
+                        <i class="fa-solid fa-arrows-rotate"></i> Đồng bộ lại dữ liệu
+                    </button>
+                    <button onclick="resetFilter()" class="liquid-btn liquid-btn-secondary px-3 py-2.5 rounded-xl text-xs font-bold text-rose-400">
+                        <i class="fa-solid fa-trash-can"></i> Xóa bộ lọc
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 💎 MODAL POPUP XEM SCRIPT ĐÃ MUA -->
+    <div class="ios-modal-overlay" id="scriptModal">
+        <div class="ios-modal-card">
+            <button onclick="closeScriptModal()" class="liquid-btn liquid-btn-secondary absolute top-4 right-4 text-slate-400 hover:text-white w-8 h-8 rounded-full flex items-center justify-center">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <h3 class="text-base font-extrabold text-white mb-2 uppercase">💎 CHI TIẾT SCRIPT ĐÃ MUA</h3>
+            <p class="text-xs text-slate-400 mb-1 text-left"><b>Đơn hàng:</b> <span id="modalNoteText" class="text-slate-200">...</span></p>
+            <p class="text-xs text-slate-400 mb-4 text-left"><b>Mã bài viết (ID):</b> <span id="modalPostId" class="px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 font-bold font-mono">...</span></p>
+            
+            <textarea id="modalScriptContent" readonly class="w-full h-24 bg-slate-950 text-emerald-400 border border-slate-800 rounded-xl p-3 font-mono text-[11px] mb-4 outline-none resize-none"></textarea>
+            
+            <button onclick="copyModalScript()" class="liquid-btn liquid-btn-cyan w-full py-3 rounded-xl text-xs font-extrabold uppercase tracking-wider flex items-center justify-center gap-2">
+                <i class="fa-solid fa-copy"></i> COPY SCRIPT NGAY
+            </button>
+        </div>
+    </div>
+
+    <!-- 📱 MODAL POPUP AUTH SYSTEM -->
     <div class="ios-modal-overlay" id="swLoginModal">
         <div class="ios-modal-card">
             <button onclick="swCloseAllModals()" class="liquid-btn liquid-btn-secondary absolute top-4 right-4 text-slate-400 hover:text-white w-8 h-8 rounded-full flex items-center justify-center">
@@ -359,7 +503,6 @@
         </div>
     </div>
 
-    <!-- 📱 MODAL POPUP ĐĂNG KÝ (CHUẨN GIAO DIỆN iOS LIQUID GLASS) -->
     <div class="ios-modal-overlay" id="swRegisterModal">
         <div class="ios-modal-card">
             <button onclick="swCloseAllModals()" class="liquid-btn liquid-btn-secondary absolute top-4 right-4 text-slate-400 hover:text-white w-8 h-8 rounded-full flex items-center justify-center">
@@ -394,7 +537,6 @@
         </div>
     </div>
 
-    <!-- 📱 MODAL POPUP QUẢN LÝ TÀI KHOẢN (CHUẨN GIAO DIỆN iOS LIQUID GLASS) -->
     <div class="ios-modal-overlay" id="swUserMenuModal">
         <div class="ios-modal-card">
             <button onclick="swCloseAllModals()" class="liquid-btn liquid-btn-secondary absolute top-4 right-4 text-slate-400 hover:text-white w-8 h-8 rounded-full flex items-center justify-center">
@@ -421,13 +563,17 @@
         </div>
     </div>
 
-    <!-- JAVASCRIPT LOGIC TRANG CHỦ & WIDGET AUTH -->
+    <!-- JAVASCRIPT LOGIC TỔNG HỢP (GIFTCODE, LỊCH SỬ, AUTH, MAIN) -->
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz_YC2ALIH4fux4jTPOiZFRcf-c2oP6cCNNtazPlEdiNPE-P0cMQ7t8LJevKEHVTnB6/exec";
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz5MYk4UcJnlQ5JUaXUFAuz9Be5Ddj9WTgPMfKpOg346dFcS2Kbwt_1kFNfzNbkYDEm/exec";
+        const SCRIPT_URL_GIFTCODE = "https://script.google.com/macros/s/AKfycbziBZNAxN4UMo81tVHE05qEoDNu1VqIplZp8L9jJPFSwu6SWxmTRNHpVQlLern5--wl/exec";
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxxidzHDOKlrUCgcN6RzviRDcTICJ4ssLRzaOtxNgwhuxRd7yFK5ItjqXXAm8gIuJ5y/exec";
+        
         let CURRENT_ACTIVE_POST_ID = "";
+        let rawTransactionData = [];
 
-        // 🌗 XỬ LÝ GIAO DIỆN SÁNG / TỐI
+        // 🌗 GIAO DIỆN SÁNG / TỐI
         function initTheme() {
             const savedTheme = localStorage.getItem('pogo_theme');
             const themeIcon = document.getElementById('themeIcon');
@@ -455,7 +601,248 @@
         }
         initTheme();
 
-        // 🟢 STORE WIDGET POPUP AUTH SYSTEM LOGIC
+        // 🎁 LOGIC GIFTCODE
+        function openGiftcodeModal() { document.getElementById("giftcodeModal").style.display = "flex"; }
+        function closeGiftcodeModal() { document.getElementById("giftcodeModal").style.display = "none"; }
+
+        async function submitPageGiftcode() {
+            let codeEl = document.getElementById("pageGiftcodeInput");
+            if (!codeEl) return;
+            let code = codeEl.value.trim();
+
+            if (!code) { alert("⚠️ Vui lòng nhập mã Giftcode!"); return; }
+
+            let loggedUser = localStorage.getItem("logged_user");
+            if (!loggedUser) {
+                alert("⚠️ Vui lòng đăng nhập tài khoản trước khi nhập Giftcode!");
+                closeGiftcodeModal();
+                swOpenLoginModal();
+                return;
+            }
+
+            let btn = document.getElementById("pageGiftcodeBtn");
+            let oldText = btn.innerText;
+            btn.innerText = "⏳ Đang xử lý...";
+            btn.disabled = true;
+
+            let clientIp = "UNKNOWN";
+            try {
+                let ipRes = await fetch("https://api.ipify.org?format=json");
+                let ipData = await ipRes.json();
+                clientIp = ipData.ip;
+            } catch (e) { console.log("Không lấy được IP"); }
+
+            fetch(SCRIPT_URL_GIFTCODE, {
+                method: "POST",
+                headers: { "Content-Type": "text/plain;charset=utf-8" },
+                body: JSON.stringify({
+                    action: "redeemGiftcode",
+                    username: loggedUser,
+                    code: code,
+                    clientIp: clientIp
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                btn.disabled = false;
+                btn.innerText = oldText;
+
+                if (data.status === "success") {
+                    alert("🎉 " + data.message);
+                    if (data.balance !== undefined) {
+                        localStorage.setItem("logged_balance", data.balance);
+                        if (typeof swUpdateBalance === "function") {
+                            swUpdateBalance(loggedUser);
+                        } else {
+                            location.reload();
+                        }
+                    }
+                    codeEl.value = "";
+                    closeGiftcodeModal();
+                } else {
+                    alert("❌ " + (data.message || "Giftcode không hợp lệ hoặc đã hết hạn/hết lượt!"));
+                }
+            })
+            .catch(err => {
+                btn.disabled = false;
+                btn.innerText = oldText;
+                alert("❌ Lỗi kết nối đến máy chủ!");
+            });
+        }
+
+        // 📜 LOGIC LỊCH SỬ GIAO DỊCH
+        function openHistoryModal() {
+            document.getElementById("historyModal").style.display = "flex";
+            checkLoginAndInitHistory();
+        }
+
+        function closeHistoryModal() {
+            document.getElementById("historyModal").style.display = "none";
+        }
+
+        function getActiveUser() {
+            let user = localStorage.getItem('logged_user') || localStorage.getItem('current_user') || localStorage.getItem('username');
+            return user ? user.trim() : "";
+        }
+
+        function checkLoginAndInitHistory() {
+            let currentUser = getActiveUser();
+            if (!currentUser) {
+                document.getElementById('auth-required-section').style.display = 'block';
+                document.getElementById('ls-main-section').style.display = 'none';
+            } else {
+                document.getElementById('auth-required-section').style.display = 'none';
+                document.getElementById('ls-main-section').style.display = 'block';
+                document.getElementById('display-user-tag').innerText = currentUser;
+                fetchHistoryFromSheet();
+            }
+        }
+
+        function fetchHistoryFromSheet() {
+            let currentUser = getActiveUser();
+            let tableBody = document.getElementById('ls-sheet-list');
+            tableBody.innerHTML = '<tr><td colspan="5" class="text-center p-6 text-slate-500 font-semibold">Đang tải dữ liệu từ Google Sheets...</td></tr>';
+
+            fetch(WEB_APP_URL)
+            .then(response => response.json())
+            .then(res => {
+                if (res.status === "success" && res.data) {
+                    rawTransactionData = res.data.filter(item => {
+                        let sheetUser = String(item.username || "").trim().toLowerCase();
+                        let targetUser = String(currentUser).trim().toLowerCase();
+                        return sheetUser === targetUser;
+                    });
+                    filterData();
+                } else {
+                    tableBody.innerHTML = '<tr><td colspan="5" class="text-center text-rose-400 p-6 font-semibold">Phản hồi từ hệ thống không hợp lệ!</td></tr>';
+                }
+            })
+            .catch(err => {
+                tableBody.innerHTML = '<tr><td colspan="5" class="text-center text-rose-400 p-6 font-semibold">Lỗi kết nối tới Web App!</td></tr>';
+            });
+        }
+
+        function resetFilter() {
+            document.getElementById('filter-type').value = "all";
+            document.getElementById('filter-method').value = "all";
+            document.getElementById('filter-time').value = "all";
+            filterData();
+        }
+
+        function parseSheetDate(timeStr) {
+            if (!timeStr) return null;
+            let str = String(timeStr).trim();
+            let parts = str.split(/\s+/);
+            let datePart = parts.length === 2 ? (parts[1].includes("/") ? parts[1] : parts[0]) : parts[0];
+            let dParts = datePart.split('/');
+            if (dParts.length === 3) {
+                return new Date(parseInt(dParts[2], 10), parseInt(dParts[1], 10) - 1, parseInt(dParts[0], 10));
+            }
+            return null;
+        }
+
+        function filterData() {
+            let typeVal = document.getElementById('filter-type').value;
+            let methodVal = document.getElementById('filter-method').value;
+            let timeVal = document.getElementById('filter-time').value;
+
+            let now = new Date();
+            let todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            let todayEnd = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59);
+
+            let filtered = rawTransactionData.filter(item => {
+                let amount = Number(item.amount || 0);
+                let note = String(item.note || "").toLowerCase();
+
+                if (typeVal === "nap" && amount < 0) return false;
+                if (typeVal === "tru" && amount > 0) return false;
+
+                if (methodVal === "chuyenkhoan" && !note.includes("chuyển khoản") && !note.includes("sepay") && !note.includes("nap")) return false;
+                if (methodVal === "napthe" && !note.includes("thẻ") && !note.includes("card")) return false;
+                if (methodVal === "muahang" && !note.includes("mua") && !note.includes("mở khóa") && amount >= 0) return false;
+
+                if (timeVal !== "all" && item.time) {
+                    let itemDate = parseSheetDate(item.time);
+                    if (!itemDate) return true;
+
+                    if (timeVal === "today") {
+                        if (itemDate < todayStart || itemDate > todayEnd) return false;
+                    } else if (timeVal === "yesterday") {
+                        let yStart = new Date(todayStart); yStart.setDate(todayStart.getDate() - 1);
+                        let yEnd = new Date(todayEnd); yEnd.setDate(todayEnd.getDate() - 1);
+                        if (itemDate < yStart || itemDate > yEnd) return false;
+                    } else if (timeVal === "week") {
+                        let limit = new Date(todayStart); limit.setDate(todayStart.getDate() - 7);
+                        if (itemDate < limit) return false;
+                    } else if (timeVal === "month") {
+                        let limit = new Date(todayStart); limit.setMonth(todayStart.getMonth() - 1);
+                        if (itemDate < limit) return false;
+                    } else if (timeVal === "year") {
+                        let limit = new Date(todayStart); limit.setFullYear(todayStart.getFullYear() - 1);
+                        if (itemDate < limit) return false;
+                    }
+                }
+                return true;
+            });
+
+            renderTable(filtered);
+        }
+
+        function renderTable(dataList) {
+            let tableBody = document.getElementById('ls-sheet-list');
+            let html = '';
+
+            if (dataList.length === 0) {
+                html = '<tr><td colspan="5" class="text-center p-6 text-slate-500 font-semibold">Chưa có giao dịch nào phù hợp với bộ lọc</td></tr>';
+            } else {
+                dataList.slice().reverse().forEach(item => {
+                    let amount = Number(item.amount || 0);
+                    let amountFormatted = (amount > 0 ? "+" : "") + amount.toLocaleString('vi-VN') + " đ";
+                    let amountClass = amount >= 0 ? "text-emerald-400 font-bold" : "text-rose-400 font-bold";
+                    let noteText = item.note || 'Giao dịch hệ thống';
+
+                    let actionHtml = '';
+                    if (amount < 0 && (noteText.toLowerCase().includes("script") || noteText.includes("ID_"))) {
+                        let match = noteText.match(/ID_[a-zA-Z0-9_]+/i);
+                        let extractedId = match ? match[0] : "";
+                        actionHtml = `<div class="flex items-center gap-2">
+                            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Thành công</span>
+                            <button onclick="openScriptModal('${extractedId}', '${encodeURIComponent(noteText)}')" class="liquid-btn liquid-btn-cyan px-2.5 py-1 rounded-lg text-[10px] font-bold">👁️ Xem Script</button>
+                        </div>`;
+                    } else {
+                        actionHtml = amount >= 0 ? `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">${item.status || 'Thành công'}</span>` : `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-500/10 text-rose-400 border border-rose-500/20">${item.status || 'Đã trừ'}</span>`;
+                    }
+
+                    html += `<tr>
+                        <td class="p-3 font-mono font-bold">${item.txnId || 'GD...'}</td>
+                        <td class="p-3">${noteText}</td>
+                        <td class="p-3 ${amountClass}">${amountFormatted}</td>
+                        <td class="p-3 text-[11px] text-slate-400">${item.time || ''}</td>
+                        <td class="p-3">${actionHtml}</td>
+                    </tr>`;
+                });
+            }
+            tableBody.innerHTML = html;
+        }
+
+        function openScriptModal(postId, rawNote) {
+            let note = decodeURIComponent(rawNote);
+            document.getElementById("modalNoteText").innerText = note;
+            document.getElementById("modalPostId").innerText = postId || "Chưa xác định";
+            document.getElementById("modalScriptContent").value = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/tienkhanh1/spicy/main/Chilli.lua"))()';
+            document.getElementById("scriptModal").style.display = "flex";
+        }
+
+        function copyModalScript() {
+            let copyText = document.getElementById("modalScriptContent");
+            copyText.select();
+            navigator.clipboard.writeText(copyText.value);
+            alert("📋 Đã copy Script thành công!");
+        }
+
+        function closeScriptModal() { document.getElementById("scriptModal").style.display = "none"; }
+
+        // 🟢 WIDGET AUTH & GENERAL MAIN LOGIC
         window.addEventListener("DOMContentLoaded", function() {
             var user = localStorage.getItem("logged_user");
             if (user && user !== "null" && user !== "") {
@@ -509,9 +896,7 @@
             document.getElementById("swAuthMenu").classList.remove("active");
             document.getElementById("swRegisterModal").style.display = "flex";
         }
-        function swOpenUserModal() {
-            document.getElementById("swUserMenuModal").style.display = "flex";
-        }
+        function swOpenUserModal() { document.getElementById("swUserMenuModal").style.display = "flex"; }
         function swCloseAllModals() {
             document.getElementById("swLoginModal").style.display = "none";
             document.getElementById("swRegisterModal").style.display = "none";
@@ -530,10 +915,7 @@
             let user = document.getElementById("swLoginUser").value.trim();
             let pass = document.getElementById("swLoginPass").value.trim();
 
-            if (!user || !pass) {
-                alert("⚠️ Vui lòng nhập đầy đủ tên tài khoản và mật khẩu!");
-                return;
-            }
+            if (!user || !pass) { alert("⚠️ Vui lòng nhập đầy đủ tên tài khoản và mật khẩu!"); return; }
 
             let btn = document.getElementById("swLoginBtn");
             let oldText = btn.innerText;
@@ -569,10 +951,7 @@
             let user = document.getElementById("swRegUser").value.trim();
             let pass = document.getElementById("swRegPass").value.trim();
 
-            if (!user || !pass) {
-                alert("⚠️ Vui lòng nhập đầy đủ tên tài khoản và mật khẩu!");
-                return;
-            }
+            if (!user || !pass) { alert("⚠️ Vui lòng nhập đầy đủ tên tài khoản và mật khẩu!"); return; }
 
             let btn = document.getElementById("swRegBtn");
             let oldText = btn.innerText;
@@ -609,19 +988,11 @@
             location.reload();
         }
 
-        // 🟢 HÀM BẤM ẨN/HIỆN FORM BÁO LỖI
         function toggleBaoLoi() {
             const box = document.getElementById("formBaoLoiBox");
-            if (box) {
-                if (box.style.display === "none" || box.style.display === "") {
-                    box.style.display = "block";
-                } else {
-                    box.style.display = "none";
-                }
-            }
+            if (box) box.style.display = (box.style.display === "none" || box.style.display === "") ? "block" : "none";
         }
 
-        // 🔴 HÀM GỬI BÁO LỖI VÀ KHÓA BÀI VIẾT
         async function guiBaoLoi() {
             const loggedUser = localStorage.getItem("logged_user") || "Chưa đăng nhập";
             const tieuDeEl = document.getElementById("loiTieuDe");
@@ -632,10 +1003,7 @@
             const fullMessage = "[" + tieuDe + "] [ID: " + CURRENT_ACTIVE_POST_ID + "]" + (noiDungChiTiet ? " " + noiDungChiTiet : "");
 
             const tag = document.getElementById("statusTag");
-            if (tag) {
-                tag.innerText = "🔴 BẢO TRÌ / ĐANG CẬP NHẬT";
-                tag.style.color = "#fb7185";
-            }
+            if (tag) { tag.innerText = "🔴 BẢO TRÌ / ĐANG CẬP NHẬT"; tag.style.color = "#fb7185"; }
 
             const freeBox = document.getElementById("khoangFreeBox");
             const vipBox = document.getElementById("khoangVipBox");
@@ -646,17 +1014,10 @@
                 await fetch(SCRIPT_URL, {
                     method: "POST",
                     headers: { "Content-Type": "text/plain;charset=utf-8" },
-                    body: JSON.stringify({ 
-                        action: "reportAndLock", 
-                        postId: CURRENT_ACTIVE_POST_ID, 
-                        username: loggedUser, 
-                        message: fullMessage 
-                    })
+                    body: JSON.stringify({ action: "reportAndLock", postId: CURRENT_ACTIVE_POST_ID, username: loggedUser, message: fullMessage })
                 });
                 alert("✅ Đã gửi báo lỗi! Trạng thái bài viết đã được tự động chuyển sang BẢO TRÌ.");
-            } catch (err) {
-                alert("✅ Đã gửi báo lỗi ngầm tới hệ thống!");
-            }
+            } catch (err) { alert("✅ Đã gửi báo lỗi ngầm tới hệ thống!"); }
 
             if (noiDungEl) noiDungEl.value = "";
             const box = document.getElementById("formBaoLoiBox");
@@ -772,9 +1133,7 @@
                         container.appendChild(postCard);
                     }
                 }
-            } catch (err) {
-                console.error('Lỗi tải bài viết:', err);
-            }
+            } catch (err) { console.error('Lỗi tải bài viết:', err); }
         }
 
         loadPosts();
@@ -801,9 +1160,7 @@
                     if (freeBox) freeBox.style.display = "block";
                     if (vipBox) vipBox.style.display = "block";
                 }
-            } catch (err) {
-                console.error("Lỗi kiểm tra trạng thái:", err);
-            }
+            } catch (err) { console.error("Lỗi kiểm tra trạng thái:", err); }
         }
 
         function openModal(title, content) {
@@ -812,9 +1169,7 @@
             document.getElementById('generalModal').classList.remove('hidden');
         }
 
-        function closeModal() {
-            document.getElementById('generalModal').classList.add('hidden');
-        }
+        function closeModal() { document.getElementById('generalModal').classList.add('hidden'); }
     </script>
 </body>
 </html>
