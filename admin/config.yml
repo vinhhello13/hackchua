@@ -1,6 +1,6 @@
 backend:
   name: github
-  repo: TEN_TAI_KHOAN_CUA_BAN/pogogaming
+  repo: vinhhello13/pogogaming
   branch: main
 
 media_folder: "images/uploads"
