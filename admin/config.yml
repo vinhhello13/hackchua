@@ -1,6 +1,6 @@
 backend:
   name: github
-  repo: vinhhello13/pogogaming
+  repo: vinhhello13/hackchua
   branch: main
 
 media_folder: "images/uploads"
