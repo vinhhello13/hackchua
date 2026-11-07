@@ -1,0 +1,18 @@
+backend:
+  name: github
+  repo: TEN_TAI_KHOAN_CUA_BAN/pogogaming
+  branch: main
+
+media_folder: "images/uploads"
+public_folder: "/images/uploads"
+
+collections:
+  - name: "posts"
+    label: "Bài Viết / Script"
+    folder: "_posts"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - {label: "Tiêu đề Script", name: "title", widget: "string"}
+      - {label: "Mô tả ngắn", name: "description", widget: "text"}
+      - {label: "Nội dung / Link Script", name: "body", widget: "markdown"}
