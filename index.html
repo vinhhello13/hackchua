@@ -28,7 +28,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
 
     <style>
-        html { transition: background-color 0.3s ease, color 0.3s ease; scroll-behavior: smooth; }
+        html { scroll-behavior: smooth; }
 
         html.dark body {
             font-family: -apple-system, 'Plus Jakarta Sans', sans-serif;
@@ -38,17 +38,6 @@
                 radial-gradient(at 50% 10%, rgba(99, 102, 241, 0.18) 0px, transparent 60%),
                 radial-gradient(at 80% 80%, rgba(244, 63, 94, 0.12) 0px, transparent 50%),
                 radial-gradient(at 10% 50%, rgba(6, 182, 212, 0.1) 0px, transparent 50%);
-            background-attachment: fixed;
-        }
-
-        html:not(.dark) body {
-            font-family: -apple-system, 'Plus Jakarta Sans', sans-serif;
-            background-color: #f0f4f9;
-            color: #0f172a;
-            background-image: 
-                radial-gradient(at 50% 10%, rgba(99, 102, 241, 0.1) 0px, transparent 60%),
-                radial-gradient(at 80% 80%, rgba(244, 63, 94, 0.06) 0px, transparent 50%),
-                radial-gradient(at 10% 50%, rgba(6, 182, 212, 0.08) 0px, transparent 50%);
             background-attachment: fixed;
         }
 
@@ -66,23 +55,6 @@
             border: 1px solid rgba(255, 255, 255, 0.08);
             box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
             transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        html:not(.dark) .glass-panel {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border: 1px solid rgba(0, 0, 0, 0.08);
-            box-shadow: 0 4px 25px -5px rgba(0, 0, 0, 0.05);
-        }
-
-        html:not(.dark) .glass-card {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(226, 232, 240, 0.9);
-            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.06);
         }
 
         .glass-card:hover {
@@ -214,6 +186,15 @@
             width: 820px;
             max-width: 100%;
         }
+
+        /* 🟢 BADGE TRẠNG THÁI BÀI VIẾT (liquid glass) */
+        .status-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 9999px; font-size: 11px; font-weight: 700; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); transition: all 0.3s ease; }
+        .status-badge .status-dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+        .status-badge.is-ok { background: rgba(16, 185, 129, 0.12); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .status-badge.is-ok .status-dot { animation: pogoPulse 1.4s ease-in-out infinite; }
+        .status-badge.is-lock { background: rgba(244, 63, 94, 0.12); color: #fb7185; border: 1px solid rgba(244, 63, 94, 0.3); }
+        .status-badge.is-wait { background: rgba(148, 163, 184, 0.12); color: #94a3b8; border: 1px solid rgba(148, 163, 184, 0.25); }
+        @keyframes pogoPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
     </style>
 </head>
 <body class="min-h-screen flex flex-col antialiased selection:bg-indigo-500 selection:text-white">
@@ -234,11 +215,6 @@
             </a>
 
             <div class="flex items-center gap-3">
-                <!-- NÚT CHUYỂN ĐỔI SÁNG / TỐI -->
-                <button id="themeToggleBtn" onclick="toggleTheme()" class="liquid-btn liquid-btn-secondary w-10 h-10 rounded-full flex items-center justify-center text-amber-400 transition" title="Chuyển chế độ Sáng/Tối">
-                    <i id="themeIcon" class="fa-solid fa-moon text-base"></i>
-                </button>
-
                 <!-- STORE WIDGET AUTH SYSTEM (PHONG CÁCH iOS) -->
                 <div class="relative" id="swMainContainer">
                     <!-- Trạng thái CHƯA ĐĂNG NHẬP -->
@@ -569,37 +545,12 @@
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz5MYk4UcJnlQ5JUaXUFAuz9Be5Ddj9WTgPMfKpOg346dFcS2Kbwt_1kFNfzNbkYDEm/exec";
         const SCRIPT_URL_GIFTCODE = "https://script.google.com/macros/s/AKfycbziBZNAxN4UMo81tVHE05qEoDNu1VqIplZp8L9jJPFSwu6SWxmTRNHpVQlLern5--wl/exec";
         const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxxidzHDOKlrUCgcN6RzviRDcTICJ4ssLRzaOtxNgwhuxRd7yFK5ItjqXXAm8gIuJ5y/exec";
+
+        // Link dùng để hỏi trạng thái bài viết (cùng link với bản đã test chạy tốt). Muốn đổi thì sửa đúng dòng này.
+        const STATUS_API_URL = WEB_APP_URL;
         
         let CURRENT_ACTIVE_POST_ID = "";
         let rawTransactionData = [];
-
-        // 🌗 GIAO DIỆN SÁNG / TỐI
-        function initTheme() {
-            const savedTheme = localStorage.getItem('pogo_theme');
-            const themeIcon = document.getElementById('themeIcon');
-            if (savedTheme === 'light') {
-                document.documentElement.classList.remove('dark');
-                if (themeIcon) themeIcon.className = 'fa-solid fa-sun text-amber-500';
-            } else {
-                document.documentElement.classList.add('dark');
-                if (themeIcon) themeIcon.className = 'fa-solid fa-moon text-amber-400';
-            }
-        }
-
-        function toggleTheme() {
-            const html = document.documentElement;
-            const themeIcon = document.getElementById('themeIcon');
-            if (html.classList.contains('dark')) {
-                html.classList.remove('dark');
-                localStorage.setItem('pogo_theme', 'light');
-                if (themeIcon) themeIcon.className = 'fa-solid fa-sun text-amber-500';
-            } else {
-                html.classList.add('dark');
-                localStorage.setItem('pogo_theme', 'dark');
-                if (themeIcon) themeIcon.className = 'fa-solid fa-moon text-amber-400';
-            }
-        }
-        initTheme();
 
         // 🎁 LOGIC GIFTCODE
         function openGiftcodeModal() { document.getElementById("giftcodeModal").style.display = "flex"; }
@@ -1016,6 +967,7 @@
                     headers: { "Content-Type": "text/plain;charset=utf-8" },
                     body: JSON.stringify({ action: "reportAndLock", postId: CURRENT_ACTIVE_POST_ID, username: loggedUser, message: fullMessage })
                 });
+                setCardBadgeByPostId(CURRENT_ACTIVE_POST_ID, "LOCK");
                 alert("✅ Đã gửi báo lỗi! Trạng thái bài viết đã được tự động chuyển sang BẢO TRÌ.");
             } catch (err) { alert("✅ Đã gửi báo lỗi ngầm tới hệ thống!"); }
 
@@ -1031,6 +983,65 @@
                 hash |= 0;
             }
             return "ID_" + Math.abs(hash).toString(36).toUpperCase();
+        }
+
+        // 🔎 TÌM KIẾM CARD (trước đây ô tìm kiếm gọi hàm này nhưng chưa được định nghĩa)
+        function filterCards() {
+            const q = (document.getElementById('searchInput').value || '').trim().toLowerCase();
+            document.querySelectorAll('#cardContainer .card-item').forEach(card => {
+                card.style.display = (!q || card.textContent.toLowerCase().includes(q)) ? '' : 'none';
+            });
+        }
+
+        // 🟢 QUÉT TRẠNG THÁI BÀI VIẾT CHO TỪNG CARD
+        function isLockStatus(s) {
+            s = String(s || "").trim().toUpperCase();
+            return s === "LOCK" || s === "MAINTENANCE";
+        }
+
+        function paintStatusBadge(badge, state) {
+            if (!badge) return;
+            const txt = badge.querySelector('.status-text');
+            badge.classList.remove('is-ok', 'is-lock', 'is-wait');
+            if (state === 'lock') {
+                badge.classList.add('is-lock');
+                if (txt) txt.textContent = '🔴 BẢO TRÌ / ĐANG CẬP NHẬT';
+            } else if (state === 'ok') {
+                badge.classList.add('is-ok');
+                if (txt) txt.textContent = 'WORKING 100%';
+            } else {
+                badge.classList.add('is-wait');
+                if (txt) txt.textContent = (state === 'error') ? '⚠️ Chưa kiểm tra được' : 'Đang kiểm tra...';
+            }
+        }
+
+        // Cập nhật badge của card + lưu cache (cùng key với script Blogger cuối file)
+        function setCardBadgeByPostId(postId, status) {
+            const locked = isLockStatus(status);
+            try { localStorage.setItem(postId, locked ? "LOCK" : "ACTIVE"); } catch (e) {}
+            document.querySelectorAll('.status-badge[data-post-id="' + postId + '"]').forEach(function (b) {
+                paintStatusBadge(b, locked ? 'lock' : 'ok');
+            });
+        }
+
+        async function applyCardStatus(postId, badge) {
+            let cached = null;
+            try { cached = localStorage.getItem(postId); } catch (e) {}
+            if (cached) paintStatusBadge(badge, isLockStatus(cached) ? 'lock' : 'ok'); // hiện ngay trạng thái cũ cho nhanh
+
+            try {
+                const res = await fetch(STATUS_API_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "text/plain;charset=utf-8" },
+                    body: JSON.stringify({ action: "checkStatus", postId: postId })
+                });
+                const data = await res.json();
+                if (data.status !== "success") throw new Error(data.message || "checkStatus lỗi");
+                setCardBadgeByPostId(postId, data.pageStatus);
+            } catch (err) {
+                console.error("Lỗi kiểm tra trạng thái:", postId, err);
+                if (!cached) paintStatusBadge(badge, 'error'); // không báo xanh giả khi hỏi server thất bại
+            }
         }
 
         async function loadPosts() {
@@ -1081,8 +1092,8 @@
                         
                         postCard.innerHTML = `
                             <div class="flex items-center justify-between mb-4 pointer-events-none">
-                                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 backdrop-blur-md">
-                                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span> WORKING 100%
+                                <span class="status-badge is-wait" data-post-id="${uniquePostId}">
+                                    <span class="status-dot"></span><span class="status-text">Đang kiểm tra...</span>
                                 </span>
                             </div>
                             <div class="post-preview-box flex flex-col items-center justify-center space-y-3 mb-6 text-center w-full pointer-events-none">
@@ -1114,7 +1125,7 @@
                                     const scripts = modalBody.querySelectorAll('script');
                                     scripts.forEach(oldScript => {
                                         const newScript = document.createElement('script');
-                                        newScript.text = `const MY_POST_ID = "${uniquePostId}";\n` + oldScript.text;
+                                        newScript.text = `var MY_POST_ID = "${uniquePostId}";\n` + oldScript.text;
                                         oldScript.parentNode.replaceChild(newScript, oldScript);
                                     });
 
@@ -1131,6 +1142,7 @@
                         });
 
                         container.appendChild(postCard);
+                        applyCardStatus(uniquePostId, postCard.querySelector('.status-badge'));
                     }
                 }
             } catch (err) { console.error('Lỗi tải bài viết:', err); }
@@ -1151,7 +1163,8 @@
                 const freeBox = document.getElementById("khoangFreeBox");
                 const vipBox = document.getElementById("khoangVipBox");
 
-                if (data.status === "success" && String(data.pageStatus).trim().toUpperCase() === "LOCK") {
+                if (data.status === "success") setCardBadgeByPostId(postId, data.pageStatus);
+                if (data.status === "success" && isLockStatus(data.pageStatus)) {
                     if (tag) { tag.innerText = "🔴 BẢO TRÌ / ĐANG CẬP NHẬT"; tag.style.color = "#fb7185"; }
                     if (freeBox) freeBox.style.display = "none";
                     if (vipBox) vipBox.style.display = "none";
@@ -1172,7 +1185,7 @@
         function closeModal() { document.getElementById('generalModal').classList.add('hidden'); }
     </script>
     <!-- Khu vực chứa thông báo Real-time siêu nhỏ gọn, tối đa 3 thông báo, ghim góc dưới bên trái -->
-<div id='toastContainer' style='position: fixed !important; bottom: 16px !important; left: 16px !important; right: auto !important; top: auto !important; width: 220px !important; z-index: 99999; display: flex; flex-direction: column-reverse; gap: 8px; pointer-events: none;'/>
+<div id='toastContainer' style='position: fixed !important; bottom: 16px !important; left: 16px !important; right: auto !important; top: auto !important; width: 220px !important; z-index: 99999; display: flex; flex-direction: column-reverse; gap: 8px; pointer-events: none;'></div>
 
 <script>
 //<![CDATA[
@@ -1461,4 +1474,3 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 </script>
 </body>
 </html>
-
