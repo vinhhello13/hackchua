@@ -554,7 +554,7 @@
         </div>
     </div>
 
-    <!-- JAVASCRIPT LOGIC TỔNG HỢP (GIFTCODE, LỊCH SỬ, AUTH, MAIN) -->
+    <!-- JAVASCRIPT LOGIC TỔNG HỢP -->
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz_YC2ALIH4fux4jTPOiZFRcf-c2oP6cCNNtazPlEdiNPE-P0cMQ7t8LJevKEHVTnB6/exec";
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz5MYk4UcJnlQ5JUaXUFAuz9Be5Ddj9WTgPMfKpOg346dFcS2Kbwt_1kFNfzNbkYDEm/exec";
@@ -564,7 +564,6 @@
         let CURRENT_ACTIVE_POST_ID = "";
         let rawTransactionData = [];
 
-        // 🌗 GIAO DIỆN SÁNG / TỐI
         function initTheme() {
             const savedTheme = localStorage.getItem('pogo_theme');
             const themeIcon = document.getElementById('themeIcon');
@@ -591,7 +590,6 @@
         }
         initTheme();
 
-        // 🎁 LOGIC GIFTCODE
         function openGiftcodeModal() { document.getElementById("giftcodeModal").style.display = "flex"; }
         function closeGiftcodeModal() { document.getElementById("giftcodeModal").style.display = "none"; }
         async function submitPageGiftcode() {
@@ -619,12 +617,7 @@
             fetch(SCRIPT_URL_GIFTCODE, {
                 method: "POST",
                 headers: { "Content-Type": "text/plain;charset=utf-8" },
-                body: JSON.stringify({
-                    action: "redeemGiftcode",
-                    username: loggedUser,
-                    code: code,
-                    clientIp: clientIp
-                })
+                body: JSON.stringify({ action: "redeemGiftcode", username: loggedUser, code: code, clientIp: clientIp })
             })
             .then(res => res.json())
             .then(data => {
@@ -634,11 +627,7 @@
                     alert("🎉 " + data.message);
                     if (data.balance !== undefined) {
                         localStorage.setItem("logged_balance", data.balance);
-                        if (typeof swUpdateBalance === "function") {
-                            swUpdateBalance(loggedUser);
-                        } else {
-                            location.reload();
-                        }
+                        if (typeof swUpdateBalance === "function") { swUpdateBalance(loggedUser); } else { location.reload(); }
                     }
                     codeEl.value = "";
                     closeGiftcodeModal();
@@ -653,14 +642,11 @@
             });
         }
 
-        // 📜 LOGIC LỊCH SỬ GIAO DỊCH
         function openHistoryModal() {
             document.getElementById("historyModal").style.display = "flex";
             checkLoginAndInitHistory();
         }
-        function closeHistoryModal() {
-            document.getElementById("historyModal").style.display = "none";
-        }
+        function closeHistoryModal() { document.getElementById("historyModal").style.display = "none"; }
         function getActiveUser() {
             let user = localStorage.getItem('logged_user') || localStorage.getItem('current_user') || localStorage.getItem('username');
             return user ? user.trim() : "";
@@ -803,13 +789,11 @@
         }
         function closeScriptModal() { document.getElementById("scriptModal").style.display = "none"; }
 
-        // 🟢 WIDGET AUTH & GENERAL MAIN LOGIC
         window.addEventListener("DOMContentLoaded", function() {
             var user = localStorage.getItem("logged_user");
             if (user && user !== "null" && user !== "") {
                 document.getElementById("swLoggedOutWrapper").style.display = "none";
                 document.getElementById("swGroupLoggedIn").style.display = "flex";
-                
                 var cachedBalance = localStorage.getItem("logged_balance") || 0;
                 document.getElementById("swTextBalance").innerText = parseInt(cachedBalance).toLocaleString("vi-VN") + "đ";
                 document.getElementById("swTextUsername").innerText = user;
@@ -828,16 +812,11 @@
                 if (data.status === "success" && data.balance !== undefined) {
                     localStorage.setItem("logged_balance", data.balance);
                     document.getElementById("swTextBalance").innerText = parseInt(data.balance).toLocaleString("vi-VN") + "đ";
-                    const modalBal = document.getElementById("userBalanceText");
-                    if (modalBal) modalBal.innerText = parseInt(data.balance).toLocaleString("vi-VN") + "đ";
                 }
             })
             .catch(err => console.log("Lỗi đồng bộ số dư:", err));
         }
-        function swToggleAuthMenu() {
-            var menu = document.getElementById("swAuthMenu");
-            menu.classList.toggle("active");
-        }
+        function swToggleAuthMenu() { document.getElementById("swAuthMenu").classList.toggle("active"); }
         document.addEventListener("click", function(event) {
             var wrapper = document.getElementById("swLoggedOutWrapper");
             if (wrapper && !wrapper.contains(event.target)) {
@@ -888,15 +867,9 @@
                     localStorage.setItem("logged_balance", data.balance);
                     alert("✅ Đăng nhập thành công!");
                     location.reload();
-                } else {
-                    alert("❌ " + data.message);
-                }
+                } else { alert("❌ " + data.message); }
             })
-            .catch(err => {
-                btn.disabled = false;
-                btn.innerText = oldText;
-                alert("❌ Lỗi kết nối đến Google Sheets!");
-            });
+            .catch(err => { btn.disabled = false; btn.innerText = oldText; alert("❌ Lỗi kết nối đến Google Sheets!"); });
         }
         function swProcessRegister() {
             let user = document.getElementById("swRegUser").value.trim();
@@ -918,15 +891,9 @@
                 if (data.status === "success") {
                     alert("✅ Đăng ký thành công! Hãy đăng nhập ngay.");
                     swSwitchToLogin();
-                } else {
-                    alert("❌ " + data.message);
-                }
+                } else { alert("❌ " + data.message); }
             })
-            .catch(err => {
-                btn.disabled = false;
-                btn.innerText = oldText;
-                alert("❌ Lỗi kết nối đến Google Sheets!");
-            });
+            .catch(err => { btn.disabled = false; btn.innerText = oldText; alert("❌ Lỗi kết nối đến Google Sheets!"); });
         }
         function swHandleLogout() {
             localStorage.removeItem("logged_user");
@@ -934,166 +901,9 @@
             alert("👋 Đã đăng xuất!");
             location.reload();
         }
-        function toggleBaoLoi() {
-            const box = document.getElementById("formBaoLoiBox");
-            if (box) box.style.display = (box.style.display === "none" || box.style.display === "") ? "block" : "none";
-        }
-        async function guiBaoLoi() {
-            const loggedUser = localStorage.getItem("logged_user") || "Chưa đăng nhập";
-            const tieuDeEl = document.getElementById("loiTieuDe");
-            const noiDungEl = document.getElementById("loiNoiDung");
-            
-            const tieuDe = tieuDeEl ? tieuDeEl.value : "Báo lỗi chung";
-            const noiDungChiTiet = noiDungEl ? noiDungEl.value.trim() : "";
-            const fullMessage = "[" + tieuDe + "] [ID: " + CURRENT_ACTIVE_POST_ID + "]" + (noiDungChiTiet ? " " + noiDungChiTiet : "");
-            const tag = document.getElementById("statusTag");
-            if (tag) { tag.innerText = "🔴 BẢO TRÌ / ĐANG CẬP NHẬT"; tag.style.color = "#fb7185"; }
-            const freeBox = document.getElementById("khoangFreeBox");
-            const vipBox = document.getElementById("khoangVipBox");
-            if (freeBox) freeBox.style.display = "none";
-            if (vipBox) vipBox.style.display = "none";
-            try {
-                await fetch(SCRIPT_URL, {
-                    method: "POST",
-                    headers: { "Content-Type": "text/plain;charset=utf-8" },
-                    body: JSON.stringify({ action: "reportAndLock", postId: CURRENT_ACTIVE_POST_ID, username: loggedUser, message: fullMessage })
-                });
-                alert("✅ Đã gửi báo lỗi! Trạng thái bài viết đã được tự động chuyển sang BẢO TRÌ.");
-            } catch (err) { alert("✅ Đã gửi báo lỗi ngầm tới hệ thống!"); }
-            if (noiDungEl) noiDungEl.value = "";
-            const box = document.getElementById("formBaoLoiBox");
-            if (box) box.style.display = "none";
-        }
-        function generatePostId(fileName) {
-            let hash = 0;
-            for (let i = 0; i < fileName.length; i++) {
-                hash = ((hash << 5) - hash) + fileName.charCodeAt(i);
-                hash |= 0;
-            }
-            return "ID_" + Math.abs(hash).toString(36).toUpperCase();
-        }
-        async function loadPosts() {
-            try {
-                const res = await fetch('https://api.github.com/repos/vinhhello13/hackchua/contents/_posts');
-                const files = await res.json();
-                
-                const container = document.getElementById('cardContainer');
-                if (!container) return;
-                container.innerHTML = '';
-                if (!Array.isArray(files) || files.length === 0) {
-                    container.innerHTML = '<div class="glass-card rounded-2xl p-6 text-center text-slate-400 text-xs col-span-2 py-8">Chưa có bài viết nào!</div>';
-                    return;
-                }
-                for (const file of files) {
-                    if (file.name.endsWith('.md')) {
-                        const contentRes = await fetch(file.download_url);
-                        const rawText = await contentRes.text();
-                        
-                        const parts = rawText.split('---');
-                        let title = file.name.replace('.md', '');
-                        let externalHTML = '';
-                        let internalHTML = '';
-                        if (parts.length >= 3) {
-                            const yamlHeader = parts[1];
-                            const fullBody = parts.slice(2).join('---').trim();
-                            const titleMatch = yamlHeader.match(/title:\s*"?(.*?)"?$/m);
-                            if (titleMatch && titleMatch[1]) title = titleMatch[1];
-                            if (fullBody.includes('<!--more-->')) {
-                                const splitParts = fullBody.split('<!--more-->');
-                                externalHTML = splitParts[0].trim();
-                                internalHTML = splitParts[1].trim();
-                            } else {
-                                externalHTML = fullBody;
-                                internalHTML = fullBody;
-                            }
-                        }
-                        const uniquePostId = generatePostId(file.name);
-                        const postCard = document.createElement('div');
-                        postCard.className = 'glass-card rounded-2xl p-6 flex flex-col justify-between relative overflow-hidden group card-item border border-slate-800 cursor-pointer';
-                        
-                        postCard.innerHTML = `
-                            <div class="flex items-center justify-between mb-4 pointer-events-none">
-                                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 backdrop-blur-md">
-                                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span> WORKING 100%
-                                </span>
-                            </div>
-                            <div class="post-preview-box flex flex-col items-center justify-center space-y-3 mb-6 text-center w-full pointer-events-none">
-                                ${externalHTML}
-                            </div>
-                            <div class="pt-2 pointer-events-none">
-                                <button class="btn-xem liquid-btn liquid-btn-cyan w-full font-extrabold py-3.5 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2">
-                                    <i class="fa-solid fa-eye text-cyan-200"></i> XEM SCRIPT CHI TIẾT
-                                </button>
-                            </div>
-                        `;
-                        const openDetailAction = () => {
-                            CURRENT_ACTIVE_POST_ID = uniquePostId;
-                            openModal(title, `<div class="w-full text-slate-200 overflow-x-auto">${internalHTML}</div>`);
-                            
-                            setTimeout(() => {
-                                const modalBody = document.getElementById('modalBody');
-                                if (modalBody) {
-                                    const idSpan = modalBody.querySelector('#displayPostId');
-                                    if (idSpan) idSpan.innerText = uniquePostId;
-                                    const userBalText = modalBody.querySelector('#userBalanceText');
-                                    if (userBalText) {
-                                        const cb = localStorage.getItem("logged_balance") || 0;
-                                        userBalText.innerText = parseInt(cb).toLocaleString("vi-VN") + "đ";
-                                    }
-                                    const scripts = modalBody.querySelectorAll('script');
-                                    scripts.forEach(oldScript => {
-                                        const newScript = document.createElement('script');
-                                        newScript.text = `const MY_POST_ID = "${uniquePostId}";\n` + oldScript.text;
-                                        oldScript.parentNode.replaceChild(newScript, oldScript);
-                                    });
-                                    if (typeof kiemTraTrangThaiModal === 'function') {
-                                        kiemTraTrangThaiModal(uniquePostId);
-                                    }
-                                }
-                            }, 150);
-                        };
-                        postCard.addEventListener('click', (e) => {
-                            e.preventDefault();
-                            openDetailAction();
-                        });
-                        container.appendChild(postCard);
-                    }
-                }
-            } catch (err) { console.error('Lỗi tải bài viết:', err); }
-        }
-        loadPosts();
-        async function kiemTraTrangThaiModal(postId) {
-            try {
-                const res = await fetch(SCRIPT_URL, {
-                    method: "POST",
-                    headers: { "Content-Type": "text/plain;charset=utf-8" },
-                    body: JSON.stringify({ action: "checkStatus", postId: postId })
-                });
-                const data = await res.json();
-                
-                const tag = document.getElementById("statusTag");
-                const freeBox = document.getElementById("khoangFreeBox");
-                const vipBox = document.getElementById("khoangVipBox");
-                if (data.status === "success" && String(data.pageStatus).trim().toUpperCase() === "LOCK") {
-                    if (tag) { tag.innerText = "🔴 BẢO TRÌ / ĐANG CẬP NHẬT"; tag.style.color = "#fb7185"; }
-                    if (freeBox) freeBox.style.display = "none";
-                    if (vipBox) vipBox.style.display = "none";
-                } else {
-                    if (tag) { tag.innerText = "🟢 WORKING (AUTO UPDATE)"; tag.style.color = "#34d399"; }
-                    if (freeBox) freeBox.style.display = "block";
-                    if (vipBox) vipBox.style.display = "block";
-                }
-            } catch (err) { console.error("Lỗi kiểm tra trạng thái:", err); }
-        }
-        function openModal(title, content) {
-            document.getElementById('modalTitle').innerText = title;
-            document.getElementById('modalBody').innerHTML = content;
-            document.getElementById('generalModal').classList.remove('hidden');
-        }
-        function closeModal() { document.getElementById('generalModal').classList.add('hidden'); }
     </script>
 
-    <!-- Khu vực chứa thông báo Real-time -->
+    <!-- 🔔 KHU VỰC THÔNG BÁO TOAST REAL-TIME -->
     <div id='toastContainer' style='position: fixed !important; bottom: 16px !important; left: 16px !important; right: auto !important; top: auto !important; width: 220px !important; z-index: 99999; display: flex; flex-direction: column-reverse; gap: 8px; pointer-events: none;'/>
     
     <script>
@@ -1111,7 +921,6 @@
         let randomTen = ten[Math.floor(Math.random() * ten.length)];
         let randomNick = nicknames[Math.floor(Math.random() * nicknames.length)];
         let num = Math.floor(Math.random() * 9000) + 100;
-        
         let generatedName = "";
         let styleChoice = Math.floor(Math.random() * 4);
         if (styleChoice === 0) {
@@ -1132,17 +941,13 @@
       function showToast(content) {
         let container = document.getElementById("toastContainer");
         if (!container) return;
-        while (container.children.length >= 3) {
-          container.lastChild.remove();
-        }
+        while (container.children.length >= 3) { container.lastChild.remove(); }
         let toast = document.createElement("div");
         toast.style.cssText = "background: rgba(15, 23, 42, 0.88); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 16px; padding: 10px 24px 10px 12px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6), 0 0 15px rgba(99, 102, 241, 0.15); font-family: -apple-system, 'Plus Jakarta Sans', sans-serif; font-size: 11px; color: #f3f4f6; z-index: 99999; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); opacity: 0; transform: translateY(12px) scale(0.95); pointer-events: auto; width: 100%; box-sizing: border-box; position: relative;";
         
         let closeBtn = document.createElement("span");
         closeBtn.innerHTML = "&times;";
         closeBtn.style.cssText = "position: absolute; top: 4px; right: 8px; font-size: 13px; cursor: pointer; color: #94a3b8; width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: rgba(255,255,255,0.05); transition: all 0.2s;";
-        closeBtn.onmouseover = function() { closeBtn.style.color = "#ffffff"; closeBtn.style.background = "rgba(255,255,255,0.2)"; };
-        closeBtn.onmouseout = function() { closeBtn.style.color = "#94a3b8"; closeBtn.style.background = "rgba(255,255,255,0.05)"; };
         closeBtn.onclick = function() {
           toast.style.opacity = "0";
           toast.style.transform = "translateY(-8px) scale(0.95)";
@@ -1162,9 +967,7 @@
           if (toast.parentElement) {
             toast.style.opacity = "0";
             toast.style.transform = "translateY(-8px) scale(0.95)";
-            setTimeout(function() {
-              toast.remove();
-            }, 300);
+            setTimeout(function() { toast.remove(); }, 300);
           }
         }, 4000);
       }
@@ -1209,34 +1012,102 @@
       }
       function scheduleNextFake() {
         let currentHour = new Date().getHours();
-        let delay;
-        if (currentHour >= 6 && currentHour < 22) {
-          delay = Math.floor(Math.random() * (25000 - 1000 + 1)) + 1000;
-        } else {
-          delay = Math.floor(Math.random() * (600000 - 180000 + 1)) + 180000;
-        }
+        let delay = (currentHour >= 6 && currentHour < 22) ? (Math.floor(Math.random() * (25000 - 1000 + 1)) + 1000) : (Math.floor(Math.random() * (600000 - 180000 + 1)) + 180000);
         setTimeout(function() {
           let chosenUser = fakeUsersPool[Math.floor(Math.random() * fakeUsersPool.length)];
           let randomType = Math.random();
           let randomMoney = fakeAmounts[Math.floor(Math.random() * fakeAmounts.length)];
           let timeText = fakeTimePool[Math.floor(Math.random() * fakeTimePool.length)];
-          let fakeMainText = "";
-          if (randomType < 0.10) {
-            fakeMainText = "vừa nạp <b style='color:#34d399;'>" + randomMoney.toLocaleString("vi-VN") + "đ</b>! 💰";
-          } else if (randomType < 0.50) {
-            fakeMainText = "vừa nhập Giftcode nhận <b style='color:#f43f5e;'>" + randomMoney.toLocaleString("vi-VN") + "đ</b>! 🔥";
-          } else {
-            fakeMainText = "vừa mở khóa <b style='color:#38bdf8;'>Script VIP</b>! 🔓";
-          }
+          let fakeMainText = randomType < 0.10 ? ("vừa nạp <b style='color:#34d399;'>" + randomMoney.toLocaleString("vi-VN") + "đ</b>! 💰") : (randomType < 0.50 ? ("vừa nhập Giftcode nhận <b style='color:#f43f5e;'>" + randomMoney.toLocaleString("vi-VN") + "đ</b>! 🔥") : ("vừa mở khóa <b style='color:#38bdf8;'>Script VIP</b>! 🔓"));
           showToast("<span style='color: #818cf8; font-weight: 800;'>⚡ " + chosenUser + "</span> " + fakeMainText + "<br><span style='font-size: 9px; color: #94a3b8; font-weight: 500; display: block; margin-top: 2px;'>⏱️ " + timeText + "</span>");
           scheduleNextFake();
         }, delay);
       }
-      setTimeout(function() {
-        pollRealTransactions();
-        scheduleNextFake();
-      }, 2000);
+      setTimeout(function() { pollRealTransactions(); scheduleNextFake(); }, 2000);
     })();
+    //]]>
+    </script>
+
+    <!-- 📱 BLOGGER PAGINATION SCRIPTS -->
+    <b:if cond='data:view.isMultipleItems'>
+    <script type='text/javascript'>
+    //<![CDATA[
+    var postResults=postPerPage;var numOfPages=2;var pageOf=["Page","of"];eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--){d[e(c)]=k[c]||e(c)}k=[function(e){return d[e]}];e=function(){return'\\w+'};c=1};while(c--){if(k[c]){p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c])}}return p}('5 K;5 m;5 l;5 w;5 s=1p.9;5 y="/";1d();G 1b(a){5 b=\\'\\';J=M(W/2);4(J==W-J){W=J*2+1}D=l-J;4(D<1)D=1;j=M(a/n)+1;4(j-1==a/n)j=j-1;E=D+W-1;4(E>j)E=j;b+=\\'<C 6="3-1u"\>\\'+17[0]+\\' \\'+l+\\' \\'+17[1]+\\' \\'+j+\\'</C\>\\';5 c=M(l)-1;4(l>1){4(l==2){4(m==\\'3\\'){b+=\\'<a 6="3-7 3-U" 9="\\'+y+\\'"></a>\\'}h{b+=\\'<a 6="3-7 3-U" 9="/v/u/\\'+w+\\'?&i-o=\\'+n+\\'"></a>\\'}}h{4(m==\\'3\\'){b+=\\'<a 6="3-7 3-U" 9="#" z="L(\\'+c+\\');B x"></a>\\'}h{b+=\\'<a 6="3-7 3-U" 9="#" z="I(\\'+c+\\');B x"></a>\\'}}}4(D>1){4(m=="3"){b+=\\'<a 6="3-7" 9="\\'+y+\\'">1</a>\\'}h{b+=\\'<a 6="3-7" 9="/v/u/\\'+w+\\'?&i-o=\\'+n+\\'">1</a>\\'}}4(D>2){b+=\\'<C 6="3-7 3-16">...</C\>\\'}1a(5 d=D;d<=E;d++){4(l==d){b+=\\'<C 6="3-7 3-1v"\>\\'+d+\\'</C\>\\'}h 4(d==1){4(m==\\'3\\'){b+=\\'<a 6="3-7" 9="\\'+y+\\'">1</a>\\'}h{b+=\\'<a 6="3-7" 9="/v/u/\\'+w+\\'?&i-o=\\'+n+\\'">1</a>\\'}}h{4(m==\\'3\\'){b+=\\'<a 6="3-7" 9="#" z="L(\\'+d+\\');B x"\>\\'+d+\\'</a>\\'}h{b+=\\'<a 6="3-7" 9="#" z="I(\\'+d+\\');B x"\>\\'+d+\\'</a>\\'}}}4(E<j-1){b+=\\'<C 6="3-7 3-16">...</C\>\\'}4(E<j){4(m=="3"){b+=\\'<a 6="3-7" 9="#" z="L(\\'+j+\\');B x"\>\\'+j+\\'</a>\\'}h{b+=\\'<a 6="3-7" 9="#" z="I(\\'+j+\\');B x"\>\\'+j+\\'</a>\\'}}5 e=M(l)+1;4(l<j){4(m==\\'3\\'){b+=\\'<a 6="3-7 3-15" 9="#" z="L(\\'+e+\\');B x"></a>\\'}h{b+=\\'<a 6="3-7 3-15" 9="#" z="I(\\'+e+\\');B x"></a>\\'}}b+=\\'\\';5 f=A.1s(\\'1t\\');5 g=A.1r(\\'1A-1D\\');1a(5 p=0;p<f.O;p++){f[p].1c=b}4(f&&f.O>0){b=\\'\\'}4(g){g.1c=b}}G 12(a){5 b=a.1f;5 c=M(b.1E$1B.$t,10);1b(c)}G 1d(){5 a=s;4(a.k(\\'/v/u/\\')!=-1){4(a.k(\\'?T-i\\')!=-1){w=a.H(a.k(\\'/v/u/\\')+14,a.k(\\'?T-i\\'))}h{w=a.H(a.k(\\'/v/u/\\')+14,a.k(\\'?&i\\'))}}4(a.k(\\'?q=\\')==-1&&a.k(\\'.1C\\')==-1){4(a.k(\\'/v/u/\\')==-1){m=\\'3\\';4(s.k(\\'#F=\\')!=-1){l=s.H(s.k(\\'#F=\\')+8,s.O)}h{l=1}A.18(\\'<r Q=\\\\'\\'+y+\\'P/R/N?i-o=1&X=Y-S-r&V=12\\\\\\'></r\>\\')}h{m=\\'u\\';4(a.k(\\'&i-o=\\')==-1){n=1F}4(s.k(\\'#F=\\')!=-1){l=s.H(s.k(\\'#F=\\')+8,s.O)}h{l=1}A.18(\\'<r Q="\\'+y+\\'P/R/N/-/\\'+w+\\'?X=Y-S-r&V=12&i-o=1" ></r\>\\')}}}G L(a){Z=(a-1)*n;K=a;5 b=A.1h(\\'1q\\')[0];5 c=A.1o(\\'r\\');c.1e=\\'1m/1n\\';c.1i(\\'Q\\',y+\\'P/R/N?1j-1k=\\'+Z+\\'&i-o=1&X=Y-S-r&V=13\\');b.1l(c)}G I(a){Z=(a-1)*n;K=a;5 b=A.1h(\\'1q\\')[0];5 c=A.1o(\\'r\\');c.1e=\\'1m/1n\\';c.1i(\\'Q\\',y+\\'P/R/N/-/\\'+w+\\'?1j-1k=\\'+Z+\\'&i-o=1&X=Y-S-r&V=13\\');b.1l(c)}G 13(a){11=a.1f.1x[0];5 b=11.1g.$t.H(0,19)+11.1g.$t.H(1z,1w);5 c=1y(b);4(m==\\'3\\'){5 d=\\'/v?T-i=\\'+c+\\'&i-o=\\'+n+\\'#F=\\'+K}h{5 d=\\'/v/u/\\'+w+\\'?T-i=\\'+c+\\'&i-o=\\'+n+\\'#F=\\'+K}1p.9=d}',62,104,'|||page|if|var|class|num||href||||||else|max|lastPageNo|indexOf|currentPageNo|currentPage|postResults|results|||script|locationUrl||label|search|postLabel|false|home_page|onclick|document|return|span|pageStart|pageEnd|PageNo|function|substring|getLabelPage|pageNumber|noPage|getPage|parseInt|summary|length|feeds|src|posts|in|updated|prev|callback|numOfPages|alt|json|jsonstart||post|dataFeed|findPostDate||next|dots|pageOf|write||for|startPagination|innerHTML|pageCurrentBlogger|type|feed|published|getElementsByTagName|setAttribute|start|index|appendChild|text|javascript|createElement|location|head|getElementById|getElementsByName|pageArea|of|active|29|entry|encodeURIComponent|23|blog|totalResults|html|pager|openSearch|20'.split('|'),0,{}))
+    //]]>
+    </script>
+    </b:if>
+
+    <!-- 🚀 BLOGGER AUTOMATION POST STATUS SCRIPT -->
+    <script type='text/javascript'>
+    //<![CDATA[
+      const GLOBAL_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxxidzHDOKlrUCgcN6RzviRDcTICJ4ssLRzaOtxNgwhuxRd7yFK5ItjqXXAm8gIuJ5y/exec";
+      function getPostIdFromUrl(url) {
+        try {
+          let parser = document.createElement('a');
+          parser.href = url;
+          let path = parser.pathname;
+          let hash = 0;
+          for (let i = 0; i < path.length; i++) {
+            hash = ((hash << 5) - hash) + path.charCodeAt(i);
+            hash |= 0;
+          }
+          return "ID_" + Math.abs(hash).toString(36).toUpperCase();
+        } catch (e) { return ""; }
+      }
+      document.addEventListener("DOMContentLoaded", function() {
+        if (window.location.pathname.includes(".html")) { return; }
+        let posts = document.querySelectorAll('.post, .hentry, .blog-post');
+        if (posts.length === 0) return;
+        posts.forEach(async function(post) {
+          let link = post.querySelector('a[href*=".html"]');
+          let img = post.querySelector('img');
+          if (!link) return;
+          let postId = getPostIdFromUrl(link.href);
+          let cachedStatus = localStorage.getItem(postId);
+          let isLock = (cachedStatus === "LOCK" || cachedStatus === "MAINTENANCE");
+          let bgStyle = isLock 
+            ? "background: rgba(244, 63, 94, 0.15) !important; color: #fb7185 !important; border: 1px solid rgba(244, 63, 94, 0.3) !important;" 
+            : "background: rgba(16, 185, 129, 0.15) !important; color: #34d399 !important; border: 1px solid rgba(16, 185, 129, 0.3) !important;";
+          let initialText = isLock ? "🔴 BẢO TRÌ / ĐANG CẬP NHẬT" : "<span style='width: 6px; height: 6px; background-color: #34d399; border-radius: 50%; display: inline-block; margin-right: 5px; box-shadow: 0 0 8px #34d399;'></span> WORKING 100%";
+          
+          let wrapper = document.createElement('div');
+          wrapper.style.cssText = "text-align: center !important; margin: 10px 0 6px 0 !important; width: 100% !important; display: block !important;";
+          let statusBadge = document.createElement('span');
+          statusBadge.style.cssText = "display: inline-flex !important; align-items: center !important; justify-content: center !important; width: auto !important; padding: 4px 12px !important; border-radius: 9999px !important; font-weight: 800 !important; font-size: 10.5px !important; backdrop-filter: blur(12px) !important; -webkit-backdrop-filter: blur(12px) !important; letter-spacing: 0.5px !important; font-family: -apple-system, sans-serif !important; " + bgStyle;
+          statusBadge.innerHTML = initialText;
+          wrapper.appendChild(statusBadge);
+          
+          if (img) {
+            let imgParent = img.closest('a') || img.parentElement;
+            if (imgParent && imgParent.parentNode) {
+              imgParent.parentNode.insertBefore(wrapper, imgParent.nextSibling);
+            } else { post.prepend(wrapper); }
+          } else {
+            let targetContainer = post.querySelector('h3.post-title, .post-header, h2') || post;
+            targetContainer.prepend(wrapper);
+          }
+          
+          try {
+            let res = await fetch(GLOBAL_SCRIPT_URL, {
+              method: "POST",
+              headers: { "Content-Type": "text/plain;charset=utf-8" },
+              body: JSON.stringify({ action: "checkStatus", postId: postId })
+            });
+            let data = await res.json();
+            if (data.status === "success") {
+              let pageStatus = String(data.pageStatus).trim().toUpperCase();
+              localStorage.setItem(postId, pageStatus);
+              if (pageStatus === "LOCK" || pageStatus === "MAINTENANCE") {
+                statusBadge.style.cssText = "display: inline-flex !important; align-items: center !important; justify-content: center !important; width: auto !important; padding: 4px 12px !important; border-radius: 9999px !important; font-weight: 800 !important; font-size: 10.5px !important; backdrop-filter: blur(12px) !important; -webkit-backdrop-filter: blur(12px) !important; letter-spacing: 0.5px !important; font-family: -apple-system, sans-serif !important; background: rgba(244, 63, 94, 0.15) !important; color: #fb7185 !important; border: 1px solid rgba(244, 63, 94, 0.3) !important;";
+                statusBadge.innerHTML = "🔴 BẢO TRÌ / ĐANG CẬP NHẬT";
+              } else {
+                statusBadge.style.cssText = "display: inline-flex !important; align-items: center !important; justify-content: center !important; width: auto !important; padding: 4px 12px !important; border-radius: 9999px !important; font-weight: 800 !important; font-size: 10.5px !important; backdrop-filter: blur(12px) !important; -webkit-backdrop-filter: blur(12px) !important; letter-spacing: 0.5px !important; font-family: -apple-system, sans-serif !important; background: rgba(16, 185, 129, 0.15) !important; color: #34d399 !important; border: 1px solid rgba(16, 185, 129, 0.3) !important;";
+                statusBadge.innerHTML = "<span style='width: 6px; height: 6px; background-color: #34d399; border-radius: 50%; display: inline-block; margin-right: 5px; box-shadow: 0 0 8px #34d399;'></span> WORKING 100%";
+              }
+            }
+          } catch (err) {}
+        });
+      });
     //]]>
     </script>
 </body>
