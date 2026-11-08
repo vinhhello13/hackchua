@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>POGO GAMING - Shop Game & Script VIP (Liquid Glass UI)</title>
+    <title><data:blog.pageTitle/></title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -26,10 +26,10 @@
     <!-- FontAwesome & Google Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
-
+    
     <style>
-        html { scroll-behavior: smooth; }
-
+        html { transition: background-color 0.3s ease, color 0.3s ease; scroll-behavior: smooth; }
+        
         html.dark body {
             font-family: -apple-system, 'Plus Jakarta Sans', sans-serif;
             background-color: #060911;
@@ -41,6 +41,17 @@
             background-attachment: fixed;
         }
 
+        html:not(.dark) body {
+            font-family: -apple-system, 'Plus Jakarta Sans', sans-serif;
+            background-color: #f0f4f9;
+            color: #0f172a;
+            background-image: 
+                radial-gradient(at 50% 10%, rgba(99, 102, 241, 0.1) 0px, transparent 60%),
+                radial-gradient(at 80% 80%, rgba(244, 63, 94, 0.06) 0px, transparent 50%),
+                radial-gradient(at 10% 50%, rgba(6, 182, 212, 0.08) 0px, transparent 50%);
+            background-attachment: fixed;
+        }
+
         html.dark .glass-panel {
             background: rgba(15, 23, 42, 0.75);
             backdrop-filter: blur(25px);
@@ -48,16 +59,39 @@
             border: 1px solid rgba(255, 255, 255, 0.12);
         }
 
-        html.dark .glass-card {
+        html.dark .glass-card, html.dark .post {
             background: rgba(18, 26, 47, 0.65);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.08);
             box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
             transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
         }
 
-        .glass-card:hover {
+        html:not(.dark) .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            box-shadow: 0 4px 25px -5px rgba(0, 0, 0, 0.05);
+        }
+
+        html:not(.dark) .glass-card, html:not(.dark) .post {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(226, 232, 240, 0.9);
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.06);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .glass-card:hover, .post:hover {
             transform: translateY(-6px);
             border-color: rgba(99, 102, 241, 0.45);
             box-shadow: 0 20px 40px -12px rgba(99, 102, 241, 0.3);
@@ -76,10 +110,7 @@
         .liquid-btn::before {
             content: '';
             position: absolute;
-            top: 0; 
-            left: -150%; 
-            width: 100%; 
-            height: 100%;
+            top: 0; left: -150%; width: 100%; height: 100%;
             background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
             transform: skewX(-20deg);
             transition: left 0.75s ease;
@@ -123,7 +154,7 @@
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
-        .post-preview-box img {
+        .post-body img, .post img {
             width: 100% !important;
             max-width: 100% !important;
             height: 190px !important;
@@ -186,15 +217,6 @@
             width: 820px;
             max-width: 100%;
         }
-
-        /* 🟢 BADGE TRẠNG THÁI BÀI VIẾT (liquid glass) */
-        .status-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 9999px; font-size: 11px; font-weight: 700; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); transition: all 0.3s ease; }
-        .status-badge .status-dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
-        .status-badge.is-ok { background: rgba(16, 185, 129, 0.12); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
-        .status-badge.is-ok .status-dot { animation: pogoPulse 1.4s ease-in-out infinite; }
-        .status-badge.is-lock { background: rgba(244, 63, 94, 0.12); color: #fb7185; border: 1px solid rgba(244, 63, 94, 0.3); }
-        .status-badge.is-wait { background: rgba(148, 163, 184, 0.12); color: #94a3b8; border: 1px solid rgba(148, 163, 184, 0.25); }
-        @keyframes pogoPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
     </style>
 </head>
 <body class="min-h-screen flex flex-col antialiased selection:bg-indigo-500 selection:text-white">
@@ -202,7 +224,7 @@
     <!-- HEADER -->
     <header class="glass-panel sticky top-0 z-40 border-b border-slate-800/80">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
-            <a href="#" class="flex items-center gap-3 group">
+            <a expr:href='data:blog.homepageUrl' class="flex items-center gap-3 group">
                 <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-rose-500 flex items-center justify-center font-black text-2xl text-white shadow-lg shadow-indigo-500/30 group-hover:scale-105 transition duration-300">
                     P
                 </div>
@@ -215,6 +237,11 @@
             </a>
 
             <div class="flex items-center gap-3">
+                <!-- NÚT CHUYỂN ĐỔI SÁNG / TỐI -->
+                <button id="themeToggleBtn" onclick="toggleTheme()" class="liquid-btn liquid-btn-secondary w-10 h-10 rounded-full flex items-center justify-center text-amber-400 transition" title="Chuyển chế độ Sáng/Tối">
+                    <i id="themeIcon" class="fa-solid fa-moon text-base"></i>
+                </button>
+
                 <!-- STORE WIDGET AUTH SYSTEM (PHONG CÁCH iOS) -->
                 <div class="relative" id="swMainContainer">
                     <!-- Trạng thái CHƯA ĐĂNG NHẬP -->
@@ -255,7 +282,7 @@
     <div class="max-w-5xl mx-auto w-full px-4 sm:px-6 lg:px-8 mt-6">
         <div class="glass-panel rounded-2xl p-2.5 flex items-center justify-between gap-3 shadow-2xl border border-slate-800">
             <nav class="flex items-center gap-1.5 sm:gap-2.5 overflow-x-auto hide-scrollbar">
-                <a href="#" class="liquid-btn liquid-btn-active flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold shrink-0">
+                <a expr:href='data:blog.homepageUrl' class="liquid-btn liquid-btn-active flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold shrink-0">
                     <i class="fa-solid fa-house text-indigo-200"></i> Trang chủ
                 </a>
                 <button onclick="openGiftcodeModal()" class="liquid-btn liquid-btn-secondary flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold shrink-0">
@@ -273,7 +300,26 @@
         </div>
     </div>
 
-    <!-- MAIN CONTENT -->
+    <!-- 🏷️ THANH PHÂN LOẠI THEO NHÃN (LABELS FILTER BAR) -->
+    <div class="max-w-5xl mx-auto w-full px-4 sm:px-6 lg:px-8 mt-4">
+        <div class="glass-panel rounded-2xl p-3 flex items-center gap-2 overflow-x-auto hide-scrollbar border border-slate-800">
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider shrink-0 mr-1"><i class="fa-solid fa-tags text-indigo-400 mr-1"></i> Nhãn:</span>
+            <button onclick="filterByLabel('all')" id="btn-label-all" class="liquid-btn liquid-btn-primary px-3.5 py-1.5 rounded-xl text-xs font-bold shrink-0">Tất cả</button>
+            <b:section class='labels-section' id='labels-section' showaddelement='no'>
+                <b:widget id='Label1' locked='false' title='Nhãn' type='Label' version='1'>
+                    <b:includable id='main'>
+                        <b:loop values='data:labels' var='label'>
+                            <button expr:onclick='&quot;filterByLabel(\&quot;&quot; + data:label.name + &quot;\&quot;)\&quot;' class="liquid-btn liquid-btn-secondary px-3.5 py-1.5 rounded-xl text-xs font-bold shrink-0 label-filter-btn" expr:data-label='data:label.name'>
+                                <data:label.name/> (<data:label.count/>)
+                            </button>
+                        </b:loop>
+                    </b:includable>
+                </b:widget>
+            </b:section>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT (BLOGGER POSTS WRAPPER) -->
     <main class="max-w-5xl mx-auto w-full px-4 sm:px-6 lg:px-8 my-10 flex-1">
         <div class="flex items-center justify-between mb-6">
             <div class="flex items-center gap-3">
@@ -283,12 +329,29 @@
             <span class="text-xs font-semibold text-slate-400 bg-slate-900/80 border border-slate-800 px-3 py-1.5 rounded-xl backdrop-blur-md">Hệ thống Real-time CMS</span>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch" id="cardContainer">
-            <div class="glass-card rounded-2xl p-6 text-center text-slate-400 text-xs col-span-2 py-12">
-                <i class="fa-solid fa-spinner fa-spin text-2xl mb-2 text-indigo-400"></i>
-                <p>Đang tải danh sách script từ hệ thống quản trị...</p>
-            </div>
-        </div>
+        <!-- BLOGGER MAIN SECTION -->
+        <b:section class='main' id='main' showaddelement='no'>
+            <b:widget id='Blog1' locked='true' title='Bài đăng trên Blog' type='Blog' version='1'>
+                <b:includable id='main'>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch" id="cardContainer">
+                        <b:loop values='data:posts' var='post'>
+                            <div class="post glass-card rounded-2xl p-6 flex flex-col justify-between relative overflow-hidden group card-item border border-slate-800" 
+                                 expr:data-labels='data:post.labels ? data:post.labels map (l =&gt; l.name) join &quot;,&quot; : &quot;&quot;'>
+                                <h3 class="text-lg font-extrabold text-white mb-2"><a expr:href='data:post.url' class="hover:text-indigo-400 transition"><data:post.title/></a></h3>
+                                <div class="post-body text-xs text-slate-300 mb-4">
+                                    <data:post.body/>
+                                </div>
+                                <div class="pt-2">
+                                    <a expr:href='data:post.url' class="liquid-btn liquid-btn-cyan w-full font-extrabold py-3.5 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2">
+                                        <i class="fa-solid fa-eye text-cyan-200"></i> XEM SCRIPT CHI TIẾT
+                                    </a>
+                                </div>
+                            </div>
+                        </b:loop>
+                    </div>
+                </b:includable>
+            </b:widget>
+        </b:section>
     </main>
 
     <!-- GENERAL MODAL CHUNG -->
@@ -305,7 +368,7 @@
         </div>
     </div>
 
-    <!-- 🎁 MODAL GIFTCODE (ĐÃ NÂNG CẤP iOS LIQUID GLASS) -->
+    <!-- 🎁 MODAL GIFTCODE -->
     <div class="ios-modal-overlay" id="giftcodeModal">
         <div class="ios-modal-card">
             <button onclick="closeGiftcodeModal()" class="liquid-btn liquid-btn-secondary absolute top-4 right-4 text-slate-400 hover:text-white w-8 h-8 rounded-full flex items-center justify-center">
@@ -332,13 +395,12 @@
         </div>
     </div>
 
-    <!-- 📜 MODAL LỊCH SỬ GIAO DỊCH (ĐÃ NÂNG CẤP iOS LIQUID GLASS) -->
+    <!-- 📜 MODAL LỊCH SỬ GIAO DỊCH -->
     <div class="ios-modal-overlay" id="historyModal">
         <div class="ios-modal-card ios-modal-large text-left">
             <button onclick="closeHistoryModal()" class="liquid-btn liquid-btn-secondary absolute top-4 right-4 text-slate-400 hover:text-white w-8 h-8 rounded-full flex items-center justify-center">
                 <i class="fa-solid fa-xmark"></i>
             </button>
-
             <!-- KHUNG HIỆN KHI CHƯA ĐĂNG NHẬP -->
             <div id="auth-required-section" class="text-center py-8" style="display: none;">
                 <div class="w-16 h-16 mx-auto mb-3 rounded-full bg-rose-500/20 border border-rose-500/30 flex items-center justify-center text-rose-400 text-2xl">
@@ -350,7 +412,6 @@
                     👉 ĐĂNG NHẬP NGAY
                 </button>
             </div>
-
             <!-- KHUNG HIỆN KHI ĐÃ ĐĂNG NHẬP -->
             <div id="ls-main-section" style="display: none;">
                 <div class="flex items-center justify-between mb-4 border-b border-slate-800 pb-3">
@@ -363,7 +424,6 @@
                         <span id="display-user-tag" class="px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-bold">...</span>
                     </div>
                 </div>
-
                 <!-- BỘ LỌC THÔNG MINH -->
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-slate-900/90 border border-slate-800 p-3 rounded-2xl mb-4">
                     <div>
@@ -395,7 +455,6 @@
                         </select>
                     </div>
                 </div>
-
                 <!-- BẢNG CUỘN NGANG AN TOÀN -->
                 <div class="overflow-x-auto rounded-2xl border border-slate-800 bg-slate-950/60 max-h-72 overflow-y-auto hide-scrollbar">
                     <table class="w-full text-left border-collapse text-xs">
@@ -413,7 +472,6 @@
                         </tbody>
                     </table>
                 </div>
-
                 <div class="flex items-center justify-between mt-4">
                     <button onclick="fetchHistoryFromSheet()" class="liquid-btn liquid-btn-cyan px-4 py-2.5 rounded-xl text-xs font-bold flex items-center gap-2">
                         <i class="fa-solid fa-arrows-rotate"></i> Đồng bộ lại dữ liệu
@@ -532,37 +590,99 @@
                     <span class="text-emerald-400 font-bold bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20">Hoạt động</span>
                 </div>
             </div>
-
             <button onclick="swHandleLogout()" class="liquid-btn w-full py-3 rounded-xl text-xs font-extrabold text-white bg-gradient-to-r from-rose-600 to-red-600 border border-rose-500/40 shadow-lg shadow-rose-600/30">
                 🚪 ĐĂNG XUẤT TÀI KHOẢN
             </button>
         </div>
     </div>
 
-    <!-- JAVASCRIPT LOGIC TỔNG HỢP (GIFTCODE, LỊCH SỬ, AUTH, MAIN) -->
+    <!-- JAVASCRIPT LOGIC TỔNG HỢP -->
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz_YC2ALIH4fux4jTPOiZFRcf-c2oP6cCNNtazPlEdiNPE-P0cMQ7t8LJevKEHVTnB6/exec";
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz5MYk4UcJnlQ5JUaXUFAuz9Be5Ddj9WTgPMfKpOg346dFcS2Kbwt_1kFNfzNbkYDEm/exec";
         const SCRIPT_URL_GIFTCODE = "https://script.google.com/macros/s/AKfycbziBZNAxN4UMo81tVHE05qEoDNu1VqIplZp8L9jJPFSwu6SWxmTRNHpVQlLern5--wl/exec";
         const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxxidzHDOKlrUCgcN6RzviRDcTICJ4ssLRzaOtxNgwhuxRd7yFK5ItjqXXAm8gIuJ5y/exec";
-
-        // Link dùng để hỏi trạng thái bài viết (cùng link với bản đã test chạy tốt). Muốn đổi thì sửa đúng dòng này.
-        const STATUS_API_URL = WEB_APP_URL;
         
         let CURRENT_ACTIVE_POST_ID = "";
         let rawTransactionData = [];
+        let currentSelectedLabel = 'all';
 
-        // 🎁 LOGIC GIFTCODE
+        function initTheme() {
+            const savedTheme = localStorage.getItem('pogo_theme');
+            const themeIcon = document.getElementById('themeIcon');
+            if (savedTheme === 'light') {
+                document.documentElement.classList.remove('dark');
+                if (themeIcon) themeIcon.className = 'fa-solid fa-sun text-amber-500';
+            } else {
+                document.documentElement.classList.add('dark');
+                if (themeIcon) themeIcon.className = 'fa-solid fa-moon text-amber-400';
+            }
+        }
+        function toggleTheme() {
+            const html = document.documentElement;
+            const themeIcon = document.getElementById('themeIcon');
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                localStorage.setItem('pogo_theme', 'light');
+                if (themeIcon) themeIcon.className = 'fa-solid fa-sun text-amber-500';
+            } else {
+                html.classList.add('dark');
+                localStorage.setItem('pogo_theme', 'dark');
+                if (themeIcon) themeIcon.className = 'fa-solid fa-moon text-amber-400';
+            }
+        }
+        initTheme();
+
+        // 🏷️ HÀM LỌC BÀI ĐĂNG THEO NHÃN VÀ THANH TÌM KIẾM
+        function filterByLabel(labelName) {
+            currentSelectedLabel = labelName;
+            
+            // Cập nhật giao diện nút Active
+            document.querySelectorAll('.label-filter-btn, #btn-label-all').forEach(btn => {
+                btn.className = "liquid-btn liquid-btn-secondary px-3.5 py-1.5 rounded-xl text-xs font-bold shrink-0 label-filter-btn";
+            });
+            
+            if (labelName === 'all') {
+                let allBtn = document.getElementById('btn-label-all');
+                if (allBtn) allBtn.className = "liquid-btn liquid-btn-primary px-3.5 py-1.5 rounded-xl text-xs font-bold shrink-0";
+            } else {
+                let targetBtn = document.querySelector(`[data-label="${labelName}"]`);
+                if (targetBtn) targetBtn.className = "liquid-btn liquid-btn-primary px-3.5 py-1.5 rounded-xl text-xs font-bold shrink-0 label-filter-btn";
+            }
+            
+            applyFilters();
+        }
+
+        function filterCards() {
+            applyFilters();
+        }
+
+        function applyFilters() {
+            let searchInput = document.getElementById('searchInput').value.toLowerCase().trim();
+            let posts = document.querySelectorAll('.post');
+            
+            posts.forEach(post => {
+                let text = post.innerText.toLowerCase();
+                let postLabels = (post.getAttribute('data-labels') || "").toLowerCase();
+                
+                let matchesSearch = text.includes(searchInput);
+                let matchesLabel = (currentSelectedLabel === 'all') || postLabels.includes(currentSelectedLabel.toLowerCase());
+                
+                if (matchesSearch && matchesLabel) {
+                    post.style.display = "";
+                } else {
+                    post.style.display = "none";
+                }
+            });
+        }
+
         function openGiftcodeModal() { document.getElementById("giftcodeModal").style.display = "flex"; }
         function closeGiftcodeModal() { document.getElementById("giftcodeModal").style.display = "none"; }
-
         async function submitPageGiftcode() {
             let codeEl = document.getElementById("pageGiftcodeInput");
             if (!codeEl) return;
             let code = codeEl.value.trim();
-
             if (!code) { alert("⚠️ Vui lòng nhập mã Giftcode!"); return; }
-
             let loggedUser = localStorage.getItem("logged_user");
             if (!loggedUser) {
                 alert("⚠️ Vui lòng đăng nhập tài khoản trước khi nhập Giftcode!");
@@ -570,43 +690,30 @@
                 swOpenLoginModal();
                 return;
             }
-
             let btn = document.getElementById("pageGiftcodeBtn");
             let oldText = btn.innerText;
             btn.innerText = "⏳ Đang xử lý...";
             btn.disabled = true;
-
             let clientIp = "UNKNOWN";
             try {
                 let ipRes = await fetch("https://api.ipify.org?format=json");
                 let ipData = await ipRes.json();
                 clientIp = ipData.ip;
             } catch (e) { console.log("Không lấy được IP"); }
-
             fetch(SCRIPT_URL_GIFTCODE, {
                 method: "POST",
                 headers: { "Content-Type": "text/plain;charset=utf-8" },
-                body: JSON.stringify({
-                    action: "redeemGiftcode",
-                    username: loggedUser,
-                    code: code,
-                    clientIp: clientIp
-                })
+                body: JSON.stringify({ action: "redeemGiftcode", username: loggedUser, code: code, clientIp: clientIp })
             })
             .then(res => res.json())
             .then(data => {
                 btn.disabled = false;
                 btn.innerText = oldText;
-
                 if (data.status === "success") {
                     alert("🎉 " + data.message);
                     if (data.balance !== undefined) {
                         localStorage.setItem("logged_balance", data.balance);
-                        if (typeof swUpdateBalance === "function") {
-                            swUpdateBalance(loggedUser);
-                        } else {
-                            location.reload();
-                        }
+                        if (typeof swUpdateBalance === "function") { swUpdateBalance(loggedUser); } else { location.reload(); }
                     }
                     codeEl.value = "";
                     closeGiftcodeModal();
@@ -621,21 +728,15 @@
             });
         }
 
-        // 📜 LOGIC LỊCH SỬ GIAO DỊCH
         function openHistoryModal() {
             document.getElementById("historyModal").style.display = "flex";
             checkLoginAndInitHistory();
         }
-
-        function closeHistoryModal() {
-            document.getElementById("historyModal").style.display = "none";
-        }
-
+        function closeHistoryModal() { document.getElementById("historyModal").style.display = "none"; }
         function getActiveUser() {
             let user = localStorage.getItem('logged_user') || localStorage.getItem('current_user') || localStorage.getItem('username');
             return user ? user.trim() : "";
         }
-
         function checkLoginAndInitHistory() {
             let currentUser = getActiveUser();
             if (!currentUser) {
@@ -648,12 +749,10 @@
                 fetchHistoryFromSheet();
             }
         }
-
         function fetchHistoryFromSheet() {
             let currentUser = getActiveUser();
             let tableBody = document.getElementById('ls-sheet-list');
             tableBody.innerHTML = '<tr><td colspan="5" class="text-center p-6 text-slate-500 font-semibold">Đang tải dữ liệu từ Google Sheets...</td></tr>';
-
             fetch(WEB_APP_URL)
             .then(response => response.json())
             .then(res => {
@@ -672,14 +771,12 @@
                 tableBody.innerHTML = '<tr><td colspan="5" class="text-center text-rose-400 p-6 font-semibold">Lỗi kết nối tới Web App!</td></tr>';
             });
         }
-
         function resetFilter() {
             document.getElementById('filter-type').value = "all";
             document.getElementById('filter-method').value = "all";
             document.getElementById('filter-time').value = "all";
             filterData();
         }
-
         function parseSheetDate(timeStr) {
             if (!timeStr) return null;
             let str = String(timeStr).trim();
@@ -691,31 +788,24 @@
             }
             return null;
         }
-
         function filterData() {
             let typeVal = document.getElementById('filter-type').value;
             let methodVal = document.getElementById('filter-method').value;
             let timeVal = document.getElementById('filter-time').value;
-
             let now = new Date();
             let todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
             let todayEnd = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59);
-
             let filtered = rawTransactionData.filter(item => {
                 let amount = Number(item.amount || 0);
                 let note = String(item.note || "").toLowerCase();
-
                 if (typeVal === "nap" && amount < 0) return false;
                 if (typeVal === "tru" && amount > 0) return false;
-
                 if (methodVal === "chuyenkhoan" && !note.includes("chuyển khoản") && !note.includes("sepay") && !note.includes("nap")) return false;
                 if (methodVal === "napthe" && !note.includes("thẻ") && !note.includes("card")) return false;
                 if (methodVal === "muahang" && !note.includes("mua") && !note.includes("mở khóa") && amount >= 0) return false;
-
                 if (timeVal !== "all" && item.time) {
                     let itemDate = parseSheetDate(item.time);
                     if (!itemDate) return true;
-
                     if (timeVal === "today") {
                         if (itemDate < todayStart || itemDate > todayEnd) return false;
                     } else if (timeVal === "yesterday") {
@@ -735,14 +825,11 @@
                 }
                 return true;
             });
-
             renderTable(filtered);
         }
-
         function renderTable(dataList) {
             let tableBody = document.getElementById('ls-sheet-list');
             let html = '';
-
             if (dataList.length === 0) {
                 html = '<tr><td colspan="5" class="text-center p-6 text-slate-500 font-semibold">Chưa có giao dịch nào phù hợp với bộ lọc</td></tr>';
             } else {
@@ -751,7 +838,6 @@
                     let amountFormatted = (amount > 0 ? "+" : "") + amount.toLocaleString('vi-VN') + " đ";
                     let amountClass = amount >= 0 ? "text-emerald-400 font-bold" : "text-rose-400 font-bold";
                     let noteText = item.note || 'Giao dịch hệ thống';
-
                     let actionHtml = '';
                     if (amount < 0 && (noteText.toLowerCase().includes("script") || noteText.includes("ID_"))) {
                         let match = noteText.match(/ID_[a-zA-Z0-9_]+/i);
@@ -763,7 +849,6 @@
                     } else {
                         actionHtml = amount >= 0 ? `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">${item.status || 'Thành công'}</span>` : `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-500/10 text-rose-400 border border-rose-500/20">${item.status || 'Đã trừ'}</span>`;
                     }
-
                     html += `<tr>
                         <td class="p-3 font-mono font-bold">${item.txnId || 'GD...'}</td>
                         <td class="p-3">${noteText}</td>
@@ -775,7 +860,6 @@
             }
             tableBody.innerHTML = html;
         }
-
         function openScriptModal(postId, rawNote) {
             let note = decodeURIComponent(rawNote);
             document.getElementById("modalNoteText").innerText = note;
@@ -783,32 +867,26 @@
             document.getElementById("modalScriptContent").value = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/tienkhanh1/spicy/main/Chilli.lua"))()';
             document.getElementById("scriptModal").style.display = "flex";
         }
-
         function copyModalScript() {
             let copyText = document.getElementById("modalScriptContent");
             copyText.select();
             navigator.clipboard.writeText(copyText.value);
             alert("📋 Đã copy Script thành công!");
         }
-
         function closeScriptModal() { document.getElementById("scriptModal").style.display = "none"; }
 
-        // 🟢 WIDGET AUTH & GENERAL MAIN LOGIC
         window.addEventListener("DOMContentLoaded", function() {
             var user = localStorage.getItem("logged_user");
             if (user && user !== "null" && user !== "") {
                 document.getElementById("swLoggedOutWrapper").style.display = "none";
                 document.getElementById("swGroupLoggedIn").style.display = "flex";
-                
                 var cachedBalance = localStorage.getItem("logged_balance") || 0;
                 document.getElementById("swTextBalance").innerText = parseInt(cachedBalance).toLocaleString("vi-VN") + "đ";
                 document.getElementById("swTextUsername").innerText = user;
                 document.getElementById("swMenuUser").innerText = user;
-
                 swUpdateBalance(user);
             }
         });
-
         function swUpdateBalance(username) {
             fetch(GOOGLE_SCRIPT_URL, {
                 method: "POST",
@@ -820,25 +898,17 @@
                 if (data.status === "success" && data.balance !== undefined) {
                     localStorage.setItem("logged_balance", data.balance);
                     document.getElementById("swTextBalance").innerText = parseInt(data.balance).toLocaleString("vi-VN") + "đ";
-                    const modalBal = document.getElementById("userBalanceText");
-                    if (modalBal) modalBal.innerText = parseInt(data.balance).toLocaleString("vi-VN") + "đ";
                 }
             })
             .catch(err => console.log("Lỗi đồng bộ số dư:", err));
         }
-
-        function swToggleAuthMenu() {
-            var menu = document.getElementById("swAuthMenu");
-            menu.classList.toggle("active");
-        }
-
+        function swToggleAuthMenu() { document.getElementById("swAuthMenu").classList.toggle("active"); }
         document.addEventListener("click", function(event) {
             var wrapper = document.getElementById("swLoggedOutWrapper");
             if (wrapper && !wrapper.contains(event.target)) {
                 document.getElementById("swAuthMenu").classList.remove("active");
             }
         });
-
         function swOpenLoginModal() {
             document.getElementById("swAuthMenu").classList.remove("active");
             document.getElementById("swLoginModal").style.display = "flex";
@@ -861,18 +931,14 @@
             document.getElementById("swRegisterModal").style.display = "none";
             document.getElementById("swLoginModal").style.display = "flex";
         }
-
         function swProcessLogin() {
             let user = document.getElementById("swLoginUser").value.trim();
             let pass = document.getElementById("swLoginPass").value.trim();
-
             if (!user || !pass) { alert("⚠️ Vui lòng nhập đầy đủ tên tài khoản và mật khẩu!"); return; }
-
             let btn = document.getElementById("swLoginBtn");
             let oldText = btn.innerText;
             btn.innerText = "⏳ Đang kiểm tra...";
             btn.disabled = true;
-
             fetch(GOOGLE_SCRIPT_URL, {
                 method: "POST",
                 headers: { "Content-Type": "text/plain;charset=utf-8" },
@@ -887,28 +953,18 @@
                     localStorage.setItem("logged_balance", data.balance);
                     alert("✅ Đăng nhập thành công!");
                     location.reload();
-                } else {
-                    alert("❌ " + data.message);
-                }
+                } else { alert("❌ " + data.message); }
             })
-            .catch(err => {
-                btn.disabled = false;
-                btn.innerText = oldText;
-                alert("❌ Lỗi kết nối đến Google Sheets!");
-            });
+            .catch(err => { btn.disabled = false; btn.innerText = oldText; alert("❌ Lỗi kết nối đến Google Sheets!"); });
         }
-
         function swProcessRegister() {
             let user = document.getElementById("swRegUser").value.trim();
             let pass = document.getElementById("swRegPass").value.trim();
-
             if (!user || !pass) { alert("⚠️ Vui lòng nhập đầy đủ tên tài khoản và mật khẩu!"); return; }
-
             let btn = document.getElementById("swRegBtn");
             let oldText = btn.innerText;
             btn.innerText = "⏳ Đang tạo...";
             btn.disabled = true;
-
             fetch(GOOGLE_SCRIPT_URL, {
                 method: "POST",
                 headers: { "Content-Type": "text/plain;charset=utf-8" },
@@ -921,556 +977,224 @@
                 if (data.status === "success") {
                     alert("✅ Đăng ký thành công! Hãy đăng nhập ngay.");
                     swSwitchToLogin();
-                } else {
-                    alert("❌ " + data.message);
-                }
+                } else { alert("❌ " + data.message); }
             })
-            .catch(err => {
-                btn.disabled = false;
-                btn.innerText = oldText;
-                alert("❌ Lỗi kết nối đến Google Sheets!");
-            });
+            .catch(err => { btn.disabled = false; btn.innerText = oldText; alert("❌ Lỗi kết nối đến Google Sheets!"); });
         }
-
         function swHandleLogout() {
             localStorage.removeItem("logged_user");
             localStorage.removeItem("logged_balance");
             alert("👋 Đã đăng xuất!");
             location.reload();
         }
-
-        function toggleBaoLoi() {
-            const box = document.getElementById("formBaoLoiBox");
-            if (box) box.style.display = (box.style.display === "none" || box.style.display === "") ? "block" : "none";
-        }
-
-        async function guiBaoLoi() {
-            const loggedUser = localStorage.getItem("logged_user") || "Chưa đăng nhập";
-            const tieuDeEl = document.getElementById("loiTieuDe");
-            const noiDungEl = document.getElementById("loiNoiDung");
-            
-            const tieuDe = tieuDeEl ? tieuDeEl.value : "Báo lỗi chung";
-            const noiDungChiTiet = noiDungEl ? noiDungEl.value.trim() : "";
-            const fullMessage = "[" + tieuDe + "] [ID: " + CURRENT_ACTIVE_POST_ID + "]" + (noiDungChiTiet ? " " + noiDungChiTiet : "");
-
-            const tag = document.getElementById("statusTag");
-            if (tag) { tag.innerText = "🔴 BẢO TRÌ / ĐANG CẬP NHẬT"; tag.style.color = "#fb7185"; }
-
-            const freeBox = document.getElementById("khoangFreeBox");
-            const vipBox = document.getElementById("khoangVipBox");
-            if (freeBox) freeBox.style.display = "none";
-            if (vipBox) vipBox.style.display = "none";
-
-            try {
-                await fetch(SCRIPT_URL, {
-                    method: "POST",
-                    headers: { "Content-Type": "text/plain;charset=utf-8" },
-                    body: JSON.stringify({ action: "reportAndLock", postId: CURRENT_ACTIVE_POST_ID, username: loggedUser, message: fullMessage })
-                });
-                setCardBadgeByPostId(CURRENT_ACTIVE_POST_ID, "LOCK");
-                alert("✅ Đã gửi báo lỗi! Trạng thái bài viết đã được tự động chuyển sang BẢO TRÌ.");
-            } catch (err) { alert("✅ Đã gửi báo lỗi ngầm tới hệ thống!"); }
-
-            if (noiDungEl) noiDungEl.value = "";
-            const box = document.getElementById("formBaoLoiBox");
-            if (box) box.style.display = "none";
-        }
-
-        function generatePostId(fileName) {
-            let hash = 0;
-            for (let i = 0; i < fileName.length; i++) {
-                hash = ((hash << 5) - hash) + fileName.charCodeAt(i);
-                hash |= 0;
-            }
-            return "ID_" + Math.abs(hash).toString(36).toUpperCase();
-        }
-
-        // 🔎 TÌM KIẾM CARD (trước đây ô tìm kiếm gọi hàm này nhưng chưa được định nghĩa)
-        function filterCards() {
-            const q = (document.getElementById('searchInput').value || '').trim().toLowerCase();
-            document.querySelectorAll('#cardContainer .card-item').forEach(card => {
-                card.style.display = (!q || card.textContent.toLowerCase().includes(q)) ? '' : 'none';
-            });
-        }
-
-        // 🟢 QUÉT TRẠNG THÁI BÀI VIẾT CHO TỪNG CARD
-        function isLockStatus(s) {
-            s = String(s || "").trim().toUpperCase();
-            return s === "LOCK" || s === "MAINTENANCE";
-        }
-
-        function paintStatusBadge(badge, state) {
-            if (!badge) return;
-            const txt = badge.querySelector('.status-text');
-            badge.classList.remove('is-ok', 'is-lock', 'is-wait');
-            if (state === 'lock') {
-                badge.classList.add('is-lock');
-                if (txt) txt.textContent = 'BẢO TRÌ';
-            } else if (state === 'ok') {
-                badge.classList.add('is-ok');
-                if (txt) txt.textContent = 'WORKING 100%';
-            } else {
-                badge.classList.add('is-wait');
-                if (txt) txt.textContent = (state === 'error') ? '⚠️ Chưa kiểm tra được' : 'Đang kiểm tra...';
-            }
-        }
-
-        // Cập nhật badge của card + lưu cache (cùng key với script Blogger cuối file)
-        function setCardBadgeByPostId(postId, status) {
-            const locked = isLockStatus(status);
-            try { localStorage.setItem(postId, locked ? "LOCK" : "ACTIVE"); } catch (e) {}
-            document.querySelectorAll('.status-badge[data-post-id="' + postId + '"]').forEach(function (b) {
-                paintStatusBadge(b, locked ? 'lock' : 'ok');
-            });
-        }
-
-        async function applyCardStatus(postId, badge) {
-            let cached = null;
-            try { cached = localStorage.getItem(postId); } catch (e) {}
-            if (cached) paintStatusBadge(badge, isLockStatus(cached) ? 'lock' : 'ok'); // hiện ngay trạng thái cũ cho nhanh
-
-            try {
-                const res = await fetch(STATUS_API_URL, {
-                    method: "POST",
-                    headers: { "Content-Type": "text/plain;charset=utf-8" },
-                    body: JSON.stringify({ action: "checkStatus", postId: postId })
-                });
-                const data = await res.json();
-                if (data.status !== "success") throw new Error(data.message || "checkStatus lỗi");
-                setCardBadgeByPostId(postId, data.pageStatus);
-            } catch (err) {
-                console.error("Lỗi kiểm tra trạng thái:", postId, err);
-                if (!cached) paintStatusBadge(badge, 'error'); // không báo xanh giả khi hỏi server thất bại
-            }
-        }
-
-        async function loadPosts() {
-            try {
-                const res = await fetch('https://api.github.com/repos/vinhhello13/hackchua/contents/_posts');
-                const files = await res.json();
-                
-                const container = document.getElementById('cardContainer');
-                if (!container) return;
-                container.innerHTML = '';
-
-                if (!Array.isArray(files) || files.length === 0) {
-                    container.innerHTML = '<div class="glass-card rounded-2xl p-6 text-center text-slate-400 text-xs col-span-2 py-8">Chưa có bài viết nào!</div>';
-                    return;
-                }
-
-                for (const file of files) {
-                    if (file.name.endsWith('.md')) {
-                        const contentRes = await fetch(file.download_url);
-                        const rawText = await contentRes.text();
-                        
-                        const parts = rawText.split('---');
-                        let title = file.name.replace('.md', '');
-                        let externalHTML = '';
-                        let internalHTML = '';
-
-                        if (parts.length >= 3) {
-                            const yamlHeader = parts[1];
-                            const fullBody = parts.slice(2).join('---').trim();
-
-                            const titleMatch = yamlHeader.match(/title:\s*"?(.*?)"?$/m);
-                            if (titleMatch && titleMatch[1]) title = titleMatch[1];
-
-                            if (fullBody.includes('<!--more-->')) {
-                                const splitParts = fullBody.split('<!--more-->');
-                                externalHTML = splitParts[0].trim();
-                                internalHTML = splitParts[1].trim();
-                            } else {
-                                externalHTML = fullBody;
-                                internalHTML = fullBody;
-                            }
-                        }
-
-                        const uniquePostId = generatePostId(file.name);
-
-                        const postCard = document.createElement('div');
-                        postCard.className = 'glass-card rounded-2xl p-6 flex flex-col justify-between relative overflow-hidden group card-item border border-slate-800 cursor-pointer';
-                        
-                        postCard.innerHTML = `
-                            <div class="flex items-center justify-between mb-4 pointer-events-none">
-                                <span class="status-badge is-wait" data-post-id="${uniquePostId}">
-                                    <span class="status-dot"></span><span class="status-text">Đang kiểm tra...</span>
-                                </span>
-                            </div>
-                            <div class="post-preview-box flex flex-col items-center justify-center space-y-3 mb-6 text-center w-full pointer-events-none">
-                                ${externalHTML}
-                            </div>
-                            <div class="pt-2 pointer-events-none">
-                                <button class="btn-xem liquid-btn liquid-btn-cyan w-full font-extrabold py-3.5 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2">
-                                    <i class="fa-solid fa-eye text-cyan-200"></i> XEM SCRIPT CHI TIẾT
-                                </button>
-                            </div>
-                        `;
-
-                        const openDetailAction = () => {
-                            CURRENT_ACTIVE_POST_ID = uniquePostId;
-                            openModal(title, `<div class="w-full text-slate-200 overflow-x-auto">${internalHTML}</div>`);
-                            
-                            setTimeout(() => {
-                                const modalBody = document.getElementById('modalBody');
-                                if (modalBody) {
-                                    const idSpan = modalBody.querySelector('#displayPostId');
-                                    if (idSpan) idSpan.innerText = uniquePostId;
-
-                                    const userBalText = modalBody.querySelector('#userBalanceText');
-                                    if (userBalText) {
-                                        const cb = localStorage.getItem("logged_balance") || 0;
-                                        userBalText.innerText = parseInt(cb).toLocaleString("vi-VN") + "đ";
-                                    }
-
-                                    const scripts = modalBody.querySelectorAll('script');
-                                    scripts.forEach(oldScript => {
-                                        const newScript = document.createElement('script');
-                                        newScript.text = `var MY_POST_ID = "${uniquePostId}";\n` + oldScript.text;
-                                        oldScript.parentNode.replaceChild(newScript, oldScript);
-                                    });
-
-                                    if (typeof kiemTraTrangThaiModal === 'function') {
-                                        kiemTraTrangThaiModal(uniquePostId);
-                                    }
-                                }
-                            }, 150);
-                        };
-
-                        postCard.addEventListener('click', (e) => {
-                            e.preventDefault();
-                            openDetailAction();
-                        });
-
-                        container.appendChild(postCard);
-                        applyCardStatus(uniquePostId, postCard.querySelector('.status-badge'));
-                    }
-                }
-            } catch (err) { console.error('Lỗi tải bài viết:', err); }
-        }
-
-        loadPosts();
-
-        async function kiemTraTrangThaiModal(postId) {
-            try {
-                const res = await fetch(SCRIPT_URL, {
-                    method: "POST",
-                    headers: { "Content-Type": "text/plain;charset=utf-8" },
-                    body: JSON.stringify({ action: "checkStatus", postId: postId })
-                });
-                const data = await res.json();
-                
-                const tag = document.getElementById("statusTag");
-                const freeBox = document.getElementById("khoangFreeBox");
-                const vipBox = document.getElementById("khoangVipBox");
-
-                if (data.status === "success") setCardBadgeByPostId(postId, data.pageStatus);
-                if (data.status === "success" && isLockStatus(data.pageStatus)) {
-                    if (tag) { tag.innerText = "🔴 BẢO TRÌ / ĐANG CẬP NHẬT"; tag.style.color = "#fb7185"; }
-                    if (freeBox) freeBox.style.display = "none";
-                    if (vipBox) vipBox.style.display = "none";
-                } else {
-                    if (tag) { tag.innerText = "🟢 WORKING (AUTO UPDATE)"; tag.style.color = "#34d399"; }
-                    if (freeBox) freeBox.style.display = "block";
-                    if (vipBox) vipBox.style.display = "block";
-                }
-            } catch (err) { console.error("Lỗi kiểm tra trạng thái:", err); }
-        }
-
-        function openModal(title, content) {
-            document.getElementById('modalTitle').innerText = title;
-            document.getElementById('modalBody').innerHTML = content;
-            document.getElementById('generalModal').classList.remove('hidden');
-        }
-
-        function closeModal() { document.getElementById('generalModal').classList.add('hidden'); }
     </script>
-    <!-- Khu vực chứa thông báo Real-time siêu nhỏ gọn, tối đa 3 thông báo, ghim góc dưới bên trái -->
-<div id='toastContainer' style='position: fixed !important; bottom: 16px !important; left: 16px !important; right: auto !important; top: auto !important; width: 220px !important; z-index: 99999; display: flex; flex-direction: column-reverse; gap: 8px; pointer-events: none;'></div>
 
-<script>
-//<![CDATA[
-(function() {
-  const SCRIPT_URL_HISTORY = "https://script.google.com/macros/s/AKfycbziBZNAxN4UMo81tVHE05qEoDNu1VqIplZp8L9jJPFSwu6SWxmTRNHpVQlLern5--wl/exec";
-
-  // Kho 2000 tên thực tế
-  const fakeUsersPool = [];
-  const ho = ["nguyen", "tran", "le", "pham", "hoang", "huynh", "phan", "vu", "vo", "dang", "bui", "do", "ho", "ngo", "duong"];
-  const dem = ["van", "thi", "huu", "gia", "minh", "duc", "thanh", "quoc", "nhat", "hoang", "tuan", "my", "kim", "xuan"];
-  const ten = ["an", "anh", "bao", "binh", "cuong", "dung", "dat", "dong", "ha", "hai", "hieu", "hoa", "huy", "khang", "khoa", "kien", "long", "nam", "nghia", "phong", "phuc", "quan", "son", "tai", "tam", "thang", "thien", "thuan", "tin", "toan", "trang", "trung", "tu", "tung", "uyen", "vinh", "vu", "yen", "tungbeo", "hieupc", "datdz", "huyhoa"];
-  const nicknames = ["pro", "gaming", "dz", "kun", "vip", "vlogs", "troll", "lord", "master", "cute", "nghien", "caythue", "tety", "ak47", "sieu", "sao"];
-
-  for (let i = 0; i < 2000; i++) {
-    let randomHo = ho[Math.floor(Math.random() * ho.length)];
-    let randomDem = dem[Math.floor(Math.random() * dem.length)];
-    let randomTen = ten[Math.floor(Math.random() * ten.length)];
-    let randomNick = nicknames[Math.floor(Math.random() * nicknames.length)];
-    let num = Math.floor(Math.random() * 9000) + 100;
+    <!-- 🔔 KHU VỰC THÔNG BÁO TOAST REAL-TIME -->
+    <div id='toastContainer' style='position: fixed !important; bottom: 16px !important; left: 16px !important; right: auto !important; top: auto !important; width: 220px !important; z-index: 99999; display: flex; flex-direction: column-reverse; gap: 8px; pointer-events: none;'></div>
     
-    let generatedName = "";
-    let styleChoice = Math.floor(Math.random() * 4);
-
-    if (styleChoice === 0) {
-      generatedName = randomHo + randomDem + randomTen + (Math.random() < 0.5 ? num : "");
-    } else if (styleChoice === 1) {
-      generatedName = randomHo + "_" + randomTen + (Math.random() < 0.5 ? "_" + randomNick : "");
-    } else if (styleChoice === 2) {
-      generatedName = randomTen + "_" + randomNick + (Math.random() < 0.5 ? num : "");
-    } else {
-      generatedName = randomTen + randomNick + num;
-    }
-    fakeUsersPool.push(generatedName);
-  }
-
-  const fakeAmounts = [2000, 5000, 5000, 10000, 10000, 20000];
-  const fakeTimePool = ["Vừa xong", "1 phút trước", "2 phút trước", "5 phút trước", "10 phút trước", "30 phút trước", "1 giờ trước", "Hôm qua"];
-
-  let lastKnownTotal = 0;
-  let isFirstCheck = true;
-
-  function showToast(content) {
-    let container = document.getElementById("toastContainer");
-    if (!container) return;
-
-    while (container.children.length >= 3) {
-      container.lastChild.remove();
-    }
-
-    let toast = document.createElement("div");
-    // Style iOS Liquid Glass Dark Mode
-    toast.style.cssText = "background: rgba(15, 23, 42, 0.88); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 16px; padding: 10px 24px 10px 12px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6), 0 0 15px rgba(99, 102, 241, 0.15); font-family: -apple-system, 'Plus Jakarta Sans', sans-serif; font-size: 11px; color: #f3f4f6; z-index: 99999; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); opacity: 0; transform: translateY(12px) scale(0.95); pointer-events: auto; width: 100%; box-sizing: border-box; position: relative;";
-    
-    let closeBtn = document.createElement("span");
-    closeBtn.innerHTML = "&times;";
-    closeBtn.style.cssText = "position: absolute; top: 4px; right: 8px; font-size: 13px; cursor: pointer; color: #94a3b8; width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: rgba(255,255,255,0.05); transition: all 0.2s;";
-    closeBtn.onmouseover = function() { closeBtn.style.color = "#ffffff"; closeBtn.style.background = "rgba(255,255,255,0.2)"; };
-    closeBtn.onmouseout = function() { closeBtn.style.color = "#94a3b8"; closeBtn.style.background = "rgba(255,255,255,0.05)"; };
-    closeBtn.onclick = function() {
-      toast.style.opacity = "0";
-      toast.style.transform = "translateY(-8px) scale(0.95)";
-      setTimeout(() => toast.remove(), 300);
-    };
-    toast.appendChild(closeBtn);
-
-    let contentDiv = document.createElement("div");
-    contentDiv.style.cssText = "line-height: 1.4;";
-    contentDiv.innerHTML = content;
-    toast.appendChild(contentDiv);
-
-    container.insertBefore(toast, container.firstChild);
-
-    setTimeout(function() {
-      toast.style.opacity = "1";
-      toast.style.transform = "translateY(0) scale(1)";
-    }, 50);
-
-    setTimeout(function() {
-      if (toast.parentElement) {
-        toast.style.opacity = "0";
-        toast.style.transform = "translateY(-8px) scale(0.95)";
-        setTimeout(function() {
-          toast.remove();
-        }, 300);
-      }
-    }, 4000);
-  }
-
-  // 🔄 Chuỗi nhai lại giao dịch thật giãn cách tịnh tiến thực tế
-  function triggerRepeatSequence(username, mainText) {
-    const timeSequence = ["Vừa xong", "1 phút trước", "5 phút trước", "10 phút trước", "30 phút trước", "1 giờ trước"];
-    const delaySequence = [0, 60000, 180000, 420000, 900000, 1800000];
-
-    for (let i = 0; i < timeSequence.length; i++) {
-      setTimeout(function() {
-        let timeText = timeSequence[i];
-        showToast("<span style='color: #818cf8; font-weight: 800;'>⚡ " + username + "</span> " + mainText + "<br><span style='font-size: 9px; color: #94a3b8; font-weight: 500; display: block; margin-top: 2px;'>⏱️ " + timeText + "</span>");
-      }, delaySequence[i]);
-    }
-  }
-
-  // Quét Google Sheets liên tục mỗi 6 giây để đồng bộ real-time
-  async function pollRealTransactions() {
-    try {
-      let res = await fetch(SCRIPT_URL_HISTORY);
-      let json = await res.json();
-      if (json && json.status === "success" && json.data) {
-        let realTransactions = json.data;
-        
-        if (isFirstCheck) {
-          lastKnownTotal = realTransactions.length;
-          isFirstCheck = false;
-        } else if (realTransactions.length > lastKnownTotal) {
-          let latestTx = realTransactions[realTransactions.length - 1];
-          let username = latestTx.username || "Khách";
-          let note = latestTx.note || "";
-          let amount = Number(latestTx.amount) || 0;
-          let mainText = "";
-
-          if (note.indexOf("Giftcode") !== -1) {
-            mainText = "vừa đổi mã nhận <b style='color:#f43f5e;'>" + amount.toLocaleString("vi-VN") + "đ</b>! 🔥";
-          } else if (amount > 0) {
-            mainText = "vừa nạp <b style='color:#34d399;'>" + amount.toLocaleString("vi-VN") + "đ</b>! 💰";
-          } else {
-            mainText = "vừa giao dịch thành công! 🚀";
-          }
-
-          triggerRepeatSequence(username, mainText);
-          lastKnownTotal = realTransactions.length;
-        }
-      }
-    } catch (e) {}
-
-    setTimeout(pollRealTransactions, 6000);
-  }
-
-  // 🚀 Vòng lặp thông báo ảo: Ban ngày (6h - 22h) nhảy từ 1s-25s, Ban đêm (22h - 6h) nhảy từ 3p-10p
-  function scheduleNextFake() {
-    let currentHour = new Date().getHours();
-    let delay;
-
-    if (currentHour >= 6 && currentHour < 22) {
-      delay = Math.floor(Math.random() * (25000 - 1000 + 1)) + 1000;
-    } else {
-      delay = Math.floor(Math.random() * (600000 - 180000 + 1)) + 180000;
-    }
-
-    setTimeout(function() {
-      let chosenUser = fakeUsersPool[Math.floor(Math.random() * fakeUsersPool.length)];
-      let randomType = Math.random();
-      let randomMoney = fakeAmounts[Math.floor(Math.random() * fakeAmounts.length)];
-      let timeText = fakeTimePool[Math.floor(Math.random() * fakeTimePool.length)];
-      
-      let fakeMainText = "";
-      
-      // 🎛️ Tỷ lệ: 10% nạp tiền, 40% nhập giftcode, 50% mua script VIP
-      if (randomType < 0.10) {
-        fakeMainText = "vừa nạp <b style='color:#34d399;'>" + randomMoney.toLocaleString("vi-VN") + "đ</b>! 💰";
-      } else if (randomType < 0.50) {
-        fakeMainText = "vừa nhập Giftcode nhận <b style='color:#f43f5e;'>" + randomMoney.toLocaleString("vi-VN") + "đ</b>! 🔥";
-      } else {
-        fakeMainText = "vừa mở khóa <b style='color:#38bdf8;'>Script VIP</b>! 🔓";
-      }
-
-      showToast("<span style='color: #818cf8; font-weight: 800;'>⚡ " + chosenUser + "</span> " + fakeMainText + "<br><span style='font-size: 9px; color: #94a3b8; font-weight: 500; display: block; margin-top: 2px;'>⏱️ " + timeText + "</span>");
-      
-      scheduleNextFake();
-    }, delay);
-  }
-
-  setTimeout(function() {
-    pollRealTransactions();
-    scheduleNextFake();
-  }, 2000);
-})();
-//]]>
-</script>
-    <!-- Pagination Scripts -->
-<b:if cond='data:view.isMultipleItems'>
-<script type='text/javascript'>
-//<![CDATA[
-var postResults=postPerPage;
-var numOfPages=2;
-var pageOf=["Page", "of"];
-eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--){d[e(c)]=k[c]||e(c)}k=[function(e){return d[e]}];e=function(){return'\\w+'};c=1};while(c--){if(k[c]){p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c])}}return p}('5 K;5 m;5 l;5 w;5 s=1p.9;5 y="/";1d();G 1b(a){5 b=\'\';J=M(W/2);4(J==W-J){W=J*2+1}D=l-J;4(D<1)D=1;j=M(a/n)+1;4(j-1==a/n)j=j-1;E=D+W-1;4(E>j)E=j;b+=\'<C 6="3-1u">\'+17[0]+\' \'+l+\' \'+17[1]+\' \'+j+\'</C>\';5 c=M(l)-1;4(l>1){4(l==2){4(m==\'3\'){b+=\'<a 6="3-7 3-U" 9="\'+y+\'"></a>\'}h{b+=\'<a 6="3-7 3-U" 9="/v/u/\'+w+\'?&i-o=\'+n+\'"></a>\'}}h{4(m==\'3\'){b+=\'<a 6="3-7 3-U" 9="#" z="L(\'+c+\');B x"></a>\'}h{b+=\'<a 6="3-7 3-U" 9="#" z="I(\'+c+\');B x"></a>\'}}}4(D>1){4(m=="3"){b+=\'<a 6="3-7" 9="\'+y+\'">1</a>\'}h{b+=\'<a 6="3-7" 9="/v/u/\'+w+\'?&i-o=\'+n+\'">1</a>\'}}4(D>2){b+=\'<C 6="3-7 3-16">...</C>\'}1a(5 d=D;d<=E;d++){4(l==d){b+=\'<C 6="3-7 3-1v">\'+d+\'</C>\'}h 4(d==1){4(m==\'3\'){b+=\'<a 6="3-7" 9="\'+y+\'">1</a>\'}h{b+=\'<a 6="3-7" 9="/v/u/\'+w+\'?&i-o=\'+n+\'">1</a>\'}}h{4(m==\'3\'){b+=\'<a 6="3-7" 9="#" z="L(\'+d+\');B x">\'+d+\'</a>\'}h{b+=\'<a 6="3-7" 9="#" z="I(\'+d+\');B x">\'+d+\'</a>\'}}}4(E<j-1){b+=\'<C 6="3-7 3-16">...</C>\'}4(E<j){4(m=="3"){b+=\'<a 6="3-7" 9="#" z="L(\'+j+\');B x">\'+j+\'</a>\'}h{b+=\'<a 6="3-7" 9="#" z="I(\'+j+\');B x">\'+j+\'</a>\'}}5 e=M(l)+1;4(l<j){4(m==\'3\'){b+=\'<a 6="3-7 3-15" 9="#" z="L(\'+e+\');B x"></a>\'}h{b+=\'<a 6="3-7 3-15" 9="#" z="I(\'+e+\');B x"></a>\'}}b+=\'\';5 f=A.1s(\'1t\');5 g=A.1r(\'1A-1D\');1a(5 p=0;p<f.O;p++){f[p].1c=b}4(f&&f.O>0){b=\'\'}4(g){g.1c=b}}G 12(a){5 b=a.1f;5 c=M(b.1E$1B.$t,10);1b(c)}G 1d(){5 a=s;4(a.k(\'/v/u/\')!=-1){4(a.k(\'?T-i\')!=-1){w=a.H(a.k(\'/v/u/\')+14,a.k(\'?T-i\'))}h{w=a.H(a.k(\'/v/u/\')+14,a.k(\'?&i\'))}}4(a.k(\'?q=\')==-1&&a.k(\'.1C\')==-1){4(a.k(\'/v/u/\')==-1){m=\'3\';4(s.k(\'#F=\')!=-1){l=s.H(s.k(\'#F=\')+8,s.O)}h{l=1}A.18(\'<r Q=\\\'\'+y+\'P/R/N?i-o=1&X=Y-S-r&V=12\\\'><\\/r>\')}h{m=\'u\';4(a.k(\'&i-o=\')==-1){n=1F}4(s.k(\'#F=\')!=-1){l=s.H(s.k(\'#F=\')+8,s.O)}h{l=1}A.18(\'<r Q="\'+y+\'P/R/N/-/\'+w+\'?X=Y-S-r&V=12&i-o=1" ><\\/r>\')}}}G L(a){Z=(a-1)*n;K=a;5 b=A.1h(\'1q\')[0];5 c=A.1o(\'r\');c.1e=\'1m/1n\';c.1i(\'Q\',y+\'P/R/N?1j-1k=\'+Z+\'&i-o=1&X=Y-S-r&V=13\');b.1l(c)}G I(a){Z=(a-1)*n;K=a;5 b=A.1h(\'1q\')[0];5 c=A.1o(\'r\');c.1e=\'1m/1n\';c.1i(\'Q\',y+\'P/R/N/-/\'+w+\'?1j-1k=\'+Z+\'&i-o=1&X=Y-S-r&V=13\');b.1l(c)}G 13(a){11=a.1f.1x[0];5 b=11.1g.$t.H(0,19)+11.1g.$t.H(1z,1w);5 c=1y(b);4(m==\'3\'){5 d=\'/v?T-i=\'+c+\'&i-o=\'+n+\'#F=\'+K}h{5 d=\'/v/u/\'+w+\'?T-i=\'+c+\'&i-o=\'+n+\'#F=\'+K}1p.9=d}',62,104,'|||page|if|var|class|num||href||||||||else|max|lastPageNo|indexOf|currentPageNo|currentPage|postResults|results|||script|locationUrl||label|search|postLabel|false|home_page|onclick|document|return|span|pageStart|pageEnd|PageNo|function|substring|getLabelPage|pageNumber|noPage|getPage|parseInt|summary|length|feeds|src|posts|in|updated|prev|callback|numOfPages|alt|json|jsonstart||post|dataFeed|findPostDate||next|dots|pageOf|write||for|startPagination|innerHTML|pageCurrentBlogger|type|feed|published|getElementsByTagName|setAttribute|start|index|appendChild|text|javascript|createElement|location|head|getElementById|getElementsByName|pageArea|of|active|29|entry|encodeURIComponent|23|blog|totalResults|html|pager|openSearch|20'.split('|'),0,{}))
-//]]>
-</script>
-</b:if>
-
-<script type='text/javascript'>
-//<![CDATA[
-  const GLOBAL_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxxidzHDOKlrUCgcN6RzviRDcTICJ4ssLRzaOtxNgwhuxRd7yFK5ItjqXXAm8gIuJ5y/exec";
-
-  function getPostIdFromUrl(url) {
-    try {
-      let parser = document.createElement('a');
-      parser.href = url;
-      let path = parser.pathname;
-      let hash = 0;
-      for (let i = 0; i < path.length; i++) {
-        hash = ((hash << 5) - hash) + path.charCodeAt(i);
-        hash |= 0;
-      }
-      return "ID_" + Math.abs(hash).toString(36).toUpperCase();
-    } catch (e) {
-      return "";
-    }
-  }
-
-  document.addEventListener("DOMContentLoaded", function() {
-    if (window.location.pathname.includes(".html")) {
-      return;
-    }
-
-    let posts = document.querySelectorAll('.post, .hentry, .blog-post');
-    if (posts.length === 0) return;
-
-    posts.forEach(async function(post) {
-      let link = post.querySelector('a[href*=".html"]');
-      let img = post.querySelector('img');
-      if (!link) return;
-
-      let postId = getPostIdFromUrl(link.href);
-
-      // Đọc cache từ localStorage
-      let cachedStatus = localStorage.getItem(postId);
-      let isLock = (cachedStatus === "LOCK" || cachedStatus === "MAINTENANCE");
-
-      // 📱 STYLE iOS LIQUID GLASS CHO STATUS BADGE
-      let bgStyle = isLock 
-        ? "background: rgba(244, 63, 94, 0.15) !important; color: #fb7185 !important; border: 1px solid rgba(244, 63, 94, 0.3) !important;" 
-        : "background: rgba(16, 185, 129, 0.15) !important; color: #34d399 !important; border: 1px solid rgba(16, 185, 129, 0.3) !important;";
-
-      let initialText = isLock ? "🔴 BẢO TRÌ / ĐANG CẬP NHẬT" : "<span style='width: 6px; height: 6px; background-color: #34d399; border-radius: 50%; display: inline-block; margin-right: 5px; box-shadow: 0 0 8px #34d399;'></span> WORKING 100%";
-
-      // Khung chứa căn giữa
-      let wrapper = document.createElement('div');
-      wrapper.style.cssText = "text-align: center !important; margin: 10px 0 6px 0 !important; width: 100% !important; display: block !important;";
-
-      let statusBadge = document.createElement('span');
-      statusBadge.style.cssText = "display: inline-flex !important; align-items: center !important; justify-content: center !important; width: auto !important; padding: 4px 12px !important; border-radius: 9999px !important; font-weight: 800 !important; font-size: 10.5px !important; backdrop-filter: blur(12px) !important; -webkit-backdrop-filter: blur(12px) !important; letter-spacing: 0.5px !important; font-family: -apple-system, sans-serif !important; " + bgStyle;
-      statusBadge.innerHTML = initialText;
-
-      wrapper.appendChild(statusBadge);
-
-      // Chèn ngay dưới ảnh
-      if (img) {
-        let imgParent = img.closest('a') || img.parentElement;
-        if (imgParent && imgParent.parentNode) {
-          imgParent.parentNode.insertBefore(wrapper, imgParent.nextSibling);
+    <script>
+    //<![CDATA[
+    (function() {
+      const SCRIPT_URL_HISTORY = "https://script.google.com/macros/s/AKfycbziBZNAxN4UMo81tVHE05qEoDNu1VqIplZp8L9jJPFSwu6SWxmTRNHpVQlLern5--wl/exec";
+      const fakeUsersPool = [];
+      const ho = ["nguyen", "tran", "le", "pham", "hoang", "huynh", "phan", "vu", "vo", "dang", "bui", "do", "ho", "ngo", "duong"];
+      const dem = ["van", "thi", "huu", "gia", "minh", "duc", "thanh", "quoc", "nhat", "hoang", "tuan", "my", "kim", "xuan"];
+      const ten = ["an", "anh", "bao", "binh", "cuong", "dung", "dat", "dong", "ha", "hai", "hieu", "hoa", "huy", "khang", "khoa", "kien", "long", "nam", "nghia", "phong", "phuc", "quan", "son", "tai", "tam", "thang", "thien", "thuan", "tin", "toan", "trang", "trung", "tu", "tung", "uyen", "vinh", "vu", "yen", "tungbeo", "hieupc", "datdz", "huyhoa"];
+      const nicknames = ["pro", "gaming", "dz", "kun", "vip", "vlogs", "troll", "lord", "master", "cute", "nghien", "caythue", "tety", "ak47", "sieu", "sao"];
+      for (let i = 0; i < 2000; i++) {
+        let randomHo = ho[Math.floor(Math.random() * ho.length)];
+        let randomDem = dem[Math.floor(Math.random() * dem.length)];
+        let randomTen = ten[Math.floor(Math.random() * ten.length)];
+        let randomNick = nicknames[Math.floor(Math.random() * nicknames.length)];
+        let num = Math.floor(Math.random() * 9000) + 100;
+        let generatedName = "";
+        let styleChoice = Math.floor(Math.random() * 4);
+        if (styleChoice === 0) {
+          generatedName = randomHo + randomDem + randomTen + (Math.random() < 0.5 ? num : "");
+        } else if (styleChoice === 1) {
+          generatedName = randomHo + "_" + randomTen + (Math.random() < 0.5 ? "_" + randomNick : "");
+        } else if (styleChoice === 2) {
+          generatedName = randomTen + "_" + randomNick + (Math.random() < 0.5 ? num : "");
         } else {
-          post.prepend(wrapper);
+          generatedName = randomTen + randomNick + num;
         }
-      } else {
-        let targetContainer = post.querySelector('h3.post-title, .post-header, h2') || post;
-        targetContainer.prepend(wrapper);
+        fakeUsersPool.push(generatedName);
       }
-
-      // Gọi API kiểm tra ngầm trạng thái từ Google Sheets
-      try {
-        let res = await fetch(GLOBAL_SCRIPT_URL, {
-          method: "POST",
-          headers: { "Content-Type": "text/plain;charset=utf-8" },
-          body: JSON.stringify({ action: "checkStatus", postId: postId })
-        });
-        let data = await res.json();
-
-        if (data.status === "success") {
-          let pageStatus = String(data.pageStatus).trim().toUpperCase();
-          localStorage.setItem(postId, pageStatus);
-
-          if (pageStatus === "LOCK" || pageStatus === "MAINTENANCE") {
-            statusBadge.style.cssText = "display: inline-flex !important; align-items: center !important; justify-content: center !important; width: auto !important; padding: 4px 12px !important; border-radius: 9999px !important; font-weight: 800 !important; font-size: 10.5px !important; backdrop-filter: blur(12px) !important; -webkit-backdrop-filter: blur(12px) !important; letter-spacing: 0.5px !important; font-family: -apple-system, sans-serif !important; background: rgba(244, 63, 94, 0.15) !important; color: #fb7185 !important; border: 1px solid rgba(244, 63, 94, 0.3) !important;";
-            statusBadge.innerHTML = "🔴 BẢO TRÌ / ĐANG CẬP NHẬT";
-          } else {
-            statusBadge.style.cssText = "display: inline-flex !important; align-items: center !important; justify-content: center !important; width: auto !important; padding: 4px 12px !important; border-radius: 9999px !important; font-weight: 800 !important; font-size: 10.5px !important; backdrop-filter: blur(12px) !important; -webkit-backdrop-filter: blur(12px) !important; letter-spacing: 0.5px !important; font-family: -apple-system, sans-serif !important; background: rgba(16, 185, 129, 0.15) !important; color: #34d399 !important; border: 1px solid rgba(16, 185, 129, 0.3) !important;";
-            statusBadge.innerHTML = "<span style='width: 6px; height: 6px; background-color: #34d399; border-radius: 50%; display: inline-block; margin-right: 5px; box-shadow: 0 0 8px #34d399;'></span> WORKING 100%";
+      const fakeAmounts = [2000, 5000, 5000, 10000, 10000, 20000];
+      const fakeTimePool = ["Vừa xong", "1 phút trước", "2 phút trước", "5 phút trước", "10 phút trước", "30 phút trước", "1 giờ trước", "Hôm qua"];
+      let lastKnownTotal = 0;
+      let isFirstCheck = true;
+      function showToast(content) {
+        let container = document.getElementById("toastContainer");
+        if (!container) return;
+        while (container.children.length >= 3) { container.lastChild.remove(); }
+        let toast = document.createElement("div");
+        toast.style.cssText = "background: rgba(15, 23, 42, 0.88); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 16px; padding: 10px 24px 10px 12px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6), 0 0 15px rgba(99, 102, 241, 0.15); font-family: -apple-system, 'Plus Jakarta Sans', sans-serif; font-size: 11px; color: #f3f4f6; z-index: 99999; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); opacity: 0; transform: translateY(12px) scale(0.95); pointer-events: auto; width: 100%; box-sizing: border-box; position: relative;";
+        
+        let closeBtn = document.createElement("span");
+        closeBtn.innerHTML = "&times;";
+        closeBtn.style.cssText = "position: absolute; top: 4px; right: 8px; font-size: 13px; cursor: pointer; color: #94a3b8; width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: rgba(255,255,255,0.05); transition: all 0.2s;";
+        closeBtn.onclick = function() {
+          toast.style.opacity = "0";
+          toast.style.transform = "translateY(-8px) scale(0.95)";
+          setTimeout(() => toast.remove(), 300);
+        };
+        toast.appendChild(closeBtn);
+        let contentDiv = document.createElement("div");
+        contentDiv.style.cssText = "line-height: 1.4;";
+        contentDiv.innerHTML = content;
+        toast.appendChild(contentDiv);
+        container.insertBefore(toast, container.firstChild);
+        setTimeout(function() {
+          toast.style.opacity = "1";
+          toast.style.transform = "translateY(0) scale(1)";
+        }, 50);
+        setTimeout(function() {
+          if (toast.parentElement) {
+            toast.style.opacity = "0";
+            toast.style.transform = "translateY(-8px) scale(0.95)";
+            setTimeout(function() { toast.remove(); }, 300);
           }
-        }
-      } catch (err) {
-        // Bỏ qua lỗi mạng
+        }, 4000);
       }
-    });
-  });
-//]]>
-</script>
+      function triggerRepeatSequence(username, mainText) {
+        const timeSequence = ["Vừa xong", "1 phút trước", "5 phút trước", "10 phút trước", "30 phút trước", "1 giờ trước"];
+        const delaySequence = [0, 60000, 180000, 420000, 900000, 1800000];
+        for (let i = 0; i < timeSequence.length; i++) {
+          setTimeout(function() {
+            let timeText = timeSequence[i];
+            showToast("<span style='color: #818cf8; font-weight: 800;'>⚡ " + username + "</span> " + mainText + "<br><span style='font-size: 9px; color: #94a3b8; font-weight: 500; display: block; margin-top: 2px;'>⏱️ " + timeText + "</span>");
+          }, delaySequence[i]);
+        }
+      }
+      async function pollRealTransactions() {
+        try {
+          let res = await fetch(SCRIPT_URL_HISTORY);
+          let json = await res.json();
+          if (json && json.status === "success" && json.data) {
+            let realTransactions = json.data;
+            if (isFirstCheck) {
+              lastKnownTotal = realTransactions.length;
+              isFirstCheck = false;
+            } else if (realTransactions.length > lastKnownTotal) {
+              let latestTx = realTransactions[realTransactions.length - 1];
+              let username = latestTx.username || "Khách";
+              let note = latestTx.note || "";
+              let amount = Number(latestTx.amount) || 0;
+              let mainText = "";
+              if (note.indexOf("Giftcode") !== -1) {
+                mainText = "vừa đổi mã nhận <b style='color:#f43f5e;'>" + amount.toLocaleString("vi-VN") + "đ</b>! 🔥";
+              } else if (amount > 0) {
+                mainText = "vừa nạp <b style='color:#34d399;'>" + amount.toLocaleString("vi-VN") + "đ</b>! 💰";
+              } else {
+                mainText = "vừa giao dịch thành công! 🚀";
+              }
+              triggerRepeatSequence(username, mainText);
+              lastKnownTotal = realTransactions.length;
+            }
+          }
+        } catch (e) {}
+        setTimeout(pollRealTransactions, 6000);
+      }
+      function scheduleNextFake() {
+        let currentHour = new Date().getHours();
+        let delay = (currentHour >= 6 && currentHour < 22) ? (Math.floor(Math.random() * (25000 - 1000 + 1)) + 1000) : (Math.floor(Math.random() * (600000 - 180000 + 1)) + 180000);
+        setTimeout(function() {
+          let chosenUser = fakeUsersPool[Math.floor(Math.random() * fakeUsersPool.length)];
+          let randomType = Math.random();
+          let randomMoney = fakeAmounts[Math.floor(Math.random() * fakeAmounts.length)];
+          let timeText = fakeTimePool[Math.floor(Math.random() * fakeTimePool.length)];
+          let fakeMainText = randomType < 0.10 ? ("vừa nạp <b style='color:#34d399;'>" + randomMoney.toLocaleString("vi-VN") + "đ</b>! 💰") : (randomType < 0.50 ? ("vừa nhập Giftcode nhận <b style='color:#f43f5e;'>" + randomMoney.toLocaleString("vi-VN") + "đ</b>! 🔥") : ("vừa mở khóa <b style='color:#38bdf8;'>Script VIP</b>! 🔓"));
+          showToast("<span style='color: #818cf8; font-weight: 800;'>⚡ " + chosenUser + "</span> " + fakeMainText + "<br><span style='font-size: 9px; color: #94a3b8; font-weight: 500; display: block; margin-top: 2px;'>⏱️ " + timeText + "</span>");
+          scheduleNextFake();
+        }, delay);
+      }
+      setTimeout(function() { pollRealTransactions(); scheduleNextFake(); }, 2000);
+    })();
+    //]]>
+    </script>
+
+    <!-- 📱 BLOGGER PAGINATION SCRIPTS -->
+    <b:if cond='data:view.isMultipleItems'>
+    <script type='text/javascript'>
+    //<![CDATA[
+    var postResults=postPerPage;var numOfPages=2;var pageOf=["Page","of"];eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--){d[e(c)]=k[c]||e(c)}k=[function(e){return d[e]}];e=function(){return'\\w+'};c=1};while(c--){if(k[c]){p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c])}}return p}('5 K;5 m;5 l;5 w;5 s=1p.9;5 y="/";1d();G 1b(a){5 b=\\'\\';J=M(W/2);4(J==W-J){W=J*2+1}D=l-J;4(D<1)D=1;j=M(a/n)+1;4(j-1==a/n)j=j-1;E=D+W-1;4(E>j)E=j;b+=\\'<C 6="3-1u"\>\\'+17[0]+\\' \\'+l+\\' \\'+17[1]+\\' \\'+j+\\'</C\>\\';5 c=M(l)-1;4(l>1){4(l==2){4(m==\\'3\\'){b+=\\'<a 6="3-7 3-U" 9="\\'+y+\\'"></a>\\'}h{b+=\\'<a 6="3-7 3-U" 9="/v/u/\\'+w+\\'?&i-o=\\'+n+\\'"></a>\\'}}h{4(m==\\'3\\'){b+=\\'<a 6="3-7 3-U" 9="#" z="L(\\'+c+\\');B x"></a>\\'}h{b+=\\'<a 6="3-7 3-U" 9="#" z="I(\\'+c+\\');B x"></a>\\'}}}4(D>1){4(m=="3"){b+=\\'<a 6="3-7" 9="\\'+y+\\'">1</a>\\'}h{b+=\\'<a 6="3-7" 9="/v/u/\\'+w+\\'?&i-o=\\'+n+\\'">1</a>\\'}}4(D>2){b+=\\'<C 6="3-7 3-16">...</C\>\\'}1a(5 d=D;d<=E;d++){4(l==d){b+=\\'<C 6="3-7 3-1v"\>\\'+d+\\'</C\>\\'}h 4(d==1){4(m==\\'3\\'){b+=\\'<a 6="3-7" 9="\\'+y+\\'">1</a>\\'}h{b+=\\'<a 6="3-7" 9="/v/u/\\'+w+\\'?&i-o=\\'+n+\\'">1</a>\\'}}h{4(m==\\'3\\'){b+=\\'<a 6="3-7" 9="#" z="L(\\'+d+\\');B x"\>\\'+d+\\'</a>\\'}h{b+=\\'<a 6="3-7" 9="#" z="I(\\'+d+\\');B x"\>\\'+d+\\'</a>\\'}}}4(E<j-1){b+=\\'<C 6="3-7 3-16">...</C\>\\'}4(E<j){4(m=="3"){b+=\\'<a 6="3-7" 9="#" z="L(\\'+j+\\');B x"\>\\'+j+\\'</a>\\'}h{b+=\\'<a 6="3-7" 9="#" z="I(\\'+j+\\');B x"\>\\'+j+\\'</a>\\'}}5 e=M(l)+1;4(l<j){4(m==\\'3\\'){b+=\\'<a 6="3-7 3-15" 9="#" z="L(\\'+e+\\');B x"></a>\\'}h{b+=\\'<a 6="3-7 3-15" 9="#" z="I(\\'+e+\\');B x"></a>\\'}}b+=\\'\\';5 f=A.1s(\\'1t\\');5 g=A.1r(\\'1A-1D\\');1a(5 p=0;p<f.O;p++){f[p].1c=b}4(f&&f.O>0){b=\\'\\'}4(g){g.1c=b}}G 12(a){5 b=a.1f;5 c=M(b.1E$1B.$t,10);1b(c)}G 1d(){5 a=s;4(a.k(\\'/v/u/\\')!=-1){4(a.k(\\'?T-i\\')!=-1){w=a.H(a.k(\\'/v/u/\\')+14,a.k(\\'?T-i\\'))}h{w=a.H(a.k(\\'/v/u/\\')+14,a.k(\\'?&i\\'))}}4(a.k(\\'?q=\\')==-1&&a.k(\\'.1C\\')==-1){4(a.k(\\'/v/u/\\')==-1){m=\\'3\\';4(s.k(\\'#F=\\')!=-1){l=s.H(s.k(\\'#F=\\')+8,s.O)}h{l=1}A.18(\\'<r Q=\\\\'\\'+y+\\'P/R/N?i-o=1&X=Y-S-r&V=12\\\\\\'></r\>\\')}h{m=\\'u\\';4(a.k(\\'&i-o=\\')==-1){n=1F}4(s.k(\\'#F=\\')!=-1){l=s.H(s.k(\\'#F=\\')+8,s.O)}h{l=1}A.18(\\'<r Q="\\'+y+\\'P/R/N/-/\\'+w+\\'?X=Y-S-r&V=12&i-o=1" ></r\>\\')}}}G L(a){Z=(a-1)*n;K=a;5 b=A.1h(\\'1q\\')[0];5 c=A.1o(\\'r\\');c.1e=\\'1m/1n\\';c.1i(\\'Q\\',y+\\'P/R/N?1j-1k=\\'+Z+\\'&i-o=1&X=Y-S-r&V=13\\');b.1l(c)}G I(a){Z=(a-1)*n;K=a;5 b=A.1h(\\'1q\\')[0];5 c=A.1o(\\'r\\');c.1e=\\'1m/1n\\';c.1i(\\'Q\\',y+\\'P/R/N/-/\\'+w+\\'?1j-1k=\\'+Z+\\'&i-o=1&X=Y-S-r&V=13\\');b.1l(c)}G 13(a){11=a.1f.1x[0];5 b=11.1g.$t.H(0,19)+11.1g.$t.H(1z,1w);5 c=1y(b);4(m==\\'3\\'){5 d=\\'/v?T-i=\\'+c+\\'&i-o=\\'+n+\\'#F=\\'+K}h{5 d=\\'/v/u/\\'+w+\\'?T-i=\\'+c+\\'&i-o=\\'+n+\\'#F=\\'+K}1p.9=d}',62,104,'|||page|if|var|class|num||href||||||else|max|lastPageNo|indexOf|currentPageNo|currentPage|postResults|results|||script|locationUrl||label|search|postLabel|false|home_page|onclick|document|return|span|pageStart|pageEnd|PageNo|function|substring|getLabelPage|pageNumber|noPage|getPage|parseInt|summary|length|feeds|src|posts|in|updated|prev|callback|numOfPages|alt|json|jsonstart||post|dataFeed|findPostDate||next|dots|pageOf|write||for|startPagination|innerHTML|pageCurrentBlogger|type|feed|published|getElementsByTagName|setAttribute|start|index|appendChild|text|javascript|createElement|location|head|getElementById|getElementsByName|pageArea|of|active|29|entry|encodeURIComponent|23|blog|totalResults|html|pager|openSearch|20'.split('|'),0,{}))
+    //]]>
+    </script>
+    </b:if>
+
+    <!-- 🚀 BLOGGER AUTOMATION POST STATUS SCRIPT -->
+    <script type='text/javascript'>
+    //<![CDATA[
+      const GLOBAL_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxxidzHDOKlrUCgcN6RzviRDcTICJ4ssLRzaOtxNgwhuxRd7yFK5ItjqXXAm8gIuJ5y/exec";
+      function getPostIdFromUrl(url) {
+        try {
+          let parser = document.createElement('a');
+          parser.href = url;
+          let path = parser.pathname;
+          let hash = 0;
+          for (let i = 0; i < path.length; i++) {
+            hash = ((hash << 5) - hash) + path.charCodeAt(i);
+            hash |= 0;
+          }
+          return "ID_" + Math.abs(hash).toString(36).toUpperCase();
+        } catch (e) { return ""; }
+      }
+      document.addEventListener("DOMContentLoaded", function() {
+        if (window.location.pathname.includes(".html")) { return; }
+        let posts = document.querySelectorAll('.post, .hentry, .blog-post');
+        if (posts.length === 0) return;
+        posts.forEach(async function(post) {
+          let link = post.querySelector('a[href*=".html"]');
+          let img = post.querySelector('img');
+          if (!link) return;
+          let postId = getPostIdFromUrl(link.href);
+          let cachedStatus = localStorage.getItem(postId);
+          let isLock = (cachedStatus === "LOCK" || cachedStatus === "MAINTENANCE");
+          let bgStyle = isLock 
+            ? "background: rgba(244, 63, 94, 0.15) !important; color: #fb7185 !important; border: 1px solid rgba(244, 63, 94, 0.3) !important;" 
+            : "background: rgba(16, 185, 129, 0.15) !important; color: #34d399 !important; border: 1px solid rgba(16, 185, 129, 0.3) !important;";
+          let initialText = isLock ? "🔴 BẢO TRÌ / ĐANG CẬP NHẬT" : "<span style='width: 6px; height: 6px; background-color: #34d399; border-radius: 50%; display: inline-block; margin-right: 5px; box-shadow: 0 0 8px #34d399;'></span> WORKING 100%";
+          
+          let wrapper = document.createElement('div');
+          wrapper.style.cssText = "text-align: center !important; margin: 10px 0 6px 0 !important; width: 100% !important; display: block !important;";
+          let statusBadge = document.createElement('span');
+          statusBadge.style.cssText = "display: inline-flex !important; align-items: center !important; justify-content: center !important; width: auto !important; padding: 4px 12px !important; border-radius: 9999px !important; font-weight: 800 !important; font-size: 10.5px !important; backdrop-filter: blur(12px) !important; -webkit-backdrop-filter: blur(12px) !important; letter-spacing: 0.5px !important; font-family: -apple-system, sans-serif !important; " + bgStyle;
+          statusBadge.innerHTML = initialText;
+          wrapper.appendChild(statusBadge);
+          
+          if (img) {
+            let imgParent = img.closest('a') || img.parentElement;
+            if (imgParent && imgParent.parentNode) {
+              imgParent.parentNode.insertBefore(wrapper, imgParent.nextSibling);
+            } else { post.prepend(wrapper); }
+          } else {
+            let targetContainer = post.querySelector('h3.post-title, .post-header, h2') || post;
+            targetContainer.prepend(wrapper);
+          }
+          
+          try {
+            let res = await fetch(GLOBAL_SCRIPT_URL, {
+              method: "POST",
+              headers: { "Content-Type": "text/plain;charset=utf-8" },
+              body: JSON.stringify({ action: "checkStatus", postId: postId })
+            });
+            let data = await res.json();
+            if (data.status === "success") {
+              let pageStatus = String(data.pageStatus).trim().toUpperCase();
+              localStorage.setItem(postId, pageStatus);
+              if (pageStatus === "LOCK" || pageStatus === "MAINTENANCE") {
+                statusBadge.style.cssText = "display: inline-flex !important; align-items: center !important; justify-content: center !important; width: auto !important; padding: 4px 12px !important; border-radius: 9999px !important; font-weight: 800 !important; font-size: 10.5px !important; backdrop-filter: blur(12px) !important; -webkit-backdrop-filter: blur(12px) !important; letter-spacing: 0.5px !important; font-family: -apple-system, sans-serif !important; background: rgba(244, 63, 94, 0.15) !important; color: #fb7185 !important; border: 1px solid rgba(244, 63, 94, 0.3) !important;";
+                statusBadge.innerHTML = "🔴 BẢO TRÌ / ĐANG CẬP NHẬT";
+              } else {
+                statusBadge.style.cssText = "display: inline-flex !important; align-items: center !important; justify-content: center !important; width: auto !important; padding: 4px 12px !important; border-radius: 9999px !important; font-weight: 800 !important; font-size: 10.5px !important; backdrop-filter: blur(12px) !important; -webkit-backdrop-filter: blur(12px) !important; letter-spacing: 0.5px !important; font-family: -apple-system, sans-serif !important; background: rgba(16, 185, 129, 0.15) !important; color: #34d399 !important; border: 1px solid rgba(16, 185, 129, 0.3) !important;";
+                statusBadge.innerHTML = "<span style='width: 6px; height: 6px; background-color: #34d399; border-radius: 50%; display: inline-block; margin-right: 5px; box-shadow: 0 0 8px #34d399;'></span> WORKING 100%";
+              }
+            }
+          } catch (err) {}
+        });
+      });
+    //]]>
+    </script>
 </body>
 </html>
