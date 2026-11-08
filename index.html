@@ -272,7 +272,25 @@
             </div>
         </div>
     </div>
-  <style>
+
+    <!-- MAIN CONTENT -->
+    <main class="max-w-5xl mx-auto w-full px-4 sm:px-6 lg:px-8 my-10 flex-1">
+        <div class="flex items-center justify-between mb-6">
+            <div class="flex items-center gap-3">
+                <div class="w-2.5 h-6 bg-gradient-to-b from-indigo-500 via-purple-500 to-rose-500 rounded-full"></div>
+                <h2 class="text-xl font-extrabold text-white tracking-wide">DANH SÁCH SẢN PHẨM SCRIPT VIP</h2>
+            </div>
+            <span class="text-xs font-semibold text-slate-400 bg-slate-900/80 border border-slate-800 px-3 py-1.5 rounded-xl backdrop-blur-md">Hệ thống Real-time CMS</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch" id="cardContainer">
+            <div class="glass-card rounded-2xl p-6 text-center text-slate-400 text-xs col-span-2 py-12">
+                <i class="fa-solid fa-spinner fa-spin text-2xl mb-2 text-indigo-400"></i>
+                <p>Đang tải danh sách script từ hệ thống quản trị...</p>
+            </div>
+        </div>
+    </main>
+
     <!-- GENERAL MODAL CHUNG -->
     <div id="generalModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
         <div id="modalBox" class="glass-panel rounded-2xl max-w-2xl w-full p-6 border border-slate-700 shadow-2xl relative modal-content-box max-h-[90vh] overflow-y-auto hide-scrollbar">
