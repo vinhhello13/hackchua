@@ -178,7 +178,7 @@
         .status-badge.is-wait { background: rgba(148, 163, 184, 0.12); color: #94a3b8; border: 1px solid rgba(148, 163, 184, 0.25); }
         @keyframes pogoPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
-        /* 🌊 CSS THANH MENU LIQUID GLASS TRONG SUỐT HOÀN TOÀN + SPRING + CẦU VỒNG */
+      /* 🌊 CSS THANH MENU LIQUID GLASS TRONG SUỐT HOÀN TOÀN + SPRING + CẦU VỒNG */
         .liquid-navbar-container {
             position: relative;
             display: inline-flex;
@@ -192,7 +192,15 @@
             box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.3);
             gap: 4px;
             overflow-x: auto;
+            
+            /* 👇 THÊM 2 DÒNG NÀY ĐỂ ẨN HOÀN TOÀN THANH CUỘN TRẮNG */
+            scrollbar-width: none; 
+            -ms-overflow-style: none;
         }
+        .liquid-navbar-container::-webkit-scrollbar {
+            display: none; /* Ẩn thanh cuộn trên Chrome, Safari, Edge */
+        }
+
         .liquid-nav-btn {
             position: relative;
             z-index: 2;
