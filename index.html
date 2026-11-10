@@ -241,7 +241,7 @@
         .liquid-nav-btn:hover { color: #ffffff; }
         .liquid-nav-btn.active { color: #ffffff; }
 
-        /* 🌊 VIÊN NANG (PILL): VIỀN CẦU VỒNG RÌA NGOÀI + HIỆU ỨNG NHÚN CO GIÃN (SPRING PHYSICS) */
+        /* 🌊 VIÊN NANG (PILL): VIỀN CẦU VỒNG RÌA NGOÀI + HIỆU ỨNG PHÌNH TO CẢ TRÊN DƯỚI (SPRING PHYSICS) */
         .liquid-pill {
             position: absolute;
             top: 6px;
@@ -253,7 +253,7 @@
             border-radius: 9999px;
             z-index: 1;
             
-            /* Độ nhún đàn hồi lò xo (Bouncy Spring) */
+            /* Độ nhún đàn hồi lò xo (Bouncy Spring) cho cả vị trí lẫn kích thước */
             transition: left 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), 
                         width 0.45s cubic-bezier(0.34, 1.56, 0.64, 1),
                         transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -261,25 +261,21 @@
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), 0 0 15px rgba(99, 102, 241, 0.3);
         }
 
-        /* Viền óng ánh 7 màu cầu vồng ôm đúng mép ngoài cùng */
+        /* Viền óng ánh 7 màu cầu vồng ôm đúng mép ngoài cùng (chỉ nằm ở viền ngoài) */
         .liquid-pill::after {
             content: '';
             position: absolute;
-            top: -1.5px; left: -1.5px; right: -1.5px; bottom: -1.5px;
+            top: -2px; left: -2px; right: -2px; bottom: -2px;
             background: linear-gradient(135deg, #6366f1, #ec4899, #06b6d4, #f59e0b, #10b981);
             border-radius: 9999px;
             z-index: -1;
-            opacity: 0.9;
+            opacity: 0.95;
+            pointer-events: none;
         }
 
-        /* Co giãn phình to ra khi trượt */
+        /* 🚀 PHÌNH TO CẢ NGANG LẪN DỌC (CẢ TRÊN VÀ DƯỚI) KHI DI CHUYỂN */
         .liquid-pill.is-morphing {
-            transform: scaleX(1.15) scaleY(0.92);
-        }
-
-        /* Chống rung vỡ layout */
-        .card-item {
-            transition: opacity 0.25s ease, transform 0.25s ease;
+            transform: scaleX(1.12) scaleY(1.12);
         }
     </style>
 </head>
@@ -633,23 +629,22 @@
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz5MYk4UcJnlQ5JUaXUFAuz9Be5Ddj9WTgPMfKpOg346dFcS2Kbwt_1kFNfzNbkYDEm/exec";
         const SCRIPT_URL_GIFTCODE = "https://script.google.com/macros/s/AKfycbziBZNAxN4UMo81tVHE05qEoDNu1VqIplZp8L9jJPFSwu6SWxmTRNHpVQlLern5--wl/exec";
         const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxxidzHDOKlrUCgcN6RzviRDcTICJ4ssLRzaOtxNgwhuxRd7yFK5ItjqXXAm8gIuJ5y/exec";
-        // Link dùng để hỏi trạng thái bài viết (cùng link với bản đã test chạy tốt). Muốn đổi thì sửa đúng dòng này.
         const STATUS_API_URL = WEB_APP_URL;
         
         let CURRENT_ACTIVE_POST_ID = "";
         let rawTransactionData = [];
 
-        // 🌊 HÀM XỬ LÝ THANH MENU LIQUID GLASS (VẬT LÝ CO GIÃN + SPRING)
+        // 🌊 HÀM XỬ LÝ THANH MENU LIQUID GLASS (PHÌNH TO CẢ TRÊN DƯỚI KHI DI CHUYỂN)
         function updatePillMetric(btn) {
             const pill = document.getElementById('liquidPill');
             if (!pill || !btn) return;
             
-            // Phình to viên nang khi bắt đầu trượt di chuyển
+            // Phình to viên nang cả bề ngang lẫn bề dọc (trên và dưới) khi đang trượt
             pill.classList.add('is-morphing');
             pill.style.width = btn.offsetWidth + 'px';
             pill.style.left = btn.offsetLeft + 'px';
 
-            // Dừng lại thì nhún nhẹ thu nhỏ về chuẩn
+            // Khi đến nơi -> thu nhỏ lại chuẩn vị trí
             setTimeout(() => {
                 pill.classList.remove('is-morphing');
             }, 300);
@@ -1242,7 +1237,6 @@
 //<![CDATA[
 (function() {
   const SCRIPT_URL_HISTORY = "https://script.google.com/macros/s/AKfycbziBZNAxN4UMo81tVHE05qEoDNu1VqIplZp8L9jJPFSwu6SWxmTRNHpVQlLern5--wl/exec";
-  // Kho 2000 tên thực tế
   const fakeUsersPool = [];
   const ho = ["nguyen", "tran", "le", "pham", "hoang", "huynh", "phan", "vu", "vo", "dang", "bui", "do", "ho", "ngo", "duong"];
   const dem = ["van", "thi", "huu", "gia", "minh", "duc", "thanh", "quoc", "nhat", "hoang", "tuan", "my", "kim", "xuan"];
@@ -1279,7 +1273,6 @@
       container.lastChild.remove();
     }
     let toast = document.createElement("div");
-    // Style iOS Liquid Glass Dark Mode
     toast.style.cssText = "background: rgba(15, 23, 42, 0.88); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 16px; padding: 10px 24px 10px 12px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6), 0 0 15px rgba(99, 102, 241, 0.15); font-family: -apple-system, 'Plus Jakarta Sans', sans-serif; font-size: 11px; color: #f3f4f6; z-index: 99999; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); opacity: 0; transform: translateY(12px) scale(0.95); pointer-events: auto; width: 100%; box-sizing: border-box; position: relative;";
     
     let closeBtn = document.createElement("span");
@@ -1312,7 +1305,6 @@
       }
     }, 4000);
   }
-  // 🔄 Chuỗi nhai lại giao dịch thật giãn cách tịnh tiến thực tế
   function triggerRepeatSequence(username, mainText) {
     const timeSequence = ["Vừa xong", "1 phút trước", "5 phút trước", "10 phút trước", "30 phút trước", "1 giờ trước"];
     const delaySequence = [0, 60000, 180000, 420000, 900000, 1800000];
@@ -1323,7 +1315,6 @@
       }, delaySequence[i]);
     }
   }
-  // Quét Google Sheets liên tục mỗi 6 giây để đồng bộ real-time
   async function pollRealTransactions() {
     try {
       let res = await fetch(SCRIPT_URL_HISTORY);
@@ -1354,7 +1345,6 @@
     } catch (e) {}
     setTimeout(pollRealTransactions, 6000);
   }
-  // 🚀 Vòng lặp thông báo ảo
   function scheduleNextFake() {
     let currentHour = new Date().getHours();
     let delay;
@@ -1397,7 +1387,7 @@
 var postResults=postPerPage;
 var numOfPages=2;
 var pageOf=["Page", "of"];
-eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(''.replace(/^/,String)){while(c--){d[e(c)]=k[c]||e(c)}k=[function(e){return d[e]}];e=function(){return'\\w+'};c=1};while(c--){if(k[c]){p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c])}}return p}('5 K;5 m;5 l;5 w;5 s=1p.9;5 y="/";1d();G 1b(a){5 b=\'\\';J=M(W/2);4(J==W-J){W=J*2+1}D=l-J;4(D<1)D=1;j=M(a/n)+1;4(j-1==a/n)j=j-1;E=D+W-1;4(E>j)E=j;b+=\'<C 6="3-1u">\'+17[0]+\' \'+l+\' \'+17[1]+\' \'+j+\'</C>\';5 c=M(l)-1;4(l>1){4(l==2){4(m==\'3\'){b+=\'<a 6="3-7 3-U" 9="\'+y+\'"></a>\'}h{b+=\'<a 6="3-7 3-U" 9="/v/u/\'+w+\'?&i-o=\'+n+\'"></a>\'}}h{4(m==\'3\'){b+=\'<a 6="3-7 3-U" 9="#" z="L(\'+c+\');B x"></a>\'}h{b+=\'<a 6="3-7 3-U" 9="#" z="I(\'+c+\');B x"></a>\'}}}4(D>1){4(m=="3"){b+=\'<a 6="3-7" 9="\'+y+\'">1</a>\'}h{b+=\'<a 6="3-7" 9="/v/u/\'+w+\'?&i-o=\'+n+\'">1</a>\'}}4(D>2){b+=\'<C 6="3-7 3-16">...</C>\'}1a(5 d=D;d<=E;d++){4(l==d){b+=\'<C 6="3-7 3-1v">\'+d+\'</C>\'}h 4(d==1){4(m==\'3\'){b+=\'<a 6="3-7" 9="\'+y+\'">1</a>\'}h{b+=\'<a 6="3-7" 9="/v/u/\'+w+\'?&i-o=\'+n+\'">1</a>\'}}h{4(m==\'3\'){b+=\'<a 6="3-7" 9="#" z="L(\'+d+\');B x">\'+d+\'</a>\'}h{b+=\'<a 6="3-7" 9="#" z="I(\'+d+\');B x">\'+d+\'</a>\'}}}4(E<j-1){b+=\'<C 6="3-7 3-16">...</C>\'}4(E<j){4(m=="3"){b+=\'<a 6="3-7" 9="#" z="L(\'+j+\');B x">\'+j+\'</a>\'}h{b+=\'<a 6="3-7" 9="#" z="I(\'+j+\');B x">\'+j+\'</a>\'}}5 e=M(l)+1;4(l<j){4(m==\'3\'){b+=\'<a 6="3-7 3-15" 9="#" z="L(\'+e+\');B x"></a>\'}h{b+=\'<a 6="3-7 3-15" 9="#" z="I(\'+e+\');B x"></a>\'}}b+=\'\';5 f=A.1s(\'1t\');5 g=A.1r(\'1A-1D\');1a(5 p=0;p<f.O;p++){f[p].1c=b}4(f&&f.O>0){b=\'\'}4(g){g.1c=b}}G 12(a){5 b=a.1f;5 c=M(b.1E.t,10);1b(c)}G 1d(){5 a=s;4(a.k(\'/v/u/\')!=-1){4(a.k(\'?T-i\')!=-1){w=a.H(a.k(\'/v/u/\')+14,a.k(\'?T-i\'))}h{w=a.H(a.k(\'/v/u/\')+14,a.k(\'?&i\'))}}4(a.k(\'?q=\')==-1&&a.k(\'.1C\')==-1){4(a.k(\'/v/u/\')==-1){m=\'3\';4(s.k(\'#F=\')!=-1){l=s.H(s.k(\'#F=\')+8,s.O)}h{l=1}A.18(\'<r Q=\\\'\\\'+y+\\'P/R/N?i-o=1&X=Y-S-r&V=12\\\'><\\/r>\')}h{m=\'u\';4(a.k(\'&i-o=\')==-1){n=1F}4(s.k(\'#F=\')!=-1){l=s.H(s.k(\'#F=\')+8,s.O)}h{l=1}A.18(\'<r Q="\'+y+\'P/R/N/-\'+w+\'?X=Y-S-r&V=12&i-o=1" ><\\/r>\')}}}G L(a){Z=(a-1)*n;K=a;5 b=A.1h(\'1q\')[0];5 c=A.1o(\'r\');c.1e=\'1m/1n\';c.1i(\'Q\',y+\'P/R/N?1j-1k=\'+Z+\'&i-o=1&X=Y-S-r&V=13\');b.1l(c)}G I(a){Z=(a-1)*n;K=a;5 b=A.1h(\'1q\')[0];5 c=A.1o(\'r\');c.1e=\'1m/1n\';c.1i(\'Q\',y+\'P/R/N/-\'+w+\'?1j-1k=\'+Z+\'&i-o=1&X=Y-S-r&V=13\');b.1l(c)}G 13(a){11=a.1f.x[0];5 b=11.1g.t.H(0,19)+11.1g.t.H(1z,1w);5 c=1y(b);4(m==\'3\'){5 d=\'/v?T-i=\'+c+\'&i-o=\'+n+\'#F=\'+K}h{5 d=\'/v/u/\'+w+\'?T-i=\'+c+\'&i-o=\'+n+\'#F=\'+K}1p.9=d}',62,104,'|||page|if|var|class|num||href||||||||else|max|lastPageNo|indexOf|currentPageNo|currentPage|postResults|results|||script|locationUrl||label|search|postLabel|false|home_page|onclick|document|return|span|pageStart|pageEnd|PageNo|function|substring|getLabelPage|pageNumber|noPage|getPage|parseInt|summary|length|feeds|src|posts|in|updated|prev|callback|numOfPages|alt|json|jsonstart||post|dataFeed|findPostDate||next|dots|pageOf|write||for|startPagination|innerHTML|pageCurrentBlogger|type|feed|published|getElementsByTagName|setAttribute|start|index|appendChild|text|javascript|createElement|location|head|getElementById|getElementsByName|pageArea|of|active|29|entry|encodeURIComponent|23|blog|totalResults|html|pager|openSearch|20'.split('|'),0,{}))
+eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(''.replace(/^/,String)){while(c--){d[e(c)]=k[c]||e(c)}k=[function(e){return d[e]}];e=function(){return'\\w+'};c=1};while(c--){if(k[c]){p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c])}}return p}('5 K;5 m;5 l;5 w;5 s=1p.9;5 y="/";1d();G 1b(a){5 b=\'\\';J=M(W/2);4(J==W-J){W=J*2+1}D=l-J;4(D<1)D=1;j=M(a/n)+1;4(j-1==a/n)j=j-1;E=D+W-1;4(E>j)E=j;b+=\'<C 6="3-1u">\'+17[0]+\' \'+l+\' \'+17[1]+\' \'+j+\'</C>\';5 c=M(l)-1;4(l>1){4(l==2){4(m==\'3\'){b+=\'<a 6="3-7 3-U" 9="\'+y+\'"></a>\'}h{b+=\'<a 6="3-7 3-U" 9="/v/u/\'+w+\'?&i-o=\'+n+\'"></a>\'}}h{4(m==\'3\'){b+=\'<a 6="3-7 3-U" 9="#" z="L(\'+c+\');B x"></a>\'}h{b+=\'<a 6="3-7 3-U" 9="#" z="I(\'+c+\');B x"></a>\'}}}4(D>1){4(m=="3"){b+=\'<a 6="3-7" 9="\'+y+\'">1</a>\'}h{b+=\'<a 6="3-7" 9="/v/u/\'+w+\'?&i-o=\'+n+\'">1</a>\'}}4(D>2){b+=\'<C 6="3-7 3-16">...</C>\'}1a(5 d=D;d<=E;d++){4(l==d){b+=\'<C 6="3-7 3-1v">\'+d+\'</C>\'}h 4(d==1){4(m==\'3\'){b+=\'<a 6="3-7" 9="\'+y+\'">1</a>\'}h{b+=\'<a 6="3-7" 9="/v/u/\'+w+\'?&i-o=\'+n+\'">1</a>\'}}h{4(m==\'3\'){b+=\'<a 6="3-7" 9="#" z="L(\'+d+\');B x">\'+d+\'</a>\'}h{b+=\'<a 6="3-7" 9="#" z="I(\'+d+\');B x">\'+d+\'</a>\'}}}4(E<j-1){b+=\'<C 6="3-7 3-16">...</C>\'}4(E<j){4(m=="3"){b+=\'<a 6="3-7" 9="#" z="L(\'+j+\');B x">\'+j+\'</a>\'}h{b+=\'<a 6="3-7" 9="#" z="I(\'+j+\');B x">\'+j+\'</a>\'}}5 e=M(l)+1;4(l<j){4(m==\'3\'){b+=\'<a 6="3-7 3-15" 9="#" z="L(\'+e+\');B x"></a>\'}h{b+=\'<a 6="3-7 3-15" 9="#" z="I(\'+e+\');B x"></a>\'}}b+=\'\';5 f=A.1s(\'1t\');5 g=A.1r(\'1A-1D\');1a(5 p=0;p<f.O;p++){f[p].1c=b}4(f&&f.O>0){b=\'\'}4(g){g.1c=b}}G 12(a){5 b=a.1f;5 c=M(b.1E.t,10);1b(c)}G 1d(){5 a=s;4(a.k(\'/v/u/\')!=-1){4(a.k(\'?T-i\')!=-1){w=a.H(a.k(\'/v/u/\')+14,a.k(\'?T-i\'))}h{w=a.H(a.k(\'/v/u/\')+14,a.k(\'?&i\'))}}4(a.k(\'?q=\')==-1&&a.k(\'.1C\')==-1){4(a.k(\'/v/u/\')==-1){m=\'3\';4(s.k(\'#F=\')!=-1){l=s.H(s.k(\'#F=\')+8,s.O)}h{l=1}A.18(\'<r Q=\\\'\\\'+y+\\'P/R/N?i-o=1&X=Y-S-r&V=12\\\'><\\/r>\')}h{m=\'u\';4(a.k(\'&i-o=\')==-1){n=1F}4(s.k(\'&i-o=\')==-1){n=1F}4(s.k(\'#F=\')!=-1){l=s.H(s.k(\'#F=\')+8,s.O)}h{l=1}A.18(\'<r Q="\'+y+\'P/R/N/-\'+w+\'?X=Y-S-r&V=12&i-o=1" ><\\/r>\')}}}G L(a){Z=(a-1)*n;K=a;5 b=A.1h(\'1q\')[0];5 c=A.1o(\'r\');c.1e=\'1m/1n\';c.1i(\'Q\',y+\'P/R/N?1j-1k=\'+Z+\'&i-o=1&X=Y-S-r&V=13\');b.1l(c)}G I(a){Z=(a-1)*n;K=a;5 b=A.1h(\'1q\')[0];5 c=A.1o(\'r\');c.1e=\'1m/1n\';c.1i(\'Q\',y+\'P/R/N/-\'+w+\'?1j-1k=\'+Z+\'&i-o=1&X=Y-S-r&V=13\');b.1l(c)}G 13(a){11=a.1f.x[0];5 b=11.1g.t.H(0,19)+11.1g.t.H(1z,1w);5 c=1y(b);4(m==\'3\'){5 d=\'/v?T-i=\'+c+\'&i-o=\'+n+\'#F=\'+K}h{5 d=\'/v/u/\'+w+\'?T-i=\'+c+\'&i-o=\'+n+\'#F=\'+K}1p.9=d}',62,104,'|||page|if|var|class|num||href||||||||else|max|lastPageNo|indexOf|currentPageNo|currentPage|postResults|results|||script|locationUrl||label|search|postLabel|false|home_page|onclick|document|return|span|pageStart|pageEnd|PageNo|function|substring|getLabelPage|pageNumber|noPage|getPage|parseInt|summary|length|feeds|src|posts|in|updated|prev|callback|numOfPages|alt|json|jsonstart||post|dataFeed|findPostDate||next|dots|pageOf|write||for|startPagination|innerHTML|pageCurrentBlogger|type|feed|published|getElementsByTagName|setAttribute|start|index|appendChild|text|javascript|createElement|location|head|getElementById|getElementsByName|pageArea|of|active|29|entry|encodeURIComponent|23|blog|totalResults|html|pager|openSearch|20'.split('|'),0,{}))
 //]]>
 </script>
 </b:if>
@@ -1430,22 +1420,18 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
       let img = post.querySelector('img');
       if (!link) return;
       let postId = getPostIdFromUrl(link.href);
-      // Đọc cache từ localStorage
       let cachedStatus = localStorage.getItem(postId);
       let isLock = (cachedStatus === "LOCK" || cachedStatus === "MAINTENANCE");
-      // 📱 STYLE iOS LIQUID GLASS CHO STATUS BADGE
       let bgStyle = isLock 
         ? "background: rgba(244, 63, 94, 0.15) !important; color: #fb7185 !important; border: 1px solid rgba(244, 63, 94, 0.3) !important;" 
         : "background: rgba(16, 185, 129, 0.15) !important; color: #34d399 !important; border: 1px solid rgba(16, 185, 129, 0.3) !important;";
       let initialText = isLock ? "🔴 BẢO TRÌ / ĐANG CẬP NHẬT" : "<span style='width: 6px; height: 6px; background-color: #34d399; border-radius: 50%; display: inline-block; margin-right: 5px; box-shadow: 0 0 8px #34d399;'></span> WORKING 100%";
-      // Khung chứa căn giữa
       let wrapper = document.createElement('div');
       wrapper.style.cssText = "text-align: center !important; margin: 10px 0 6px 0 !important; width: 100% !important; display: block !important;";
       let statusBadge = document.createElement('span');
       statusBadge.style.cssText = "display: inline-flex !important; align-items: center !important; justify-content: center !important; width: auto !important; padding: 4px 12px !important; border-radius: 9999px !important; font-weight: 800 !important; font-size: 10.5px !important; backdrop-filter: blur(12px) !important; -webkit-backdrop-filter: blur(12px) !important; letter-spacing: 0.5px !important; font-family: -apple-system, sans-serif !important; " + bgStyle;
       statusBadge.innerHTML = initialText;
       wrapper.appendChild(statusBadge);
-      // Chèn ngay dưới ảnh
       if (img) {
         let imgParent = img.closest('a') || img.parentElement;
         if (imgParent && imgParent.parentNode) {
@@ -1457,7 +1443,6 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
         let targetContainer = post.querySelector('h3.post-title, .post-header, h2') || post;
         targetContainer.prepend(wrapper);
       }
-      // Gọi API kiểm tra ngầm trạng thái từ Google Sheets
       try {
         let res = await fetch(GLOBAL_SCRIPT_URL, {
           method: "POST",
@@ -1476,9 +1461,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
             statusBadge.innerHTML = "<span style='width: 6px; height: 6px; background-color: #34d399; border-radius: 50%; display: inline-block; margin-right: 5px; box-shadow: 0 0 8px #34d399;'></span> WORKING 100%";
           }
         }
-      } catch (err) {
-        // Bỏ qua lỗi mạng
-      }
+      } catch (err) {}
     });
   });
 //]]>
