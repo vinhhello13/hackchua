@@ -178,7 +178,7 @@
         .status-badge.is-wait { background: rgba(148, 163, 184, 0.12); color: #94a3b8; border: 1px solid rgba(148, 163, 184, 0.25); }
         @keyframes pogoPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
-        /* 🌊 THANH MENU LIQUID GLASS (ĐÃ TỐI ƯU CHUẨN GIAO DIỆN BỒNG BỀNH Y HỆT VIDEO) */
+        /* 🌊 THANH MENU LIQUID GLASS GAME CATEGORY (BẢN ĐÃ CHỈNH ƯNG Ý) */
         .liquid-navbar-container {
             position: relative;
             display: inline-flex;
@@ -198,7 +198,6 @@
         .liquid-navbar-container::-webkit-scrollbar {
             display: none !important;
         }
-
         .liquid-nav-btn {
             position: relative;
             z-index: 2;
@@ -217,29 +216,12 @@
             transition: color 0.3s ease;
             white-space: nowrap;
             user-select: none;
-            overflow: hidden;
         }
-
-        .liquid-nav-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -150%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
-            transform: skewX(-20deg);
-            transition: left 0.65s ease-in-out;
+        .liquid-nav-btn:hover,
+        .liquid-nav-btn.active { 
+            color: #ffffff; 
         }
-        .liquid-nav-btn:hover::before,
-        .liquid-nav-btn.active::before {
-            left: 150%;
-        }
-
-        .liquid-nav-btn:hover { color: #ffffff; }
-        .liquid-nav-btn.active { color: #ffffff; }
-
-        /* 🌟 VIÊN NANG (PILL): VIỀN CẦU VỒNG NGOÀI CÙNG + ĐÀN HỒI NƯỚC (SPRING PHYSICS) */
+        /* Viên nang giọt nước (Liquid Pill) */
         .liquid-pill {
             position: absolute;
             top: 6px;
@@ -250,30 +232,21 @@
             -webkit-backdrop-filter: blur(16px);
             border-radius: 9999px;
             z-index: 1;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.6);
             
-            /* Độ nhún đàn hồi bồng bềnh mượt mà */
-            transition: left 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), 
-                        width 0.45s cubic-bezier(0.34, 1.56, 0.64, 1),
-                        transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-            
-            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.6), 0 0 20px rgba(99, 102, 241, 0.35);
+            /* Tốc độ trượt mượt mà, đàn hồi tinh tế */
+            transition: left 0.45s cubic-bezier(0.25, 1, 0.3, 1), 
+                        width 0.45s cubic-bezier(0.25, 1, 0.3, 1),
+                        transform 0.2s ease-in-out;
         }
-
-        /* Viền cầu vồng óng ánh chỉ bọc đúng rìa ngoài cùng */
-        .liquid-pill::after {
-            content: '';
-            position: absolute;
-            top: -2px; left: -2px; right: -2px; bottom: -2px;
-            background: linear-gradient(135deg, #6366f1, #ec4899, #06b6d4, #f59e0b, #10b981);
-            border-radius: 9999px;
-            z-index: -1;
-            opacity: 0.95;
-            pointer-events: none;
+        /* Trạng thái trượt: Giãn nhẹ tinh tế */
+        .liquid-pill.is-stretching {
+            transform: scaleX(1.12) scaleY(0.92);
         }
-
-        /* Phình to nhẹ cả ngang lẫn dọc (trên và dưới) khi đang trượt */
-        .liquid-pill.is-morphing {
-            transform: scaleX(1.1) scaleY(1.12);
+        /* Trạng thái cập bến: Nhún nảy nhẹ nhàng */
+        .liquid-pill.is-bouncing {
+            transform: scaleX(0.96) scaleY(1.05);
         }
     </style>
 </head>
@@ -347,8 +320,7 @@
             </div>
         </div>
     </div>
-
-    <!-- 🌊 THANH MENU LIQUID GLASS GAME CATEGORY (BỒNG BỀNH Y HỆT VIDEO) -->
+    <!-- 🌊 THANH MENU LIQUID GLASS GAME CATEGORY -->
     <div style="display: flex; justify-content: center; padding: 20px 0;">
       <div class="liquid-navbar-container">
         <div id="liquidPill" class="liquid-pill"></div>
@@ -369,7 +341,6 @@
         </button>
       </div>
     </div>
-
     <!-- MAIN CONTENT -->
     <main class="max-w-5xl mx-auto w-full px-4 sm:px-6 lg:px-8 my-10 flex-1">
         <div class="flex items-center justify-between mb-6">
@@ -628,25 +599,31 @@
         let CURRENT_ACTIVE_POST_ID = "";
         let rawTransactionData = [];
 
-        // 🌊 HÀM XỬ LÝ THANH MENU LIQUID GLASS (HIỆU ỨNG ĐÀN HỒI MƯỢT MÀ CHUẨN VIDEO)
-        function updatePillMetric(btn) {
+        // 🌊 HÀM XỬ LÝ THANH MENU LIQUID GLASS (BẢN ĐÃ CHỈNH ƯNG Ý)
+        function updatePillPosition(btn) {
             const pill = document.getElementById('liquidPill');
             if (!pill || !btn) return;
             
-            pill.classList.add('is-morphing');
+            pill.classList.remove('is-bouncing');
+            pill.classList.add('is-stretching');
+            
             pill.style.width = btn.offsetWidth + 'px';
             pill.style.left = btn.offsetLeft + 'px';
 
             setTimeout(() => {
-                pill.classList.remove('is-morphing');
-            }, 300);
+                pill.classList.remove('is-stretching');
+                pill.classList.add('is-bouncing');
+            }, 200);
+
+            setTimeout(() => {
+                pill.classList.remove('is-bouncing');
+            }, 400);
         }
 
         function switchGameTab(btn, gameKey) {
             document.querySelectorAll('.liquid-nav-btn').forEach(el => el.classList.remove('active'));
             btn.classList.add('active');
-            updatePillMetric(btn);
-
+            updatePillPosition(btn);
             let cards = document.querySelectorAll('.card-item, .post');
             cards.forEach(card => {
                 let text = card.innerText.toLowerCase();
@@ -661,11 +638,11 @@
 
         window.addEventListener('DOMContentLoaded', () => {
             const activeDefault = document.querySelector('.liquid-nav-btn.active');
-            if (activeDefault) updatePillMetric(activeDefault);
+            if (activeDefault) updatePillPosition(activeDefault);
         });
         window.addEventListener('resize', () => {
             const activeDefault = document.querySelector('.liquid-nav-btn.active');
-            if (activeDefault) updatePillMetric(activeDefault);
+            if (activeDefault) updatePillPosition(activeDefault);
         });
 
         // 🎁 LOGIC GIFTCODE
