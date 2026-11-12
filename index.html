@@ -169,16 +169,24 @@
             width: 820px;
             max-width: 100%;
         }
-        /* 🟢 BADGE TRẠNG THÁI BÀI VIẾT (liquid glass) */
+        /* 🟢 BADGE TRẠNG THÁI BÀI VIẾT (liquid glass + nháy cả Working và Bảo trì) */
         .status-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 9999px; font-size: 11px; font-weight: 700; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); transition: all 0.3s ease; }
         .status-badge .status-dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
         .status-badge.is-ok { background: rgba(16, 185, 129, 0.12); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
         .status-badge.is-ok .status-dot { animation: pogoPulse 1.4s ease-in-out infinite; }
         .status-badge.is-lock { background: rgba(244, 63, 94, 0.12); color: #fb7185; border: 1px solid rgba(244, 63, 94, 0.3); }
+        .status-badge.is-lock .status-dot { animation: pogoPulseRed 1.4s ease-in-out infinite; }
         .status-badge.is-wait { background: rgba(148, 163, 184, 0.12); color: #94a3b8; border: 1px solid rgba(148, 163, 184, 0.25); }
-        @keyframes pogoPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+        @keyframes pogoPulse { 
+            0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.45); } 
+            50% { opacity: 0.3; box-shadow: 0 0 0 5px rgba(52, 211, 153, 0); } 
+        }
+        @keyframes pogoPulseRed { 
+            0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(251, 113, 133, 0.45); } 
+            50% { opacity: 0.3; box-shadow: 0 0 0 5px rgba(251, 113, 133, 0); } 
+        }
 
-        /* 🌊 THANH MENU LIQUID GLASS GAME CATEGORY (BẢN ĐÃ CHỈNH ƯNG Ý) */
+        /* 🌊 THANH MENU LIQUID GLASS GAME CATEGORY */
         .liquid-navbar-container {
             position: relative;
             display: inline-flex;
@@ -599,7 +607,7 @@
         let CURRENT_ACTIVE_POST_ID = "";
         let rawTransactionData = [];
 
-        // 🌊 HÀM XỬ LÝ THANH MENU LIQUID GLASS (BẢN ĐÃ CHỈNH ƯNG Ý)
+        // 🌊 HÀM XỬ LÝ THANH MENU LIQUID GLASS
         function updatePillPosition(btn) {
             const pill = document.getElementById('liquidPill');
             if (!pill || !btn) return;
